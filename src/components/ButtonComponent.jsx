@@ -1,15 +1,30 @@
+import { Button } from "@material-tailwind/react";
 import React from "react";
 
-const ButtonComponent = ({ type = "button", text, onClick = () => {} }) => {
+const ButtonComponent = ({
+  children,
+  className,
+  type = "button",
+  onClick = () => {},
+  disabled = false,
+  loading = false,
+  variant = "filled",
+}) => {
   return (
     <>
-      <button
-        className="py-2 rounded-md text-[12px] bg-primary text-secondary font-semibold"
-        type={type}
+      <Button
+        variant={variant}
+        size="sm"
+        loading={loading}
+        className={` shadow-none hover:shadow-sm normal-case font-medium text-sm border-light-gray focus:!border-light-gray ${
+          className || "bg-primary text-secondary"
+        } `}
         onClick={onClick}
+        disabled={disabled}
+        type={type}
       >
-        {text}
-      </button>
+        {children}
+      </Button>
     </>
   );
 };
