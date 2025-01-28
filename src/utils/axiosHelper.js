@@ -1,11 +1,15 @@
 import axios from "axios";
 
+const baseURL =
+  import.meta.env.VITE_ENVIRONMENT == "production"
+    ? import.meta.env.VITE_API_PRODUCTION_URL
+    : import.meta.env.VITE_ENVIRONMENT == "staging"
+    ? import.meta.env.VITE_API_STAGING_URL
+    : import.meta.env.VITE_API_LOCALHOST_URL;
+
 // Create an instance of Axios
 const axiosInstance = axios.create({
-  baseURL:
-    import.meta.env.VITE_ENVIRONMENT != "development"
-      ? import.meta.env.VITE_API_PRODUCTION_URL
-      : import.meta.env.VITE_API_LOCALHOST_URL,
+  baseURL: baseURL,
   headers: {
     "Content-Type": "application/json",
   },
