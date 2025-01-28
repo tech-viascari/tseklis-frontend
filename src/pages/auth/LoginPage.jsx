@@ -5,8 +5,8 @@ import ButtonComponent from "../../components/ButtonComponent";
 import axiosInstance from "../../utils/axiosHelper.js";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
-import google_icon from "../../assets/logos/google_icon.svg";
 import useAuthStore from "../../store/useAuthStore.js";
+import { googleIconSVG } from "../../components/GetIcons.jsx";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -85,39 +85,51 @@ const LoginPage = () => {
         type="email"
         value={formData.email}
         error_message={errors.email}
+        required={true}
+        labelClass="font-medium"
         onChange={(e) => {
           handleOnChange(e, "Email is required.");
         }}
       />
       <InputComponent
         label="Password"
-        s
         name="password"
         type="password"
         value={formData.password}
         error_message={errors.password}
+        required={true}
+        labelClass="font-medium"
         onChange={(e) => {
           handleOnChange(e, "Password is required.");
         }}
       />
-      <ButtonComponent text="Login" type="submit" />
+      <ButtonComponent
+        variant="filled"
+        type="submit"
+        className="font-semibold text-secondary bg-primary"
+      >
+        Login
+      </ButtonComponent>
     </form>
   );
 
   const googleAuthComponent = (
-    <div
-      className="border w-full items-center flex flex-row justify-center py-1 rounded-md cursor-pointer"
-      onClick={() => toast.error("Google auth is under development.")}
-    >
-      <div className="flex flex-row gap-1 items-center justify-center">
-        <img src={google_icon} className="w-6" alt="Google Icon" />
-        <p className="font-semibold text-[12px]">Continue with Google</p>
-      </div>
-    </div>
+    <>
+      <ButtonComponent
+        className="w-full normal-case text-dark"
+        variant="outlined"
+        onClick={() => toast.error("Google auth is under development.")}
+      >
+        <div className="flex flex-row gap-1 items-center justify-center">
+          {googleIconSVG}
+          <p className="font-semibold text-[12px]">Continue with Google</p>
+        </div>
+      </ButtonComponent>
+    </>
   );
 
   const dividerComponent = (
-    <div className="w-full relative">
+    <div className="w-full relative py-2">
       <div className="border-light relative w-full border-[.5px]"></div>
       <div className="absolute top-1/2 text-center w-full -mt-[8px] flex flex-col items-center">
         <p className="bg-white flex flex-col w-7 text-[10px] text-dark font-semibold">

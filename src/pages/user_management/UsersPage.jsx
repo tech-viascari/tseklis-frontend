@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import UnderConstructionComponent from "../../components/UnderConstructionComponent";
 import MainContent from "../layouts/MainContent";
 
-const DashboardPage = () => {
+const UsersPage = () => {
   return (
-    <MainContent items={[{ title: "Dashboard", goto: "/" }]}>
+    <MainContent items={[{ title: "Users", goto: "/users" }]}>
       <div className="h-screen p-5 flex flex-col items-center justify-center -mt-[60px] gap-3">
         <UnderConstructionComponent />
       </div>
@@ -12,4 +12,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default UsersPage;

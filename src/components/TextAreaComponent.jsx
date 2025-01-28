@@ -1,17 +1,16 @@
-import { Input, Typography } from "@material-tailwind/react";
+import { Option, Select, Textarea, Typography } from "@material-tailwind/react";
 import React from "react";
 import { HiMiniExclamationTriangle } from "react-icons/hi2";
 
-const InputComponent = ({
+const TextAreaComponent = ({
   label = "",
   error_message = "",
-  type = "text",
-  placeholder = "",
   name,
   value,
   onChange,
-  required = false,
+  required,
   labelClass = "",
+  options = [],
 }) => {
   return (
     <>
@@ -22,17 +21,16 @@ const InputComponent = ({
         >
           {label} {required && <span className="text-red-400">*</span>}
         </Typography>
-        <Input
-          type={type}
+        <Textarea
+          onChange={onChange}
           name={name}
           value={value}
-          onChange={onChange}
-          className=" !border-light-gray focus:!border-light-gray text-dark"
+          className="!border-light-gray focus:!border-light-gray text-dark"
           labelProps={{
             className: "before:content-none after:content-none",
           }}
-          placeholder={placeholder}
-        />
+          error={true}
+        ></Textarea>
         {error_message && (
           <label className="text-xs text-red-500 flex flex-row gap-1 items-center">
             <HiMiniExclamationTriangle size={15} />
@@ -44,4 +42,4 @@ const InputComponent = ({
   );
 };
 
-export default InputComponent;
+export default TextAreaComponent;
