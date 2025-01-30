@@ -29,6 +29,7 @@ const LoginPage = () => {
         }
       } catch (error) {
         console.log(error);
+        toast.error("Failed to login. Please try again.");
       }
     }
   };
