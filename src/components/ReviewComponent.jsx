@@ -13,7 +13,7 @@ const ReviewComponent = ({ title, data }) => {
           return (
             <div key={`${row.name}-${index}`} className="flex flex-row">
               <div className="w-80">
-                <Typography variant="small" className="font-medium text-sm">
+                <Typography variant="small" className="font-normal text-sm">
                   {row.name}
                 </Typography>
               </div>
