@@ -19,11 +19,6 @@ import {
   MenuItem,
   Typography,
   Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  Spinner,
-  DialogHeader,
 } from "@material-tailwind/react";
 import TextAreaComponent from "../../components/TextAreaComponent";
 import {
@@ -34,7 +29,6 @@ import { toast } from "sonner";
 import FormComponent from "./FormComponent";
 import ReviewComponent from "../../components/ReviewComponent";
 import DialogComponent from "../../components/DialogComponent";
-import { use } from "react";
 
 const AddQuotesPage = () => {
   const { isDirty, setIsDirty } = useDirtyContext();
@@ -619,7 +613,6 @@ const AddQuotesPage = () => {
   };
 
   const handleNext = () => {
-    console.log(formData);
     if (selectedIndex < formComponent.length - 1) {
       setSelectedIndex(selectedIndex + 1);
     }

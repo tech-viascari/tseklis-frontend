@@ -1,26 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { UseState } from "react";
 import { useNavigate, useParams } from "react-router";
 import TopBar from "../layouts/TopBar";
 import {
   Button,
-  ButtonGroup,
-  Dialog,
   Menu,
   MenuHandler,
   MenuItem,
   MenuList,
   Spinner,
-  Tab,
-  TabPanel,
-  Tabs,
-  TabsBody,
-  TabsHeader,
-  Timeline,
-  TimelineBody,
-  TimelineConnector,
-  TimelineHeader,
-  TimelineIcon,
-  TimelineItem,
   Typography,
 } from "@material-tailwind/react";
 import ButtonComponent from "../../components/ButtonComponent";
@@ -29,10 +16,8 @@ import useQuoteStore from "../../store/useQuoteStore";
 import ReviewComponent from "../../components/ReviewComponent";
 import { formatNumberWithCommaAndDecimal, getName } from "../../utils/global";
 import {
-  HiMiniEllipsisHorizontal,
   HiMiniExclamationCircle,
   HiOutlineEllipsisHorizontal,
-  HiPencil,
 } from "react-icons/hi2";
 import DialogComponent from "../../components/DialogComponent";
 import { toast } from "sonner";
@@ -43,7 +28,7 @@ const ViewQuotePage = () => {
 
   const { open, setOpen } = useDrawerStore();
 
-  const { quote, quotes, setQuotes } = useQuoteStore();
+  const { quote, quotes, setQuotes, setQuote } = useQuoteStore();
 
   const navigate = useNavigate();
 
@@ -60,6 +45,11 @@ const ViewQuotePage = () => {
   const [loadingDialog, setLoadingDialog] = useState(false);
   const loadingHandlerDialog = () => {
     setLoadingDialog(!loadingDialog);
+  };
+
+  const handleEditDetails = () => {
+    setQuote(quote);
+    navigate(`/quotes/update/${quote.quote_number}`);
   };
 
   return (
@@ -112,7 +102,10 @@ const ViewQuotePage = () => {
                           </Button>
                         </MenuHandler>
                         <MenuList>
-                          <MenuItem className="text-dark">
+                          <MenuItem
+                            className="text-dark"
+                            onClick={handleEditDetails}
+                          >
                             Edit Details
                           </MenuItem>
                           <MenuItem
