@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainContent from "../layouts/MainContent";
 import ButtonComponent from "../../components/ButtonComponent";
 import {
@@ -33,15 +33,13 @@ import {
 import { toast } from "sonner";
 import FormComponent from "./FormComponent";
 import ReviewComponent from "../../components/ReviewComponent";
-import DialogComponent from "../../components/DialogComponent";
-import { use } from "react";
 
-const AddQuotesPage = () => {
+const UpdateQuotesPage = () => {
   const { isDirty, setIsDirty } = useDirtyContext();
 
-  const { states, quotes, setQuotes } = useQuoteStore();
+  const { states, quote, setQuotes, quotes, setQuote } = useQuoteStore();
 
-  const [formData, setFormData] = useState(states.quote_form_data);
+  const [formData, setFormData] = useState(quote.form_data);
   const [scopeFormData, setScopeFormData] = useState(states.scope_of_work);
 
   const [errors, setErrors] = useState({});
@@ -82,19 +80,20 @@ const AddQuotesPage = () => {
 
   const handleSubmit = () => {
     try {
-      const toInsert = {
-        quote_id: "0001-0000-0001",
-        quote_number: "Quote-0001",
-        quote_name: "Quote Name",
-        status: "Drafted",
-      };
+      const updateQuote = { ...quote, form_data: formData };
+      const updatedQuotes = quotes.map((all_quotes) => {
+        if (all_quotes.quote_id === quote.quote_id) {
+          return updateQuote;
+        }
+        return quote;
+      });
 
-      const newQuote = { ...states.quote, form_data: formData, ...toInsert };
+      setQuote(updateQuote);
+      setQuotes(updatedQuotes);
 
-      setQuotes([...quotes, newQuote]);
-      navigate("/quotes");
+      navigate("/quotes/view/" + quote.quote_id);
 
-      toast.success("Quote added successfully.");
+      toast.success("Quote updated successfully.");
     } catch (error) {
       console.log(error);
     } finally {
@@ -248,15 +247,62 @@ const AddQuotesPage = () => {
             >
               Add scope
             </ButtonComponent>
-            <DialogComponent
-              dialogName={scopeDialog}
-              handlerDialog={handleScopeDialog}
-              submitDialog={() => {
-                console.log("Status Dialog");
-              }}
-              title="Add Scope of Work"
-              footerContent={
-                <div className="flex flex-row gap-3 pb-3">
+            <Dialog open={scopeDialog} handler={handleScopeDialog}>
+              <DialogBody className="text-dark">
+                <div className="flex flex-col w-full px-5 pt-3">
+                  <Typography variant="small" className="font-bold text-md">
+                    Add Scope of Work
+                  </Typography>
+                  <div className="flex flex-col mt-5 gap-2">
+                    <InputComponent
+                      label="Scope of work"
+                      required={true}
+                      name="task"
+                      value={scopeFormData.task}
+                      error_message={scopeErrors.task}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Scope of Work is required.");
+                      }}
+                    />
+                    <TextAreaComponent
+                      label="Description"
+                      required={true}
+                      name="sub_task"
+                      value={scopeFormData.sub_task}
+                      error_message={scopeErrors.sub_task}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Description is required.");
+                      }}
+                    />
+                    <InputComponent
+                      label="Service Fee"
+                      type="number"
+                      required={true}
+                      name="service_fee"
+                      value={scopeFormData.service_fee}
+                      error_message={scopeErrors.service_fee}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Service Fee is required.");
+                      }}
+                    />
+                    <InputComponent
+                      label="Out-of-pocket Expenses"
+                      required={true}
+                      name="oop_expenses"
+                      value={scopeFormData.oop_expenses}
+                      error_message={scopeErrors.oop_expenses}
+                      onChange={(e) => {
+                        handleScopeOnChange(
+                          e,
+                          "Out-of-pocket Expenses is required."
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+              </DialogBody>
+              <DialogFooter>
+                <div className="flex flex-row gap-3 px-5 pb-3">
                   <ButtonComponent
                     variant="outlined"
                     className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
@@ -281,55 +327,8 @@ const AddQuotesPage = () => {
                     </ButtonComponent>
                   )}
                 </div>
-              }
-            >
-              <div className="flex flex-col gap-2">
-                <InputComponent
-                  label="Scope of work"
-                  required={true}
-                  name="task"
-                  value={scopeFormData.task}
-                  error_message={scopeErrors.task}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Scope of Work is required.");
-                  }}
-                />
-                <TextAreaComponent
-                  label="Description"
-                  required={true}
-                  name="sub_task"
-                  value={scopeFormData.sub_task}
-                  error_message={scopeErrors.sub_task}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Description is required.");
-                  }}
-                />
-                <InputComponent
-                  label="Service Fee"
-                  type="number"
-                  required={true}
-                  name="service_fee"
-                  value={scopeFormData.service_fee}
-                  error_message={scopeErrors.service_fee}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Service Fee is required.");
-                  }}
-                />
-                <InputComponent
-                  label="Out-of-pocket Expenses"
-                  required={true}
-                  name="oop_expenses"
-                  value={scopeFormData.oop_expenses}
-                  error_message={scopeErrors.oop_expenses}
-                  onChange={(e) => {
-                    handleScopeOnChange(
-                      e,
-                      "Out-of-pocket Expenses is required."
-                    );
-                  }}
-                />
-              </div>
-            </DialogComponent>
+              </DialogFooter>
+            </Dialog>
           </div>
           <div className=" flex flex-col gap-3">
             {formData.scope_of_work.length == 0 ? (
@@ -610,16 +609,15 @@ const AddQuotesPage = () => {
 
         if (alert) {
           setIsDirty(false);
-          navigate("/quotes");
+          navigate(-1);
         }
       } else {
-        navigate("/quotes");
+        navigate(-1);
       }
     }
   };
 
   const handleNext = () => {
-    console.log(formData);
     if (selectedIndex < formComponent.length - 1) {
       setSelectedIndex(selectedIndex + 1);
     }
@@ -648,11 +646,13 @@ const AddQuotesPage = () => {
     <MainContent
       items={[
         { title: "Quotes", goto: "/quotes" },
-        { title: "Add New Quote", goto: "/quotes/add-new" },
+        { title: "Update Quote", goto: "/quotes/add-new" },
       ]}
     >
       <div className="flex flex-col h-full">
-        <h1 className="text-md font-semibold text-lg">Add New Quote</h1>
+        <h1 className="text-md font-semibold text-lg">
+          Update {quote.quote_name}
+        </h1>
         <p className="text-sm font-normal">
           Please fill in the necessary details below.
         </p>
@@ -681,7 +681,7 @@ const AddQuotesPage = () => {
               onClick={handleNext}
             >
               <div className="flex flex-row gap-1 items-center">
-                {selectedIndex == formComponent.length - 1 ? "Submit" : "Next"}
+                {selectedIndex == formComponent.length - 1 ? "Update" : "Next"}
                 <HiArrowSmallRight size={15} />
               </div>
             </ButtonComponent>
@@ -689,11 +689,21 @@ const AddQuotesPage = () => {
         </div>
       </div>
 
-      <DialogComponent
-        dialogName={submitDialog}
-        handlerDialog={handleSubmitDialog}
-        title="Add New Quote"
-        footerContent={
+      <Dialog open={submitDialog} handler={handleSubmitDialog} size="sm">
+        <DialogHeader>
+          <Typography variant="small" className="font-bold text-base">
+            Update {quote.quote_name}
+          </Typography>
+        </DialogHeader>
+        <hr className="border-light-gray" />
+        <DialogBody className="text-dark">
+          <div className="flex flex-col gap-2">
+            <Typography variant="small" className="font-normal text-sm">
+              Are you sure you want to update this record?
+            </Typography>
+          </div>
+        </DialogBody>
+        <DialogFooter>
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
               className="bg-red-400"
@@ -706,14 +716,10 @@ const AddQuotesPage = () => {
               Yes
             </ButtonComponent>
           </div>
-        }
-      >
-        <Typography variant="small" className="font-normal text-sm">
-          Are you sure you want to add this record?
-        </Typography>
-      </DialogComponent>
+        </DialogFooter>
+      </Dialog>
     </MainContent>
   );
 };
 
-export default AddQuotesPage;
+export default UpdateQuotesPage;
