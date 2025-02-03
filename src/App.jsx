@@ -10,6 +10,8 @@ import PermissionsPage from "./pages/user_management/PermissionsPage";
 import AddQuotesPage from "./pages/quotes/AddQuotesPage";
 import { DirtyProvider } from "./providers/DirtyProvider";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
+import ViewQuotePage from "./pages/quotes/ViewQuotePage";
+import UpdateQuotesPage from "./pages/quotes/UpdateQuotesPage";
 
 const App = () => {
   return (
@@ -20,6 +22,11 @@ const App = () => {
 
           <Route path="/quotes" element={<QuotesPage />} />
           <Route path="/quotes/add-new" element={<AddQuotesPage />} />
+          <Route path="/quotes/view/:quote_id" element={<ViewQuotePage />} />
+          <Route
+            path="/quotes/update/:quote_id"
+            element={<UpdateQuotesPage />}
+          />
 
           <Route path="/users" element={<UsersPage />} />
 

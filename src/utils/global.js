@@ -42,3 +42,13 @@ export const formattedDate = (date) => {
   }
   return moment(date).format("LL");
 };
+
+export const getName = (fullName) => {
+  if (fullName == " " || !fullName) return;
+
+  const [firstName, ...lastNameParts] = fullName.split(" ");
+
+  const lastNameInitial = lastNameParts[lastNameParts.length - 1].charAt(0);
+
+  return `${firstName} ${lastNameInitial}.`;
+};
