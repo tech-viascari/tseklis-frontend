@@ -52,3 +52,25 @@ export const getName = (fullName) => {
 
   return `${firstName} ${lastNameInitial}.`;
 };
+
+export const handleOnChange = (
+  e,
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  error_message,
+  setIsDirty
+) => {
+  const { name, value } = e.target;
+
+  setFormData({ ...formData, [name]: value });
+
+  if (value === "") {
+    setErrors({ ...errors, [name]: error_message });
+  } else {
+    setErrors({ ...errors, [name]: "" });
+  }
+
+  setIsDirty(true);
+};

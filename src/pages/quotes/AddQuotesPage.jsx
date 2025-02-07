@@ -26,9 +26,10 @@ import {
   formattedDate,
 } from "../../utils/global";
 import { toast } from "sonner";
-import FormComponent from "./FormComponent";
 import ReviewComponent from "../../components/ReviewComponent";
 import DialogComponent from "../../components/DialogComponent";
+import FormComponent from "../../components/FormComponent";
+import AddPageComponent from "../../components/AddPageComponent";
 
 const AddQuotesPage = () => {
   const { isDirty, setIsDirty } = useDirtyContext();
@@ -638,49 +639,20 @@ const AddQuotesPage = () => {
   }, []);
 
   return (
-    <MainContent
-      items={[
-        { title: "Quotes", goto: "/quotes" },
-        { title: "Add New Quote", goto: "/quotes/add-new" },
-      ]}
-    >
-      <div className="flex flex-col h-full">
-        <h1 className="text-md font-semibold text-lg">Add New Quote</h1>
-        <p className="text-sm font-normal">
-          Please fill in the necessary details below.
-        </p>
-
-        <div className="flex flex-col h-full py-5 gap-3">
-          <FormComponent
-            formComponent={formComponent}
-            selectedIndex={selectedIndex}
-            pageIsLoading={pageIsLoading}
-          />
-
-          <div className="flex flex-row justify-between">
-            <ButtonComponent
-              variant="outlined"
-              className="bg-transparent text-gray border-gray hover:text-red-400 hover:border-red-400 "
-              onClick={handleBack}
-            >
-              <div className="flex flex-row gap-1 items-center">
-                <HiArrowSmallLeft size={15} />
-                {selectedIndex == 0 ? "Cancel" : "Back"}
-              </div>
-            </ButtonComponent>
-            <ButtonComponent
-              variant="outlined"
-              className="bg-transparent text-gray border-gray hover:text-primary  hover:border-primary"
-              onClick={handleNext}
-            >
-              <div className="flex flex-row gap-1 items-center">
-                {selectedIndex == formComponent.length - 1 ? "Submit" : "Next"}
-                <HiArrowSmallRight size={15} />
-              </div>
-            </ButtonComponent>
-          </div>
-        </div>
-      </div>
+    <>
+      <AddPageComponent
+        items={[
+          { title: "Quotes", goto: "/quotes" },
+          { title: "Add New Quote", goto: "/quotes/add-new" },
+        ]}
+        title="Add New Quote"
+        subtitle="Please fill in the necessary details below."
+        handleSubmit={handleSubmitDialog}
+        goBackTo="/users"
+        formComponent={formComponent}
+        setToDefault={setToDefault}
+        pageIsLoading={pageIsLoading}
+      />
 
       <DialogComponent
         dialogName={submitDialog}
@@ -705,7 +677,7 @@ const AddQuotesPage = () => {
           Are you sure you want to add this record?
         </Typography>
       </DialogComponent>
-    </MainContent>
+    </>
   );
 };
 

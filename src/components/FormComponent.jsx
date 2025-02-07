@@ -43,7 +43,7 @@ const FormComponent = ({
             </div>
           </div>
         ) : (
-          <div className="p-5 py-8 md:px-16 lg:px-24 max-h-[calc(100vh-250px)]">
+          <div className="p-5 py-8 md:px-10 lg:px-16 max-h-[calc(100vh-250px)]">
             {formComponent[selectedIndex].form_contents}
           </div>
         )}

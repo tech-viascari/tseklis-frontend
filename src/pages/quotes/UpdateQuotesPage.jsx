@@ -31,8 +31,8 @@ import {
   formattedDate,
 } from "../../utils/global";
 import { toast } from "sonner";
-import FormComponent from "./FormComponent";
 import ReviewComponent from "../../components/ReviewComponent";
+import FormComponent from "../../components/FormComponent";
 
 const UpdateQuotesPage = () => {
   const { isDirty, setIsDirty } = useDirtyContext();

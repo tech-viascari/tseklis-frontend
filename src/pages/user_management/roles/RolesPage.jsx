@@ -1,6 +1,6 @@
 import React from "react";
-import UnderConstructionComponent from "../../components/UnderConstructionComponent";
-import MainContent from "../layouts/MainContent";
+import UnderConstructionComponent from "../../../components/UnderConstructionComponent";
+import MainContent from "../../layouts/MainContent";
 
 const RolesPage = () => {
   return (
