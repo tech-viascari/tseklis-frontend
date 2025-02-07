@@ -58,13 +58,16 @@ const AddUsersPage = () => {
       } = formData;
 
       const response = await axiosInstance.post("/users", newUser);
+      console.log(response.data);
       if (response.status == 200) {
         toast.success("User has been successfully added!");
         navigate("/users");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
       toast.error("There was an error in adding the record.");
+
+      setErrors({ ...errors, ...error.response.data.errors });
     } finally {
       handleSubmitDialog();
     }

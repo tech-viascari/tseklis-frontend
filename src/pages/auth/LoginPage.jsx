@@ -30,12 +30,14 @@ const LoginPage = () => {
           navigate("/");
         }
       } catch (error) {
+        if(!error.response){
+          toast.error("Failed to login. Please try again.");
+        }
         if (error.response.data.status == "failed") {
           toast.error("Invalid email or password. Please try again.");
         } else {
           toast.error("Failed to login. Please try again.");
         }
-        console.log(error)
       }
     }
   };

@@ -38,7 +38,7 @@ const ViewPermissionPage = () => {
     const fetchData = async () => {
       const response = await axiosInstance.get(`/permission/${permission_id}`);
       if (response.status == 200) {
-        setPermission(response.data.permission[0]);
+        setPermission(response.data.permission);
       }
     };
 
