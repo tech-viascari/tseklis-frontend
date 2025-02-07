@@ -11,12 +11,28 @@ import { handleLogout } from "../../services/authServices.js";
 const TopBar = ({ items }) => {
   const { open, setOpen } = useDrawerStore();
 
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const [showMenu, setShowMenu] = useState(false);
   const [isMenuActive, setIsMenuActive] = useState(false);
+  const [initials, setInitials] = useState(false);
+  const [picture, setPicture] = useState("");
 
   const navigate = useNavigate();
+
+  const GetImage = () => {
+    if (picture == "" || picture == undefined) return <span className="text-[13px]">{initials}</span>;
+    return <img className="w-7 h-7 rounded-full " src={picture} alt="" />;
+  };
+
+  useEffect(() => {
+    if (user) {
+      if (user.email) {
+        setInitials(`${user.first_name[0]}${user.last_name[0]}`);
+        setPicture(user.picture);
+      }
+    }
+  }, [user]);
 
   return (
     <div className={`w-full fixed z-10 ${open ? "pl-64" : "pl-20"}`}>
@@ -64,7 +80,7 @@ const TopBar = ({ items }) => {
                 }
               }}
             >
-              <span className="text-[13px]">BP</span>
+              <GetImage />
             </button>
 
             <div
