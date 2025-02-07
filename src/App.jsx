@@ -4,42 +4,63 @@ import LoginPage from "./pages/auth/LoginPage";
 import MainLayout from "./pages/layouts/MainLayout";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import QuotesPage from "./pages/quotes/QuotesPage";
-import UsersPage from "./pages/user_management/UsersPage";
-import RolesPage from "./pages/user_management/RolesPage";
-import PermissionsPage from "./pages/user_management/PermissionsPage";
 import AddQuotesPage from "./pages/quotes/AddQuotesPage";
 import { DirtyProvider } from "./providers/DirtyProvider";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
 import ViewQuotePage from "./pages/quotes/ViewQuotePage";
 import UpdateQuotesPage from "./pages/quotes/UpdateQuotesPage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import UsersPage from "./pages/user_management/users/UsersPage";
+import RolesPage from "./pages/user_management/roles/RolesPage";
+import PermissionsPage from "./pages/user_management/permissions/PermissionsPage";
+import AddUsersPage from "./pages/user_management/users/AddUsersPage";
+import AddPermissionsPage from "./pages/user_management/permissions/AddPermissionsPage";
+import ViewPermissionPage from "./pages/user_management/permissions/ViewPermissionPage";
+import UpdatePermissionPage from "./pages/user_management/permissions/UpdatePermissionPage";
 
 const App = () => {
   return (
-    <DirtyProvider>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<DashboardPage />} />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <DirtyProvider>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<DashboardPage />} />
 
-          <Route path="/quotes" element={<QuotesPage />} />
-          <Route path="/quotes/add-new" element={<AddQuotesPage />} />
-          <Route path="/quotes/view/:quote_id" element={<ViewQuotePage />} />
-          <Route
-            path="/quotes/update/:quote_id"
-            element={<UpdateQuotesPage />}
-          />
+            <Route path="/quotes" element={<QuotesPage />} />
+            <Route path="/quotes/add-new" element={<AddQuotesPage />} />
+            <Route path="/quotes/view/:quote_id" element={<ViewQuotePage />} />
+            <Route
+              path="/quotes/update/:quote_id"
+              element={<UpdateQuotesPage />}
+            />
 
-          <Route path="/users" element={<UsersPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/users/add-new" element={<AddUsersPage />} />
+            <Route path="/users/view/:user_id" element={<UsersPage />} />
 
-          <Route path="/roles" element={<RolesPage />} />
+            <Route path="/roles" element={<RolesPage />} />
 
-          <Route path="/permissions" element={<PermissionsPage />} />
-        </Route>
+            <Route path="/permissions" element={<PermissionsPage />} />
+            <Route
+              path="/permissions/add-new"
+              element={<AddPermissionsPage />}
+            />
+            <Route
+              path="/permissions/view/:permission_id"
+              element={<ViewPermissionPage />}
+            />
+            <Route
+              path="/permissions/update/:permission_id"
+              element={<UpdatePermissionPage />}
+            />
+          </Route>
 
-        <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route path="*" element={<PageNotFoundComponent />} />
-      </Routes>
-    </DirtyProvider>
+          <Route path="*" element={<PageNotFoundComponent />} />
+        </Routes>
+      </DirtyProvider>
+    </GoogleOAuthProvider>
   );
 };
 
