@@ -131,7 +131,7 @@ const UpdatePermissionPage = () => {
     const fetchData = async () => {
       const response = await axiosInstance.get(`/permission/${permission_id}`);
       if (response.status == 200) {
-        setFormData(response.data.permission[0]);
+        setFormData(response.data.permission);
       }
     };
     fetchData();
