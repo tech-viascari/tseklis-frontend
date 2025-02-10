@@ -1,31 +1,37 @@
-import React, { useEffect } from "react";
-import TopBar from "../layouts/TopBar";
-import ButtonComponent from "../../components/ButtonComponent";
-import TableComponent from "../../components/TableComponent";
-import { useNavigate } from "react-router";
-import useDrawerStore from "../../store/useDrawerStore";
+import React from "react";
+import UnderConstructionComponent from "../../../components/UnderConstructionComponent";
+import MainContent from "../../layouts/MainContent";
+import TopBar from "../../layouts/TopBar";
+import QuotesProvider from "../../../providers/QuotesProvider";
 import { Typography } from "@material-tailwind/react";
-import useQuoteStore from "../../store/useQuoteStore";
-import QuotesProvider from "../../providers/QuotesProvider";
+import ButtonComponent from "../../../components/ButtonComponent";
+import TableComponent from "../../../components/TableComponent";
+import useDrawerStore from "../../../store/useDrawerStore";
+import useQuoteStore from "../../../store/useQuoteStore";
+import { useNavigate } from "react-router";
+import DataProvider from "../../../providers/DataProvider";
+import useUserStore from "../../../store/useUserStore";
 
-const QuotesPage = () => {
+const UsersPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
-  const { quotes, setQuote } = useQuoteStore();
+  const { users, setUser, setUsers } = useUserStore();
 
   const columns = [
     {
-      name: "Quote Number",
-      selector: (row) => row.quote_number,
+      name: "Email",
+      selector: (row) => row.email,
     },
     {
-      name: "Company Name",
-      selector: (row) => row.form_data.recipient_company,
+      name: "Name",
+      selector: (row) => {
+        return `${row.first_name} ${row.last_name}`
+      },
     },
     {
-      name: "Quote Name",
-      selector: (row) => row.quote_name,
+      name: "Last Login",
+      selector: (row) => row.last_login,
     },
     {
       name: "Status",
@@ -35,9 +41,9 @@ const QuotesPage = () => {
 
   return (
     <div className="w-full relative">
-      <TopBar items={[{ title: "Quotes", goto: "/quotes" }]} />
+      <TopBar items={[{ title: "Users", goto: "/users" }]} />
 
-      <QuotesProvider>
+      <DataProvider tableName="/users" setData={setUsers}>
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
@@ -45,16 +51,16 @@ const QuotesPage = () => {
                 <div className="flex flex-row justify-between items-center">
                   <div>
                     <Typography variant="small" className="font-bold text-xl">
-                      Quotes
+                      Users
                     </Typography>
                     <Typography variant="small" className="font-normal text-sm">
-                      Here's the list of quotes.
+                      Here's the list of users.
                     </Typography>
                   </div>
                   <div>
                     <ButtonComponent
                       onClick={() => {
-                        navigate("/quotes/add-new");
+                        navigate("/users/add-new");
                       }}
                     >
                       Add new
@@ -65,10 +71,10 @@ const QuotesPage = () => {
                   <div>
                     <TableComponent
                       columns={columns}
-                      data={quotes}
+                      data={users}
                       onClick={(row) => {
                         navigate("/quotes/view/" + row.quote_id);
-                        setQuote(row);
+                        setUser(row);
                       }}
                     />
                   </div>
@@ -77,9 +83,9 @@ const QuotesPage = () => {
             </div>
           </div>
         </div>
-      </QuotesProvider>
+      </DataProvider>
     </div>
   );
 };
 
-export default QuotesPage;
+export default UsersPage;

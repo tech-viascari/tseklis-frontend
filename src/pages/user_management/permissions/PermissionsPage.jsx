@@ -1,43 +1,31 @@
-import React, { useEffect } from "react";
-import TopBar from "../layouts/TopBar";
-import ButtonComponent from "../../components/ButtonComponent";
-import TableComponent from "../../components/TableComponent";
+import React from "react";
+import useDrawerStore from "../../../store/useDrawerStore";
 import { useNavigate } from "react-router";
-import useDrawerStore from "../../store/useDrawerStore";
+import TopBar from "../../layouts/TopBar";
+import DataProvider from "../../../providers/DataProvider";
 import { Typography } from "@material-tailwind/react";
-import useQuoteStore from "../../store/useQuoteStore";
-import QuotesProvider from "../../providers/QuotesProvider";
+import ButtonComponent from "../../../components/ButtonComponent";
+import TableComponent from "../../../components/TableComponent";
+import usePermissionStore from "../../../store/usePermissionStore";
 
-const QuotesPage = () => {
+const PermissionsPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
-  const { quotes, setQuote } = useQuoteStore();
+  const { permissions, setPermission, setPermissions } = usePermissionStore();
 
   const columns = [
     {
-      name: "Quote Number",
-      selector: (row) => row.quote_number,
-    },
-    {
-      name: "Company Name",
-      selector: (row) => row.form_data.recipient_company,
-    },
-    {
-      name: "Quote Name",
-      selector: (row) => row.quote_name,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.status,
+      name: "Permission Name",
+      selector: (row) => row.permission_name,
     },
   ];
 
   return (
     <div className="w-full relative">
-      <TopBar items={[{ title: "Quotes", goto: "/quotes" }]} />
+      <TopBar items={[{ title: "Permissions", goto: "/permissions" }]} />
 
-      <QuotesProvider>
+      <DataProvider tableName="/permissions" setData={setPermissions}>
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
@@ -45,16 +33,16 @@ const QuotesPage = () => {
                 <div className="flex flex-row justify-between items-center">
                   <div>
                     <Typography variant="small" className="font-bold text-xl">
-                      Quotes
+                      Permissions
                     </Typography>
                     <Typography variant="small" className="font-normal text-sm">
-                      Here's the list of quotes.
+                      Here's the list of permissions.
                     </Typography>
                   </div>
                   <div>
                     <ButtonComponent
                       onClick={() => {
-                        navigate("/quotes/add-new");
+                        navigate("/permissions/add-new");
                       }}
                     >
                       Add new
@@ -65,10 +53,10 @@ const QuotesPage = () => {
                   <div>
                     <TableComponent
                       columns={columns}
-                      data={quotes}
+                      data={permissions}
                       onClick={(row) => {
-                        navigate("/quotes/view/" + row.quote_id);
-                        setQuote(row);
+                        navigate("/permissions/view/" + row.permission_id);
+                        setPermission(row);
                       }}
                     />
                   </div>
@@ -77,9 +65,9 @@ const QuotesPage = () => {
             </div>
           </div>
         </div>
-      </QuotesProvider>
+      </DataProvider>
     </div>
   );
 };
 
-export default QuotesPage;
+export default PermissionsPage;

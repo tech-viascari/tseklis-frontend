@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
       try {
         const response = await axiosInstance.get("auth/check");
         if (response.status === 200) {
-          login(response.data.payload);
+          login(response.data.user);
         }
       } catch (error) {
         navigate("/login");

@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import useAuthStore from "../../store/useAuthStore.js";
 import { googleIconSVG } from "../../components/GetIcons.jsx";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -23,12 +25,19 @@ const LoginPage = () => {
         const response = await axiosInstance.post("/authenticate", formData);
 
         if (response.status === 200) {
-          login(response.data.payload);
+          login(response.data.user);
           toast.success("Login Successfully.");
           navigate("/");
         }
       } catch (error) {
-        console.log(error);
+        if(!error.response){
+          toast.error("Failed to login. Please try again.");
+        }
+        if (error.response.data.status == "failed") {
+          toast.error("Invalid email or password. Please try again.");
+        } else {
+          toast.error("Failed to login. Please try again.");
+        }
       }
     }
   };
@@ -113,12 +122,34 @@ const LoginPage = () => {
     </form>
   );
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async ({ code }) => {
+      try {
+        const response = await axiosInstance.post("/auth/google", {
+          code,
+        });
+        if (response.status === 200) {
+          login(response.data.user);
+          toast.success("Login Successfully.");
+          navigate("/");
+        }
+      } catch (error) {
+        if (error.response.data.status == "failed") {
+          toast.error(
+            `Login failed. ${error.response.data.message} Please contact the administrator immediately.`
+          );
+        }
+      }
+    },
+    flow: "auth-code",
+  });
+
   const googleAuthComponent = (
     <>
       <ButtonComponent
         className="w-full normal-case text-dark"
         variant="outlined"
-        onClick={() => toast.error("Google auth is under development.")}
+        onClick={googleLogin}
       >
         <div className="flex flex-row gap-1 items-center justify-center">
           {googleIconSVG}
