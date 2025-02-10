@@ -10,6 +10,8 @@ import PermissionsPage from "./pages/user_management/PermissionsPage";
 import AddQuotesPage from "./pages/quotes/AddQuotesPage";
 import { DirtyProvider } from "./providers/DirtyProvider";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
+import EntityEnrollment from "./pages/company_enrollment/EntityEnrollment";
+import AddEntityEnrollmentPage from "./pages/company_enrollment/AddEntityEnrollmentPage";
 
 const App = () => {
   return (
@@ -20,6 +22,9 @@ const App = () => {
 
           <Route path="/quotes" element={<QuotesPage />} />
           <Route path="/quotes/add-new" element={<AddQuotesPage />} />
+
+          <Route path="/entity-enrollment" element={<EntityEnrollment />} />
+          <Route path="/entity-enrollment/add" element={<AddEntityEnrollmentPage />} />
 
           <Route path="/users" element={<UsersPage />} />
 
