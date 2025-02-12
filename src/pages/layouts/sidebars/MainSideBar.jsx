@@ -3,6 +3,7 @@ import useDrawerStore from "../../../store/useDrawerStore";
 import primary_logo from "../../../assets/logos/primary_logo.svg";
 import logo_mark from "../../../assets/logos/logo_mark.svg";
 import {
+  HiBuildingOffice2,
   HiChevronDown,
   HiDocumentText,
   HiMiniUserGroup,
@@ -31,6 +32,13 @@ const MainSideBar = () => {
           icon: <HiDocumentText className="text-xl" />,
           title: "Quotes",
           goto: "/quotes",
+          submenus: [],
+          isExpanded: false,
+        },
+        {
+          icon: <HiBuildingOffice2 className="text-xl" />,
+          title: "Entity Enrollment",
+          goto: "/entity-enrollment",
           submenus: [],
           isExpanded: false,
         },

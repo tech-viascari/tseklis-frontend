@@ -7,6 +7,8 @@ import QuotesPage from "./pages/quotes/QuotesPage";
 import AddQuotesPage from "./pages/quotes/AddQuotesPage";
 import { DirtyProvider } from "./providers/DirtyProvider";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
+import EntityEnrollment from "./pages/company_enrollment/EntityEnrollment";
+import AddEntityEnrollmentPage from "./pages/company_enrollment/AddEntityEnrollmentPage";
 import ViewQuotePage from "./pages/quotes/ViewQuotePage";
 import UpdateQuotesPage from "./pages/quotes/UpdateQuotesPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -17,6 +19,12 @@ import AddUsersPage from "./pages/user_management/users/AddUsersPage";
 import AddPermissionsPage from "./pages/user_management/permissions/AddPermissionsPage";
 import ViewPermissionPage from "./pages/user_management/permissions/ViewPermissionPage";
 import UpdatePermissionPage from "./pages/user_management/permissions/UpdatePermissionPage";
+import AddRolesPage from "./pages/user_management/roles/AddRolesPage";
+import ViewRolePage from "./pages/user_management/roles/ViewRolePage";
+import UpdateRolePage from "./pages/user_management/roles/UpdateRolePage";
+import ViewUsersPage from "./pages/user_management/users/ViewUsersPage";
+import UpdateUsersPage from "./pages/user_management/users/UpdateUsersPage";
+
 
 const App = () => {
   return (
@@ -34,11 +42,21 @@ const App = () => {
               element={<UpdateQuotesPage />}
             />
 
+          <Route path="/entity-enrollment" element={<EntityEnrollment />} />
+          <Route path="/entity-enrollment/add" element={<AddEntityEnrollmentPage />} />
+
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
-            <Route path="/users/view/:user_id" element={<UsersPage />} />
+            <Route path="/users/view/:user_id" element={<ViewUsersPage />} />
+            <Route
+              path="/users/update/:user_id"
+              element={<UpdateUsersPage />}
+            />
 
             <Route path="/roles" element={<RolesPage />} />
+            <Route path="/roles/add-new" element={<AddRolesPage />} />
+            <Route path="/roles/view/:role_id" element={<ViewRolePage />} />
+            <Route path="/roles/update/:role_id" element={<UpdateRolePage />} />
 
             <Route path="/permissions" element={<PermissionsPage />} />
             <Route

@@ -21,7 +21,8 @@ const TopBar = ({ items }) => {
   const navigate = useNavigate();
 
   const GetImage = () => {
-    if (picture == "" || picture == undefined) return <span className="text-[13px]">{initials}</span>;
+    if (picture == "" || picture == undefined)
+      return <span className="text-[13px]">{initials}</span>;
     return <img className="w-7 h-7 rounded-full " src={picture} alt="" />;
   };
 

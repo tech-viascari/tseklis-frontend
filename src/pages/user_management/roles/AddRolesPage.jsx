@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import AddPageComponent from "../../../components/AddPageComponent";
 import InputComponent from "../../../components/InputComponent";
-import useUserStore from "../../../store/useUserStore";
 import DialogComponent from "../../../components/DialogComponent";
 import ButtonComponent from "../../../components/ButtonComponent";
-import { Switch, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useDirtyContext } from "../../../providers/DirtyProvider";
-import { HiMiniExclamationTriangle } from "react-icons/hi2";
 import axiosInstance from "../../../utils/axiosHelper";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import usePermissionStore from "../../../store/usePermissionStore";
 import ReviewComponent from "../../../components/ReviewComponent";
+import useRoleStore from "../../../store/useRoleStore";
+import SelectMultipleComponent from "../../../components/SelectMultipleComponent";
 
-const AddPermissionsPage = () => {
-  const { states, setPermissions, permissions } = usePermissionStore();
+const AddRolesPage = () => {
+  const { states, setRoles, roles } = useRoleStore();
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
-  const [formData, setFormData] = useState(states.permission);
+  const [formData, setFormData] = useState(states.role);
 
   const [errors, setErrors] = useState({});
 
@@ -48,12 +47,11 @@ const AddPermissionsPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const { permission_id, created_at, updated_at, ...newPermission } =
-        formData;
-      const response = await axiosInstance.post("/permissions", newPermission);
+      const { role_id, created_at, updated_at, ...filteredData } = formData;
+      const response = await axiosInstance.post("/roles", filteredData);
       if (response.status == 200) {
-        toast.success("User has been successfully added!");
-        navigate("/permissions");
+        toast.success("Role has been successfully added!");
+        navigate("/roles");
       }
     } catch (error) {
       console.log(error);
@@ -76,23 +74,51 @@ const AddPermissionsPage = () => {
     };
   };
 
+  const [options, setOptions] = useState([]);
+
   const formComponent = [
     getFormState(
-      "Permission Information",
+      "Role Information",
       <>
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <InputComponent
-              label="Permission Name"
+              label="Role Name"
               required={true}
-              name="permission_name"
-              value={formData.permission_name}
-              error_message={errors.permission_name}
+              name="role_name"
+              value={formData.role_name}
+              error_message={errors.role_name}
               onChange={(e) => {
-                handleOnChange(e, "Permission Name is required.");
+                handleOnChange(e, "Role Name is required.");
               }}
             />
           </div>
+        </div>
+      </>
+    ),
+    getFormState(
+      "Permissions",
+      <>
+        <div className="flex flex-col gap-3">
+          <SelectMultipleComponent
+            label="Permissions"
+            error_message={""}
+            name={"permissions"}
+            onSelectChange={(values) => {
+              let selected = values.map((selected) => {
+                return {
+                  permission_id: selected.value,
+                  permission_name: selected.label,
+                };
+              });
+
+              setFormData({ ...formData, permissions: selected });
+            }}
+            required
+            labelClass={""}
+            options={options}
+            isMulti={true}
+          />
         </div>
       </>
     ),
@@ -101,11 +127,22 @@ const AddPermissionsPage = () => {
       <>
         <div className="flex flex-col gap-3">
           <ReviewComponent
-            title="Permission Information"
+            title="Role Information"
             data={[
               {
-                name: "Permission Name",
-                value: formData.permission_name,
+                name: "Role Name",
+                value: formData.role_name,
+              },
+            ]}
+          />
+          <ReviewComponent
+            title="Permissions"
+            data={[
+              {
+                name: "Permissions",
+                value: formData.permissions
+                  .map((permission) => permission.permission_name)
+                  .join(", "),
               },
             ]}
           />
@@ -114,7 +151,7 @@ const AddPermissionsPage = () => {
     ),
   ];
 
-  const setToDefault = () => {
+  const setToDefault = async () => {
     let form_data = { ...states.permission };
     // Loop through each key and set its value to an empty string
     for (let key in form_data) {
@@ -123,6 +160,18 @@ const AddPermissionsPage = () => {
       }
     }
     setErrors(form_data);
+
+    const response = await axiosInstance.get("/permissions");
+
+    if (response.status == 200) {
+      const permissions = response.data.map((permission) => {
+        return {
+          value: permission.permission_id,
+          label: permission.permission_name,
+        };
+      });
+      setOptions(permissions);
+    }
     setPageIsLoading(false);
   };
 
@@ -130,13 +179,13 @@ const AddPermissionsPage = () => {
     <>
       <AddPageComponent
         items={[
-          { title: "Permissions", goto: "/permissions" },
-          { title: "Add New Permission", goto: "/permissions/add-new" },
+          { title: "Roles", goto: "/roles" },
+          { title: "Add New Role", goto: "/roles/add-new" },
         ]}
-        title="Add New Permission"
+        title="Add New Role"
         subtitle="Please fill in the necessary details below."
         handleSubmit={handleSubmitDialog}
-        goBackTo="/permissions"
+        goBackTo="/roles"
         formComponent={formComponent}
         setToDefault={setToDefault}
         pageIsLoading={pageIsLoading}
@@ -145,7 +194,7 @@ const AddPermissionsPage = () => {
       <DialogComponent
         dialogName={submitDialog}
         handlerDialog={handleSubmitDialog}
-        title="Add New Permission"
+        title="Add New Role"
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
@@ -169,4 +218,4 @@ const AddPermissionsPage = () => {
   );
 };
 
-export default AddPermissionsPage;
+export default AddRolesPage;

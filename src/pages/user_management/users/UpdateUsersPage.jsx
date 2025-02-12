@@ -1,50 +1,63 @@
-import React, { useState } from "react";
-import AddPageComponent from "../../../components/AddPageComponent";
-import InputComponent from "../../../components/InputComponent";
-import DialogComponent from "../../../components/DialogComponent";
-import ButtonComponent from "../../../components/ButtonComponent";
-import { Switch, Typography } from "@material-tailwind/react";
-import { useDirtyContext } from "../../../providers/DirtyProvider";
-import axiosInstance from "../../../utils/axiosHelper";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
+import React, { useEffect, useState } from "react";
+import UpdatePageComponent from "../../../components/UpdatePageComponent";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Switch,
+  Typography,
+} from "@material-tailwind/react";
 import ReviewComponent from "../../../components/ReviewComponent";
+import { handleOnChange } from "../../../utils/global";
+import { useDirtyContext } from "../../../providers/DirtyProvider";
+import ButtonComponent from "../../../components/ButtonComponent";
+import InputComponent from "../../../components/InputComponent";
+import axiosInstance from "../../../utils/axiosHelper";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 import useRoleStore from "../../../store/useRoleStore";
 import SelectMultipleComponent from "../../../components/SelectMultipleComponent";
-import { handleOnChange } from "../../../utils/global";
 import useUserStore from "../../../store/useUserStore";
-import SelectComponent from "../../../components/SelectComponent";
 
-const AddUsersPage = () => {
-  const { states, setUser, users } = useUserStore();
+const UpdateUsersPage = () => {
+  const { user_id } = useParams();
+  const navigate = useNavigate();
+  const { states, user, setUser, users, setUsers } = useUserStore();
 
-  const { isDirty, setIsDirty } = useDirtyContext();
+  const { setIsDirty } = useDirtyContext();
 
   const [formData, setFormData] = useState(states.user);
-
   const [errors, setErrors] = useState({});
 
-  const [pageIsLoading, setPageIsLoading] = useState(true);
-
   const [submitDialog, setSubmitDialog] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleSubmitDialog = () => {
+  const handleSubmitDialog = (e) => {
     setSubmitDialog(!submitDialog);
   };
 
+  const [pageIsLoading, setPageIsLoading] = useState(false);
+
+  const [options, setOptions] = useState([]);
+  const [defaultOptions, setDefaultOptions] = useState([]);
+
   const handleSubmit = async () => {
     try {
-      const { role_id, created_at, updated_at, ...filteredData } = formData;
-      const response = await axiosInstance.post("/users", filteredData);
+      const updateData = { ...user, ...formData };
+
+      const response = await axiosInstance.patch(
+        `/user/${user_id}`,
+        updateData
+      );
+
       if (response.status == 200) {
-        toast.success("User has been successfully added!");
-        navigate("/users");
+        navigate("/users/view/" + user_id);
+        toast.success("User updated successfully.");
+      } else {
+        throw Error("Failed to update the record.");
       }
     } catch (error) {
       console.log(error);
-      toast.error("There was an error in adding the record.");
+      toast.error("Failed to update the record.");
     } finally {
       handleSubmitDialog();
     }
@@ -62,8 +75,6 @@ const AddUsersPage = () => {
       form_contents,
     };
   };
-
-  const [options, setOptions] = useState([]);
 
   const formComponent = [
     getFormState(
@@ -147,7 +158,6 @@ const AddUsersPage = () => {
             />
             <InputComponent
               label="Password"
-              required={true}
               name="password"
               type="password"
               value={formData.password}
@@ -159,7 +169,7 @@ const AddUsersPage = () => {
                   setFormData,
                   errors,
                   setErrors,
-                  "Password is required",
+                  "",
                   setIsDirty
                 );
               }}
@@ -231,6 +241,7 @@ const AddUsersPage = () => {
             required
             labelClass={""}
             options={options}
+            defaultValue={defaultOptions}
             isMulti={false}
             closeMenuOnSelect={true}
           />
@@ -285,7 +296,7 @@ const AddUsersPage = () => {
   ];
 
   const setToDefault = async () => {
-    let form_data = { ...states.permission };
+    let form_data = { ...states.user };
     // Loop through each key and set its value to an empty string
     for (let key in form_data) {
       if (form_data.hasOwnProperty(key)) {
@@ -293,7 +304,6 @@ const AddUsersPage = () => {
       }
     }
     setErrors(form_data);
-
     const response = await axiosInstance.get("/roles");
 
     if (response.status == 200) {
@@ -308,27 +318,57 @@ const AddUsersPage = () => {
     setPageIsLoading(false);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axiosInstance.get(`/user/${user_id}`);
+      if (response.status == 200) {
+        const userState = { password: "", ...response.data.user };
+        setFormData(userState);
+        const defaultRole = response.data.user.roles.map((role) => {
+          return {
+            label: role.role_name,
+            value: role.role_id,
+          };
+        });
+        setDefaultOptions(defaultRole);
+      }
+    };
+    fetchData();
+    setToDefault();
+  }, []);
+
   return (
-    <>
-      <AddPageComponent
+    <div>
+      <UpdatePageComponent
         items={[
           { title: "Users", goto: "/users" },
-          { title: "Add New User", goto: "/users/add-new" },
+          {
+            title: "Update User",
+            goto: `/users/update/:${user.user_id}`,
+          },
         ]}
-        title="Add New User"
-        subtitle="Please fill in the necessary details below."
-        handleSubmit={handleSubmitDialog}
-        goBackTo="/users"
+        goBackTo={"/users"}
+        title={"User"}
+        handleSubmitDialog={handleSubmitDialog}
         formComponent={formComponent}
-        setToDefault={setToDefault}
         pageIsLoading={pageIsLoading}
-      />
+      ></UpdatePageComponent>
 
-      <DialogComponent
-        dialogName={submitDialog}
-        handlerDialog={handleSubmitDialog}
-        title="Add New User"
-        footerContent={
+      <Dialog open={submitDialog} handler={handleSubmitDialog} size="sm">
+        <DialogHeader>
+          <Typography variant="small" className="font-bold text-base">
+            Update User
+          </Typography>
+        </DialogHeader>
+        <hr className="border-light-gray" />
+        <DialogBody className="text-dark">
+          <div className="flex flex-col gap-2">
+            <Typography variant="small" className="font-normal text-sm">
+              Are you sure you want to update this record?
+            </Typography>
+          </div>
+        </DialogBody>
+        <DialogFooter>
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
               className="bg-red-400"
@@ -341,14 +381,10 @@ const AddUsersPage = () => {
               Yes
             </ButtonComponent>
           </div>
-        }
-      >
-        <Typography variant="small" className="font-normal text-sm">
-          Are you sure you want to add this record?
-        </Typography>
-      </DialogComponent>
-    </>
+        </DialogFooter>
+      </Dialog>
+    </div>
   );
 };
 
-export default AddUsersPage;
+export default UpdateUsersPage;

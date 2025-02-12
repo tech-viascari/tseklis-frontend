@@ -14,10 +14,7 @@ const TableComponent = ({ columns, data, onClick = () => {} }) => {
                     className="py-4 px-5"
                     key={`tbl-row-head-${Date.now() + Math.random()}`}
                   >
-                    <Typography
-                      variant="small"
-                      className="font-medium text-sm"
-                    >
+                    <Typography variant="small" className="font-medium text-sm">
                       {row.name}
                     </Typography>
                   </th>
@@ -53,12 +50,13 @@ const TableComponent = ({ columns, data, onClick = () => {} }) => {
                           "border-b border-light-gray"
                         }`}
                       >
-                        <Typography
+                        {/* <Typography
                           variant="small"
                           className="font-normal text-sm text-dark"
                         >
                           {column.selector(row)}
-                        </Typography>
+                        </Typography> */}
+                        {column.selector(row)}
                       </td>
                     );
                   })}

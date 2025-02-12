@@ -17,7 +17,13 @@ const PermissionsPage = () => {
   const columns = [
     {
       name: "Permission Name",
-      selector: (row) => row.permission_name,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.permission_name}
+          </Typography>
+        );
+      },
     },
   ];
 

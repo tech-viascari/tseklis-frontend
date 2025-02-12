@@ -60,13 +60,14 @@ export const handleOnChange = (
   errors,
   setErrors,
   error_message,
-  setIsDirty
+  setIsDirty,
+  required = true
 ) => {
   const { name, value } = e.target;
 
   setFormData({ ...formData, [name]: value });
 
-  if (value === "") {
+  if (value === "" && required) {
     setErrors({ ...errors, [name]: error_message });
   } else {
     setErrors({ ...errors, [name]: "" });
