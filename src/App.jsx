@@ -19,6 +19,11 @@ import AddUsersPage from "./pages/user_management/users/AddUsersPage";
 import AddPermissionsPage from "./pages/user_management/permissions/AddPermissionsPage";
 import ViewPermissionPage from "./pages/user_management/permissions/ViewPermissionPage";
 import UpdatePermissionPage from "./pages/user_management/permissions/UpdatePermissionPage";
+import AddRolesPage from "./pages/user_management/roles/AddRolesPage";
+import ViewRolePage from "./pages/user_management/roles/ViewRolePage";
+import UpdateRolePage from "./pages/user_management/roles/UpdateRolePage";
+import ViewUsersPage from "./pages/user_management/users/ViewUsersPage";
+import UpdateUsersPage from "./pages/user_management/users/UpdateUsersPage";
 
 
 const App = () => {
@@ -42,9 +47,16 @@ const App = () => {
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
-
+            <Route path="/users/view/:user_id" element={<ViewUsersPage />} />
+            <Route
+              path="/users/update/:user_id"
+              element={<UpdateUsersPage />}
+            />
 
             <Route path="/roles" element={<RolesPage />} />
+            <Route path="/roles/add-new" element={<AddRolesPage />} />
+            <Route path="/roles/view/:role_id" element={<ViewRolePage />} />
+            <Route path="/roles/update/:role_id" element={<UpdateRolePage />} />
 
             <Route path="/permissions" element={<PermissionsPage />} />
             <Route

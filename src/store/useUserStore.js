@@ -12,6 +12,8 @@ const UserState = {
   last_login: new Date(),
   password: "",
   status: "Active",
+  roles: [],
+  permissions: [],
   access_token: "",
   refresh_token: "",
   created_at: new Date(),
@@ -27,6 +29,13 @@ const useUserStore = create((set) => ({
   },
   setUsers: (payload) => set({ users: payload }),
   setUser: (payload) => set({ user: payload }),
+  getPermissions: (payload) => {
+    if (payload) {
+      return payload.map((permission) => permission.permission_name);
+    }
+
+    return [];
+  },
 }));
 
 export default useUserStore;

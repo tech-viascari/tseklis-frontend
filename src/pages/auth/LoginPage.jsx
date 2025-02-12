@@ -30,7 +30,8 @@ const LoginPage = () => {
           navigate("/");
         }
       } catch (error) {
-        if(!error.response){
+        console.log(error);
+        if (!error.response) {
           toast.error("Failed to login. Please try again.");
         }
         if (error.response.data.status == "failed") {
