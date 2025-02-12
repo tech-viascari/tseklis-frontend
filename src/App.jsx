@@ -7,6 +7,8 @@ import QuotesPage from "./pages/quotes/QuotesPage";
 import AddQuotesPage from "./pages/quotes/AddQuotesPage";
 import { DirtyProvider } from "./providers/DirtyProvider";
 import PageNotFoundComponent from "./components/PageNotFoundComponent";
+import EntityEnrollment from "./pages/company_enrollment/EntityEnrollment";
+import AddEntityEnrollmentPage from "./pages/company_enrollment/AddEntityEnrollmentPage";
 import ViewQuotePage from "./pages/quotes/ViewQuotePage";
 import UpdateQuotesPage from "./pages/quotes/UpdateQuotesPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -23,6 +25,7 @@ import UpdateRolePage from "./pages/user_management/roles/UpdateRolePage";
 import ViewUsersPage from "./pages/user_management/users/ViewUsersPage";
 import UpdateUsersPage from "./pages/user_management/users/UpdateUsersPage";
 
+
 const App = () => {
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
@@ -38,6 +41,9 @@ const App = () => {
               path="/quotes/update/:quote_id"
               element={<UpdateQuotesPage />}
             />
+
+          <Route path="/entity-enrollment" element={<EntityEnrollment />} />
+          <Route path="/entity-enrollment/add" element={<AddEntityEnrollmentPage />} />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
