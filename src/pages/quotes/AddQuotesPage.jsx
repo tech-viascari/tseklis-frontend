@@ -648,7 +648,7 @@ const AddQuotesPage = () => {
         title="Add New Quote"
         subtitle="Please fill in the necessary details below."
         handleSubmit={handleSubmitDialog}
-        goBackTo="/users"
+        goBackTo="/quotes"
         formComponent={formComponent}
         setToDefault={setToDefault}
         pageIsLoading={pageIsLoading}

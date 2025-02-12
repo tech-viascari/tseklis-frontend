@@ -11,6 +11,7 @@ import useQuoteStore from "../../../store/useQuoteStore";
 import { useNavigate } from "react-router";
 import DataProvider from "../../../providers/DataProvider";
 import useUserStore from "../../../store/useUserStore";
+import moment from "moment";
 
 const UsersPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -21,21 +22,53 @@ const UsersPage = () => {
   const columns = [
     {
       name: "Email",
-      selector: (row) => row.email,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.email}
+          </Typography>
+        );
+      },
     },
     {
       name: "Name",
       selector: (row) => {
-        return `${row.first_name} ${row.last_name}`
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {`${row.first_name} ${row.last_name}`}
+          </Typography>
+        );
+      },
+    },
+    {
+      name: "Role",
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.roles.length != 0 && row.roles[0].role_name}
+          </Typography>
+        );
       },
     },
     {
       name: "Last Login",
-      selector: (row) => row.last_login,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {moment(row.last_login).format("MMM DD, YYYY hh:mm A")}
+          </Typography>
+        );
+      },
     },
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.status}
+          </Typography>
+        );
+      },
     },
   ];
 
@@ -73,7 +106,7 @@ const UsersPage = () => {
                       columns={columns}
                       data={users}
                       onClick={(row) => {
-                        navigate("/quotes/view/" + row.quote_id);
+                        navigate("/users/view/" + row.user_id);
                         setUser(row);
                       }}
                     />
