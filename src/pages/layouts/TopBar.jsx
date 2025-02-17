@@ -36,8 +36,12 @@ const TopBar = ({ items }) => {
   }, [user]);
 
   return (
-    <div className={`w-full fixed z-10 ${open ? "pl-64" : "pl-20"}`}>
-      <div className="w-full z-10 h-[60px] bg-white flex flex-row justify-between items-center px-5 shadow">
+    <div
+      className={`w-full min-w-[240px] max-w-[2560px] fixed z-10 ${
+        open ? "pl-64" : "pl-20"
+      }`}
+    >
+      <div className="w-full z-10 h-[60px] bg-white  flex flex-row justify-between items-center px-5 shadow">
         <div className="flex flex-row gap-2 items-center">
           {open ? (
             <GoSidebarExpand

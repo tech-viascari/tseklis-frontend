@@ -55,6 +55,8 @@ const TimelineComponent = ({ timelines = [] }) => {
                 >
                   {timeline.description}
                 </Typography>
+
+                {timeline.action_component && timeline.action_component}
               </TimelineBody>
             </TimelineItem>
           ))}
