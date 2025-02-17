@@ -1,35 +1,59 @@
-import React, { useEffect } from "react";
-import TopBar from "../layouts/TopBar";
-import ButtonComponent from "../../components/ButtonComponent";
-import TableComponent from "../../components/TableComponent";
+import React from "react";
 import { useNavigate } from "react-router";
-import useDrawerStore from "../../store/useDrawerStore";
 import { Typography } from "@material-tailwind/react";
 import useQuoteStore from "../../store/useQuoteStore";
-import QuotesProvider from "../../providers/QuotesProvider";
+import useDrawerStore from "../../store/useDrawerStore";
+import TopBar from "../layouts/TopBar";
+import DataProvider from "../../providers/DataProvider";
+import ButtonComponent from "../../components/ButtonComponent";
+import TableComponent from "../../components/TableComponent";
 
 const QuotesPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
-  const { quotes, setQuote } = useQuoteStore();
+  const { quotes, setQuote, setQuotes } = useQuoteStore();
 
   const columns = [
     {
       name: "Quote Number",
-      selector: (row) => row.quote_number,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.quote_number}
+          </Typography>
+        );
+      },
     },
     {
       name: "Company Name",
-      selector: (row) => row.form_data.recipient_company,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.form_data.recipient_company}
+          </Typography>
+        );
+      },
     },
     {
       name: "Quote Name",
-      selector: (row) => row.quote_name,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.quote_name}
+          </Typography>
+        );
+      },
     },
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => {
+        return (
+          <Typography variant="small" className="font-normal text-sm text-dark">
+            {row.timestamps.length != 0 && row.timestamps[0].status}
+          </Typography>
+        );
+      },
     },
   ];
 
@@ -37,7 +61,7 @@ const QuotesPage = () => {
     <div className="w-full relative">
       <TopBar items={[{ title: "Quotes", goto: "/quotes" }]} />
 
-      <QuotesProvider>
+      <DataProvider tableName="/quotes" setData={setQuotes}>
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
@@ -77,7 +101,7 @@ const QuotesPage = () => {
             </div>
           </div>
         </div>
-      </QuotesProvider>
+      </DataProvider>
     </div>
   );
 };

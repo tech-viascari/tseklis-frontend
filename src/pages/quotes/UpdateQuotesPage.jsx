@@ -1,118 +1,89 @@
 import React, { useEffect, useState } from "react";
-import MainContent from "../layouts/MainContent";
-import ButtonComponent from "../../components/ButtonComponent";
 import {
-  HiArrowSmallLeft,
-  HiArrowSmallRight,
-  HiMiniExclamationCircle,
-  HiOutlineEllipsisHorizontal,
-} from "react-icons/hi2";
-import { useDirtyContext } from "../../providers/DirtyProvider";
-import { useNavigate } from "react-router";
-import InputComponent from "../../components/InputComponent";
-import useQuoteStore from "../../store/useQuoteStore";
-import SelectComponent from "../../components/SelectComponent";
-import {
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Typography,
   Button,
   Dialog,
   DialogBody,
   DialogFooter,
-  Spinner,
   DialogHeader,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Typography,
 } from "@material-tailwind/react";
-import TextAreaComponent from "../../components/TextAreaComponent";
-import {
-  formatNumberWithCommaAndDecimal,
-  formattedDate,
-} from "../../utils/global";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import useQuoteStore from "../../store/useQuoteStore";
+import UpdatePageComponent from "../../components/UpdatePageComponent";
+import { useDirtyContext } from "../../providers/DirtyProvider";
 import ReviewComponent from "../../components/ReviewComponent";
-import FormComponent from "../../components/FormComponent";
+import {
+  HiMiniExclamationCircle,
+  HiOutlineEllipsisHorizontal,
+} from "react-icons/hi2";
+import InputComponent from "../../components/InputComponent";
+import TextAreaComponent from "../../components/TextAreaComponent";
+import SelectComponent from "../../components/SelectComponent";
+import ButtonComponent from "../../components/ButtonComponent";
+import DialogComponent from "../../components/DialogComponent";
+import {
+  formattedDate,
+  formatNumberWithCommaAndDecimal,
+} from "../../utils/global";
+import axiosInstance from "../../utils/axiosHelper";
 
 const UpdateQuotesPage = () => {
-  const { isDirty, setIsDirty } = useDirtyContext();
-
-  const { states, quote, setQuotes, quotes, setQuote } = useQuoteStore();
-
-  const [formData, setFormData] = useState(quote.form_data);
-  const [scopeFormData, setScopeFormData] = useState(states.scope_of_work);
-
-  const [errors, setErrors] = useState({});
-  const [scopeErrors, setScopeErrors] = useState(states.scope_of_work);
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const [pageIsLoading, setPageIsLoading] = useState(true);
-
-  const [scopeDialog, setScopeDialog] = useState(false);
-  const [submitDialog, setSubmitDialog] = useState(false);
-
-  const [scopeIndex, setScopeIndex] = useState(-1);
-
+  const { quote_id } = useParams();
   const navigate = useNavigate();
+  const { states, quote, setQuote, quotes, setQuotes } = useQuoteStore();
 
-  const getFormState = (title, form_contents) => {
-    const formState = {
-      title: "",
-      form_contents: <></>,
-    };
+  const { setIsDirty } = useDirtyContext();
 
-    return {
-      ...formState,
-      title,
-      form_contents,
-    };
-  };
+  const [formData, setFormData] = useState(states.quote.form_data);
+  const [errors, setErrors] = useState({});
 
-  const handleScopeDialog = (e, scope_of_work = states.scope_of_work) => {
-    setScopeFormData(scope_of_work);
-    setScopeDialog(!scopeDialog);
-  };
-
+  const [submitDialog, setSubmitDialog] = useState(false);
   const handleSubmitDialog = (e) => {
     setSubmitDialog(!submitDialog);
   };
 
-  const handleSubmit = () => {
+  const [pageIsLoading, setPageIsLoading] = useState(false);
+
+  const [scopeFormData, setScopeFormData] = useState(states.scope_of_work);
+  const [scopeErrors, setScopeErrors] = useState(states.scope_of_work);
+
+  const [scopeDialog, setScopeDialog] = useState(false);
+  const [scopeIndex, setScopeIndex] = useState(-1);
+
+  const handleSubmit = async () => {
     try {
-      const updateQuote = { ...quote, form_data: formData };
-      const updatedQuotes = quotes.map((all_quotes) => {
-        if (all_quotes.quote_id === quote.quote_id) {
-          return updateQuote;
-        }
-        return quote;
-      });
+      const updateData = {
+        quote: { ...quote, form_data: { ...formData } },
+        timestamp: { status: "Drafted", remarks: "" },
+      };
 
-      setQuote(updateQuote);
-      setQuotes(updatedQuotes);
+      const response = await axiosInstance.patch(
+        `/quote/${quote_id}`,
+        updateData
+      );
 
-      navigate("/quotes/view/" + quote.quote_id);
-
-      toast.success("Quote updated successfully.");
+      if (response.status == 200) {
+        navigate("/quotes/view/" + quote_id);
+        toast.success("Quote updated successfully.");
+      } else {
+        throw Error("Failed to update the record.");
+      }
     } catch (error) {
       console.log(error);
+      toast.error("Failed to update the record.");
     } finally {
       handleSubmitDialog();
     }
   };
 
-  const handleScopeOnChange = (e, error_message) => {
-    const { name, value } = e.target;
-
-    setScopeFormData({ ...scopeFormData, [name]: value });
-
-    if (value === "") {
-      setScopeErrors({ ...scopeErrors, [name]: error_message });
-    } else {
-      setScopeErrors({ ...scopeErrors, [name]: "" });
-    }
-
-    setIsDirty(true);
+  const handleScopeDialog = (e, scope_of_work = states.scope_of_work) => {
+    setScopeFormData(scope_of_work);
+    setScopeDialog(!scopeDialog);
   };
 
   const handleScopeAdd = () => {
@@ -135,6 +106,43 @@ const UpdateQuotesPage = () => {
     setFormData({ ...formData, scope_of_work: newScopeOfWork });
     setScopeDialog(false);
     setScopeIndex(-1);
+  };
+
+  const handleScopeOnChange = (e, error_message) => {
+    const { name, value } = e.target;
+
+    setScopeFormData({ ...scopeFormData, [name]: value });
+
+    if (value === "") {
+      setScopeErrors({ ...scopeErrors, [name]: error_message });
+    } else {
+      setScopeErrors({ ...scopeErrors, [name]: "" });
+    }
+
+    setIsDirty(true);
+  };
+
+  const handleOnSelectChange = (name, value, error_message) => {
+    setFormData({ ...formData, [name]: value });
+
+    if (value === "") {
+      setErrors({ ...errors, [name]: error_message });
+    } else {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const getFormState = (title, form_contents) => {
+    const formState = {
+      title: "",
+      form_contents: <></>,
+    };
+
+    return {
+      ...formState,
+      title,
+      form_contents,
+    };
   };
 
   const formComponent = [
@@ -236,7 +244,17 @@ const UpdateQuotesPage = () => {
     getFormState(
       "Scope of Work",
       <>
-        <div className="w-full pb-10">
+        <div className="flex flex-col w-full pb-10 gap-3">
+          <InputComponent
+            label="Subject"
+            required={true}
+            name="service_type"
+            value={formData.service_type}
+            error_message={errors.service_type}
+            onChange={(e) => {
+              handleOnChange(e, "Subject is required.");
+            }}
+          />
           <div className="flex flex-row justify-between items-center w-full">
             <Typography variant="small" className="font-semibold">
               Scope of Work: <span className="text-red-500">*</span>
@@ -247,62 +265,15 @@ const UpdateQuotesPage = () => {
             >
               Add scope
             </ButtonComponent>
-            <Dialog open={scopeDialog} handler={handleScopeDialog}>
-              <DialogBody className="text-dark">
-                <div className="flex flex-col w-full px-5 pt-3">
-                  <Typography variant="small" className="font-bold text-md">
-                    Add Scope of Work
-                  </Typography>
-                  <div className="flex flex-col mt-5 gap-2">
-                    <InputComponent
-                      label="Scope of work"
-                      required={true}
-                      name="task"
-                      value={scopeFormData.task}
-                      error_message={scopeErrors.task}
-                      onChange={(e) => {
-                        handleScopeOnChange(e, "Scope of Work is required.");
-                      }}
-                    />
-                    <TextAreaComponent
-                      label="Description"
-                      required={true}
-                      name="sub_task"
-                      value={scopeFormData.sub_task}
-                      error_message={scopeErrors.sub_task}
-                      onChange={(e) => {
-                        handleScopeOnChange(e, "Description is required.");
-                      }}
-                    />
-                    <InputComponent
-                      label="Service Fee"
-                      type="number"
-                      required={true}
-                      name="service_fee"
-                      value={scopeFormData.service_fee}
-                      error_message={scopeErrors.service_fee}
-                      onChange={(e) => {
-                        handleScopeOnChange(e, "Service Fee is required.");
-                      }}
-                    />
-                    <InputComponent
-                      label="Out-of-pocket Expenses"
-                      required={true}
-                      name="oop_expenses"
-                      value={scopeFormData.oop_expenses}
-                      error_message={scopeErrors.oop_expenses}
-                      onChange={(e) => {
-                        handleScopeOnChange(
-                          e,
-                          "Out-of-pocket Expenses is required."
-                        );
-                      }}
-                    />
-                  </div>
-                </div>
-              </DialogBody>
-              <DialogFooter>
-                <div className="flex flex-row gap-3 px-5 pb-3">
+            <DialogComponent
+              dialogName={scopeDialog}
+              handlerDialog={handleScopeDialog}
+              submitDialog={() => {
+                console.log("Status Dialog");
+              }}
+              title="Add Scope of Work"
+              footerContent={
+                <div className="flex flex-row gap-3 pb-3">
                   <ButtonComponent
                     variant="outlined"
                     className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
@@ -327,8 +298,55 @@ const UpdateQuotesPage = () => {
                     </ButtonComponent>
                   )}
                 </div>
-              </DialogFooter>
-            </Dialog>
+              }
+            >
+              <div className="flex flex-col gap-2">
+                <InputComponent
+                  label="Scope of work"
+                  required={true}
+                  name="task"
+                  value={scopeFormData.task}
+                  error_message={scopeErrors.task}
+                  onChange={(e) => {
+                    handleScopeOnChange(e, "Scope of Work is required.");
+                  }}
+                />
+                <TextAreaComponent
+                  label="Description"
+                  required={true}
+                  name="sub_task"
+                  value={scopeFormData.sub_task}
+                  error_message={scopeErrors.sub_task}
+                  onChange={(e) => {
+                    handleScopeOnChange(e, "Description is required.");
+                  }}
+                />
+                <InputComponent
+                  label="Service Fee"
+                  type="number"
+                  required={true}
+                  name="service_fee"
+                  value={scopeFormData.service_fee}
+                  error_message={scopeErrors.service_fee}
+                  onChange={(e) => {
+                    handleScopeOnChange(e, "Service Fee is required.");
+                  }}
+                />
+                <InputComponent
+                  label="Out-of-pocket Expenses"
+                  required={true}
+                  name="oop_expenses"
+                  value={scopeFormData.oop_expenses}
+                  error_message={scopeErrors.oop_expenses}
+                  onChange={(e) => {
+                    handleScopeOnChange(
+                      e,
+                      "Out-of-pocket Expenses is required."
+                    );
+                  }}
+                />
+              </div>
+            </DialogComponent>
           </div>
           <div className=" flex flex-col gap-3">
             {formData.scope_of_work.length == 0 ? (
@@ -500,6 +518,27 @@ const UpdateQuotesPage = () => {
               Scope of Work
             </Typography>
             <hr className="border-light-gray" />
+            <div className="flex flex-col gap-3 mt-3">
+              <Typography variant="small" className="font-normal text-sm">
+                <span className="font-bold">RE:</span> Service Quote for{" "}
+                <span className="font-bold">{formData.service_type}</span>.
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                Prepared by{" "}
+                <span className="font-bold">{formData.billing_account}</span>{" "}
+                (the legal company representing{" "}
+                <span className="font-bold">FullSuite Compliance</span>),
+                outlines the services and associated costs for undertaking the
+                audit fieldwork coordination with the specified government
+                entities on behalf of{" "}
+                <span className="font-bold">{formData.recipient_company}</span>{" "}
+                (herein referred to as “ Client”),
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                FullSuite will carry out, under Partner Client's direction and
+                approval, the scope of work as follows:
+              </Typography>
+            </div>
             <div className="flex flex-col gap-2">
               {formData.scope_of_work.length == 0 ? (
                 <>
@@ -574,125 +613,55 @@ const UpdateQuotesPage = () => {
     ),
   ];
 
-  const handleOnChange = (e, error_message) => {
-    const { name, value } = e.target;
-
-    setFormData({ ...formData, [name]: value });
-
-    if (value === "") {
-      setErrors({ ...errors, [name]: error_message });
-    } else {
-      setErrors({ ...errors, [name]: "" });
-    }
-
-    setIsDirty(true);
-  };
-
-  const handleOnSelectChange = (name, value, error_message) => {
-    setFormData({ ...formData, [name]: value });
-
-    if (value === "") {
-      setErrors({ ...errors, [name]: error_message });
-    } else {
-      setErrors({ ...errors, [name]: "" });
-    }
-  };
-
-  const handleBack = () => {
-    if (selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
-    } else {
-      if (isDirty) {
-        const alert = confirm(
-          "You have unsaved changes. Are you sure you want to leave?"
-        );
-
-        if (alert) {
-          setIsDirty(false);
-          navigate(-1);
-        }
-      } else {
-        navigate(-1);
-      }
-    }
-  };
-
-  const handleNext = () => {
-    if (selectedIndex < formComponent.length - 1) {
-      setSelectedIndex(selectedIndex + 1);
-    }
-    if (selectedIndex == formComponent.length - 1) {
-      handleSubmitDialog();
-    }
-  };
-
-  const setToDefault = () => {
-    let quote_form_data = { ...states.quote_form_data };
+  const setToDefault = async () => {
+    let form_data = { ...states.quote.form_data };
     // Loop through each key and set its value to an empty string
-    for (let key in quote_form_data) {
-      if (quote_form_data.hasOwnProperty(key)) {
-        quote_form_data[key] = "";
+    for (let key in form_data) {
+      if (form_data.hasOwnProperty(key)) {
+        form_data[key] = "";
       }
     }
-    setErrors(quote_form_data);
+    setErrors(form_data);
     setPageIsLoading(false);
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      const response = await axiosInstance.get(`/quote/${quote_id}`);
+      if (response.status == 200) {
+        setFormData(response.data.quote.form_data);
+        setQuote(response.data.quote);
+      }
+    };
+    fetchData();
     setToDefault();
   }, []);
 
   return (
-    <MainContent
-      items={[
-        { title: "Quotes", goto: "/quotes" },
-        { title: "Update Quote", goto: "/quotes/add-new" },
-      ]}
-    >
-      <div className="flex flex-col h-full">
-        <h1 className="text-md font-semibold text-lg">
-          Update {quote.quote_name}
-        </h1>
-        <p className="text-sm font-normal">
-          Please fill in the necessary details below.
-        </p>
-
-        <div className="flex flex-col h-full py-5 gap-3">
-          <FormComponent
-            formComponent={formComponent}
-            selectedIndex={selectedIndex}
-            pageIsLoading={pageIsLoading}
-          />
-
-          <div className="flex flex-row justify-between">
-            <ButtonComponent
-              variant="outlined"
-              className="bg-transparent text-gray border-gray hover:text-red-400 hover:border-red-400 "
-              onClick={handleBack}
-            >
-              <div className="flex flex-row gap-1 items-center">
-                <HiArrowSmallLeft size={15} />
-                {selectedIndex == 0 ? "Cancel" : "Back"}
-              </div>
-            </ButtonComponent>
-            <ButtonComponent
-              variant="outlined"
-              className="bg-transparent text-gray border-gray hover:text-primary  hover:border-primary"
-              onClick={handleNext}
-            >
-              <div className="flex flex-row gap-1 items-center">
-                {selectedIndex == formComponent.length - 1 ? "Update" : "Next"}
-                <HiArrowSmallRight size={15} />
-              </div>
-            </ButtonComponent>
-          </div>
-        </div>
-      </div>
+    <div>
+      <UpdatePageComponent
+        items={[
+          { title: "Quotes", goto: "/quotes" },
+          {
+            title: `${quote.quote_name}`,
+            goto: `/quotes/view/${quote.quote_id}`,
+          },
+          {
+            title: "Update Quote",
+            goto: `/quotes/update/${quote.quote_id}`,
+          },
+        ]}
+        goBackTo={"/quotes"}
+        title={"Quote"}
+        handleSubmitDialog={handleSubmitDialog}
+        formComponent={formComponent}
+        pageIsLoading={pageIsLoading}
+      ></UpdatePageComponent>
 
       <Dialog open={submitDialog} handler={handleSubmitDialog} size="sm">
         <DialogHeader>
           <Typography variant="small" className="font-bold text-base">
-            Update {quote.quote_name}
+            Update Quote
           </Typography>
         </DialogHeader>
         <hr className="border-light-gray" />
@@ -718,7 +687,7 @@ const UpdateQuotesPage = () => {
           </div>
         </DialogFooter>
       </Dialog>
-    </MainContent>
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ const MainLayout = () => {
         <div className="flex flex-row max-w-[2560px] min-w-[320px] h-screen w-full justify-center">
           {<MainSideBar />}
           <div
-            className={`bg-white w-full min-w-[240px] max-w-[1440px] flex flex-col items-center`}
+            className={`bg-white w-full min-w-[240px] max-w-[2560px] flex flex-col items-center`}
           >
             <div className="w-full">
               <Outlet />

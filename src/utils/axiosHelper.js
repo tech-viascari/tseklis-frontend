@@ -35,21 +35,21 @@ const axiosInstance = axios.create({
 // axiosInstance.interceptors.response.use(
 //   (response) => {
 //     // Optionally, you can process the response here
-//     return response.data; // Returning only the data part
+//     // return response.data; // Returning only the data part
+//     return response;
 //   },
 //   (error) => {
 //     // Handle errors globally (e.g., token expiration, network errors)
 //     if (error.response) {
 //       // Server responded with a status code out of 2xx range
-//       console.error("Response error: ", error.response);
+//       console.log("Response error: ", error.response);
 //     } else if (error.request) {
 //       // No response received (network error)
-//       console.error("Request error: ", error.request);
+//       console.log("Request error: ", error.request);
 //     } else {
 //       // Something else went wrong
-//       console.error("Error: ", error.message);
+//       console.log("Error: ", error.message);
 //     }
-//     return Promise.reject(error);
 //   }
 // );
 
