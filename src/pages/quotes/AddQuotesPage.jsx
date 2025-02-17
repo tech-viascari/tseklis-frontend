@@ -1,97 +1,90 @@
-import React, { useEffect, useRef, useState } from "react";
-import MainContent from "../layouts/MainContent";
-import ButtonComponent from "../../components/ButtonComponent";
+import React, { useState } from "react";
 import {
-  HiArrowSmallLeft,
-  HiArrowSmallRight,
+  Button,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Typography,
+} from "@material-tailwind/react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+import ReviewComponent from "../../components/ReviewComponent";
+import AddPageComponent from "../../components/AddPageComponent";
+import DialogComponent from "../../components/DialogComponent";
+import ButtonComponent from "../../components/ButtonComponent";
+import useQuoteStore from "../../store/useQuoteStore";
+import { useDirtyContext } from "../../providers/DirtyProvider";
+import InputComponent from "../../components/InputComponent";
+import axiosInstance from "../../utils/axiosHelper";
+import SelectComponent from "../../components/SelectComponent";
+import TextAreaComponent from "../../components/TextAreaComponent";
+import {
   HiMiniExclamationCircle,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
-import { useDirtyContext } from "../../providers/DirtyProvider";
-import { useNavigate } from "react-router";
-import InputComponent from "../../components/InputComponent";
-import useQuoteStore from "../../store/useQuoteStore";
-import SelectComponent from "../../components/SelectComponent";
-import {
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
-import TextAreaComponent from "../../components/TextAreaComponent";
 import {
   formatNumberWithCommaAndDecimal,
   formattedDate,
 } from "../../utils/global";
-import { toast } from "sonner";
-import ReviewComponent from "../../components/ReviewComponent";
-import DialogComponent from "../../components/DialogComponent";
-import FormComponent from "../../components/FormComponent";
-import AddPageComponent from "../../components/AddPageComponent";
 
 const AddQuotesPage = () => {
+  const { states, setQuotes, quotes } = useQuoteStore();
+
   const { isDirty, setIsDirty } = useDirtyContext();
 
-  const { states, quotes, setQuotes } = useQuoteStore();
-
-  const [formData, setFormData] = useState(states.quote_form_data);
-  const [scopeFormData, setScopeFormData] = useState(states.scope_of_work);
+  const [formData, setFormData] = useState(states.quote.form_data);
 
   const [errors, setErrors] = useState({});
-  const [scopeErrors, setScopeErrors] = useState(states.scope_of_work);
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
 
-  const [scopeDialog, setScopeDialog] = useState(false);
   const [submitDialog, setSubmitDialog] = useState(false);
+  const [scopeFormData, setScopeFormData] = useState(states.scope_of_work);
+  const [scopeErrors, setScopeErrors] = useState(states.scope_of_work);
 
   const [scopeIndex, setScopeIndex] = useState(-1);
 
+  const [scopeDialog, setScopeDialog] = useState(false);
+
   const navigate = useNavigate();
 
-  const getFormState = (title, form_contents) => {
-    const formState = {
-      title: "",
-      form_contents: <></>,
-    };
-
-    return {
-      ...formState,
-      title,
-      form_contents,
-    };
-  };
-
-  const handleScopeDialog = (e, scope_of_work = states.scope_of_work) => {
-    setScopeFormData(scope_of_work);
-    setScopeDialog(!scopeDialog);
-  };
-
-  const handleSubmitDialog = (e) => {
+  const handleSubmitDialog = () => {
     setSubmitDialog(!submitDialog);
   };
 
-  const handleSubmit = () => {
+  const handleOnChange = (e, error_message) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    if (value === "") {
+      setErrors({ ...errors, [name]: error_message });
+    } else {
+      setErrors({ ...errors, [name]: "" });
+    }
+
+    setIsDirty(true);
+  };
+
+  const handleSubmit = async () => {
     try {
-      const toInsert = {
-        quote_id: "0001-0000-0001",
-        quote_number: "Quote-0001",
-        quote_name: "Quote Name",
-        status: "Drafted",
-      };
+      const { quote_id, created_at, updated_at, ...filteredData } = formData;
 
-      const newQuote = { ...states.quote, form_data: formData, ...toInsert };
-
-      setQuotes([...quotes, newQuote]);
-      navigate("/quotes");
-
-      toast.success("Quote added successfully.");
+      const response = await axiosInstance.post("/quotes", {
+        form_data: filteredData,
+        timestamp: {
+          status: "Drafted",
+          remarks: "",
+        },
+      });
+      if (response.status == 200) {
+        toast.success("Quote has been successfully added!");
+        navigate("/quotes");
+      }
     } catch (error) {
       console.log(error);
+      toast.error("There was an error in adding the record.");
     } finally {
       handleSubmitDialog();
     }
@@ -131,6 +124,34 @@ const AddQuotesPage = () => {
     setFormData({ ...formData, scope_of_work: newScopeOfWork });
     setScopeDialog(false);
     setScopeIndex(-1);
+  };
+
+  const handleOnSelectChange = (name, value, error_message) => {
+    setFormData({ ...formData, [name]: value });
+
+    if (value === "") {
+      setErrors({ ...errors, [name]: error_message });
+    } else {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const handleScopeDialog = (e, scope_of_work = states.scope_of_work) => {
+    setScopeFormData(scope_of_work);
+    setScopeDialog(!scopeDialog);
+  };
+
+  const getFormState = (title, form_contents) => {
+    const formState = {
+      title: "",
+      form_contents: <></>,
+    };
+
+    return {
+      ...formState,
+      title,
+      form_contents,
+    };
   };
 
   const formComponent = [
@@ -232,7 +253,17 @@ const AddQuotesPage = () => {
     getFormState(
       "Scope of Work",
       <>
-        <div className="w-full pb-10">
+        <div className="flex flex-col w-full pb-10 gap-3">
+          <InputComponent
+            label="Subject"
+            required={true}
+            name="service_type"
+            value={formData.service_type}
+            error_message={errors.service_type}
+            onChange={(e) => {
+              handleOnChange(e, "Subject is required.");
+            }}
+          />
           <div className="flex flex-row justify-between items-center w-full">
             <Typography variant="small" className="font-semibold">
               Scope of Work: <span className="text-red-500">*</span>
@@ -496,6 +527,27 @@ const AddQuotesPage = () => {
               Scope of Work
             </Typography>
             <hr className="border-light-gray" />
+            <div className="flex flex-col gap-3 mt-3">
+              <Typography variant="small" className="font-normal text-sm">
+                <span className="font-bold">RE:</span> Service Quote for{" "}
+                <span className="font-bold">{formData.service_type}</span>.
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                Prepared by{" "}
+                <span className="font-bold">{formData.billing_account}</span>{" "}
+                (the legal company representing{" "}
+                <span className="font-bold">FullSuite Compliance</span>),
+                outlines the services and associated costs for undertaking the
+                audit fieldwork coordination with the specified government
+                entities on behalf of{" "}
+                <span className="font-bold">{formData.recipient_company}</span>{" "}
+                (herein referred to as “ Client”),
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                FullSuite will carry out, under Partner Client's direction and
+                approval, the scope of work as follows:
+              </Typography>
+            </div>
             <div className="flex flex-col gap-2">
               {formData.scope_of_work.length == 0 ? (
                 <>
@@ -570,73 +622,17 @@ const AddQuotesPage = () => {
     ),
   ];
 
-  const handleOnChange = (e, error_message) => {
-    const { name, value } = e.target;
-
-    setFormData({ ...formData, [name]: value });
-
-    if (value === "") {
-      setErrors({ ...errors, [name]: error_message });
-    } else {
-      setErrors({ ...errors, [name]: "" });
-    }
-
-    setIsDirty(true);
-  };
-
-  const handleOnSelectChange = (name, value, error_message) => {
-    setFormData({ ...formData, [name]: value });
-
-    if (value === "") {
-      setErrors({ ...errors, [name]: error_message });
-    } else {
-      setErrors({ ...errors, [name]: "" });
-    }
-  };
-
-  const handleBack = () => {
-    if (selectedIndex > 0) {
-      setSelectedIndex(selectedIndex - 1);
-    } else {
-      if (isDirty) {
-        const alert = confirm(
-          "You have unsaved changes. Are you sure you want to leave?"
-        );
-
-        if (alert) {
-          setIsDirty(false);
-          navigate("/quotes");
-        }
-      } else {
-        navigate("/quotes");
-      }
-    }
-  };
-
-  const handleNext = () => {
-    if (selectedIndex < formComponent.length - 1) {
-      setSelectedIndex(selectedIndex + 1);
-    }
-    if (selectedIndex == formComponent.length - 1) {
-      handleSubmitDialog();
-    }
-  };
-
-  const setToDefault = () => {
-    let quote_form_data = { ...states.quote_form_data };
+  const setToDefault = async () => {
+    let form_data = { ...states.quote.form_data };
     // Loop through each key and set its value to an empty string
-    for (let key in quote_form_data) {
-      if (quote_form_data.hasOwnProperty(key)) {
-        quote_form_data[key] = "";
+    for (let key in form_data) {
+      if (form_data.hasOwnProperty(key)) {
+        form_data[key] = "";
       }
     }
-    setErrors(quote_form_data);
+    setErrors(form_data);
     setPageIsLoading(false);
   };
-
-  useEffect(() => {
-    setToDefault();
-  }, []);
 
   return (
     <>

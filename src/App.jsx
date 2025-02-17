@@ -44,6 +44,8 @@ const App = () => {
 
           <Route path="/entity-enrollment" element={<EntityEnrollment />} />
           <Route path="/entity-enrollment/add" element={<AddEntityEnrollmentPage />} />
+          <Route path="/entity-enrollment/view/:entity_id" element={<AddEntityEnrollmentPage />} />
+
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />

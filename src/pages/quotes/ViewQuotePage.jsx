@@ -1,6 +1,5 @@
-import React, { useState, UseState } from "react";
+import React, { useEffect, useState, UseState } from "react";
 import { useNavigate, useParams } from "react-router";
-import TopBar from "../layouts/TopBar";
 import {
   Button,
   Menu,
@@ -10,34 +9,30 @@ import {
   Spinner,
   Typography,
 } from "@material-tailwind/react";
-import ButtonComponent from "../../components/ButtonComponent";
-import useDrawerStore from "../../store/useDrawerStore";
-import useQuoteStore from "../../store/useQuoteStore";
-import ReviewComponent from "../../components/ReviewComponent";
-import { formatNumberWithCommaAndDecimal, getName } from "../../utils/global";
 import {
   HiMiniExclamationCircle,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
-import DialogComponent from "../../components/DialogComponent";
 import { toast } from "sonner";
+import useQuoteStore from "../../store/useQuoteStore";
+import ViewPageComponent from "../../components/ViewPageComponent";
+import ReviewComponent from "../../components/ReviewComponent";
+import DialogComponent from "../../components/DialogComponent";
+import ButtonComponent from "../../components/ButtonComponent";
+import axiosInstance from "../../utils/axiosHelper";
+import {
+  formattedDate,
+  formatNumberWithCommaAndDecimal,
+} from "../../utils/global";
 import TimelineComponent from "../../components/TimelineComponent";
 
 const ViewQuotePage = () => {
   const { quote_id } = useParams();
 
-  const { open, setOpen } = useDrawerStore();
-
-  const { quote, quotes, setQuotes, setQuote } = useQuoteStore();
-
-  const navigate = useNavigate();
-
-  const [statusDialog, setStatusDialog] = useState(false);
-  const statusHandlerDialog = () => {
-    setStatusDialog(!statusDialog);
-  };
+  const { quote, setQuote } = useQuoteStore();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
+
   const deleteHandlerDialog = () => {
     setDeleteDialog(!deleteDialog);
   };
@@ -47,198 +42,273 @@ const ViewQuotePage = () => {
     setLoadingDialog(!loadingDialog);
   };
 
-  const handleEditDetails = () => {
-    setQuote(quote);
-    navigate(`/quotes/update/${quote.quote_number}`);
+  const [statusDialog, setStatusDialog] = useState(false);
+  const statusHandlerDialog = () => {
+    setStatusDialog(!statusDialog);
   };
 
+  const [timelines, setTimelines] = useState([]);
+
+  const navigate = useNavigate();
+
+  const formattedTimeline = (timestamps = []) => {
+    if (timestamps.length === 0) {
+      return [];
+    }
+
+    const timelineState = {
+      title: "",
+      date: new Date(),
+      name: "",
+      description: "",
+      action_component: <></>,
+    };
+
+    const actionComponents = {
+      Drafted: (
+        <>
+          <div className="flex flex-row gap-3">
+            <ButtonComponent className="bg-transparent text-gray border hover:bg-primary hover:text-white font-sm">
+              Mark as 'Rejected'
+            </ButtonComponent>
+          </div>
+        </>
+      ),
+      "For Approval": <>For Approval</>,
+    };
+
+    const timeline = timestamps.map((timestamp, index) => {
+      const actionComponent =
+        actionComponents[timestamp.status] && index == 0 ? (
+          actionComponents[timestamp.status]
+        ) : (
+          <></>
+        );
+      return {
+        ...timelineState,
+        title: timestamp.status,
+        date: timestamp.datetime,
+        name: timestamp.full_name,
+        description: timestamp.remarks,
+        action_component: actionComponent,
+      };
+    });
+
+    return timeline;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(`/quote/${quote_id}`);
+        if (response.status == 200) {
+          const quotes = response.data.quote;
+
+          const timeline = formattedTimeline(quotes.timestamps);
+
+          setTimelines(timeline);
+          setQuote(quotes);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="w-full relative">
-      <TopBar
+    <>
+      <ViewPageComponent
         items={[
           { title: "Quotes", goto: "/quotes" },
           {
-            title: quote.quote_number,
-            goto: `/quotes/view/${quote.quote_number}`,
+            title: quote.quote_name,
+            goto: `/quote/view/${quote_id}`,
           },
         ]}
-      />
+        title={quote.quote_name}
+        subtitle={quote.quote_number}
+        sideButtonComponent={
+          <div className="flex w-max flex-row gap-2">
+            <ButtonComponent
+              variant="outlined"
+              className="py-1 px-4 text-secondary text-sm"
+              onClick={statusHandlerDialog}
+            >
+              {quote.timestamps.length != 0 && quote.timestamps[0].status}
+            </ButtonComponent>
+            <Menu>
+              <MenuHandler>
+                <Button
+                  variant="outlined"
+                  className="bg-transparent border-light-gray"
+                  size="sm"
+                >
+                  <HiOutlineEllipsisHorizontal />
+                </Button>
+              </MenuHandler>
+              <MenuList>
+                <MenuItem
+                  className="text-dark"
+                  onClick={() => {
+                    setQuote(quote);
+                    navigate(`/quotes/update/${quote_id}`);
+                  }}
+                >
+                  Edit Details
+                </MenuItem>
+                <MenuItem className="text-dark" onClick={loadingHandlerDialog}>
+                  Sync and Generate
+                </MenuItem>
+                <hr className="my-1 text-light-gray" />
+                <MenuItem onClick={deleteHandlerDialog}>
+                  <span className="text-red-400">Delete</span>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+        }
+      >
+        <div className="flex flex-col gap-3 mb-10">
+          <ReviewComponent
+            title="Basic Information"
+            data={[
+              {
+                name: "Recipient's Company",
+                value: quote.form_data.recipient_company,
+              },
+              {
+                name: "Recipient's Address",
+                value: quote.form_data.recipient_address,
+              },
+              {
+                name: "Recipient's Name",
+                value: quote.form_data.recipient_name,
+              },
+              {
+                name: "Recipient's Email",
+                value: quote.form_data.recipient_email,
+              },
+              {
+                name: "Currency",
+                value: quote.form_data.currency,
+              },
+              {
+                name: "Billing Account",
+                value: quote.form_data.billing_account,
+              },
+              {
+                name: "Due Date",
+                value: formattedDate(quote.form_data.due_date),
+              },
+            ]}
+          />
 
-      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
-        <div className="pt-[60px]">
-          <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
-            <div className="flex flex-col gap-5 h-full">
-              <div className="flex flex-row justify-between items-start">
-                <div className="flex flex-row gap-8">
-                  <div>
-                    <Typography variant="small" className="font-bold text-xl">
-                      {quote.quote_name}
-                    </Typography>
-                    <Typography variant="small" className="font-normal text-sm">
-                      {quote.quote_number}
-                    </Typography>
-                  </div>
-                  <div></div>
-                </div>
-                <div className="flex flex-row gap-3">
-                  <div className="flex w-max flex-row gap-2">
-                    <ButtonComponent
-                      variant="outlined"
-                      className="py-1 px-4 text-secondary text-sm"
-                      onClick={statusHandlerDialog}
+          <div className="flex flex-col gap-1">
+            <Typography variant="small" className="font-semibold text-sm">
+              Scope of Work
+            </Typography>
+            <hr className="border-light-gray" />
+            <div className="flex flex-col gap-3 mt-3">
+              <Typography variant="small" className="font-normal text-sm">
+                <span className="font-bold">RE:</span> Service Quote for{" "}
+                <span className="font-bold">
+                  {quote.form_data.service_type}
+                </span>
+                .
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                Prepared by{" "}
+                <span className="font-bold">
+                  {quote.form_data.billing_account}
+                </span>{" "}
+                (the legal company representing{" "}
+                <span className="font-bold">FullSuite Compliance</span>),
+                outlines the services and associated costs for undertaking the
+                audit fieldwork coordination with the specified government
+                entities on behalf of{" "}
+                <span className="font-bold">
+                  {quote.form_data.recipient_company}
+                </span>{" "}
+                (herein referred to as “ Client”),
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                FullSuite will carry out, under Partner Client's direction and
+                approval, the scope of work as follows:
+              </Typography>
+            </div>
+            <div className="flex flex-col gap-2">
+              {quote.form_data.scope_of_work.length == 0 ? (
+                <>
+                  <div className="py-5 text-center justify-center items-center flex flex-col">
+                    <HiMiniExclamationCircle
+                      className="text-orange-500"
+                      size={25}
+                    />
+
+                    <Typography
+                      variant="small"
+                      className="text-center text-sm font-medium"
                     >
-                      {quote.status}
-                    </ButtonComponent>
-
-                    <div>
-                      <Menu>
-                        <MenuHandler>
-                          <Button
-                            variant="outlined"
-                            className="bg-transparent border-light-gray"
-                            size="sm"
-                          >
-                            <HiOutlineEllipsisHorizontal />
-                          </Button>
-                        </MenuHandler>
-                        <MenuList>
-                          <MenuItem
-                            className="text-dark"
-                            onClick={handleEditDetails}
-                          >
-                            Edit Details
-                          </MenuItem>
-                          <MenuItem
-                            className="text-dark"
-                            onClick={loadingHandlerDialog}
-                          >
-                            Sync and Generate
-                          </MenuItem>
-                          <hr className="my-1 text-light-gray" />
-                          <MenuItem onClick={deleteHandlerDialog}>
-                            <span className="text-red-400">Delete</span>
-                          </MenuItem>
-                        </MenuList>
-                      </Menu>
-                    </div>
+                      No scope of work added yet.
+                    </Typography>
                   </div>
-                </div>
-              </div>
-              <div className="flex-1 h-full">
-                <div className="flex flex-col gap-5">
-                  <ReviewComponent
-                    title="Basic Information"
-                    data={[
-                      {
-                        name: "Recipient's Company",
-                        value: quote.form_data.recipient_company,
-                      },
-                      {
-                        name: "Recipient's Address",
-                        value: quote.form_data.recipient_address,
-                      },
-                      {
-                        name: "Recipient's Name",
-                        value: quote.form_data.recipient_name,
-                      },
-                      {
-                        name: "Recipient's Email",
-                        value: quote.form_data.recipient_email,
-                      },
-                      {
-                        name: "Currency",
-                        value: quote.form_data.currency,
-                      },
-                      {
-                        name: "Billing Account",
-                        value: quote.form_data.billing_account,
-                      },
-                      {
-                        name: "Due Date",
-                        value: quote.form_data.due_date,
-                      },
-                    ]}
-                  />
-                  <div className="w-full pb-10 flex flex-col gap-2">
-                    <div className="flex flex-row justify-between items-center w-full">
-                      <Typography variant="small" className="font-semibold">
-                        Scope of Work
-                      </Typography>
-                    </div>
-                    <hr className="border-light-gray" />
-                    <div className=" flex flex-col gap-3">
-                      {quote.form_data.scope_of_work.length == 0 ? (
-                        <>
-                          <div className="py-5 text-center justify-center items-center flex flex-col">
-                            <HiMiniExclamationCircle
-                              className="text-orange-500"
-                              size={25}
-                            />
+                </>
+              ) : (
+                <ul className="list-disc ml-5 flex-1 mt-1 gap-1 flex flex-col">
+                  {quote.form_data.scope_of_work.map((scope, index) => {
+                    const isPHP = quote.form_data.currency == "PHP";
+                    let service_fee = `${
+                      isPHP
+                        ? `PHP ${formatNumberWithCommaAndDecimal(
+                            scope.service_fee
+                          )} + 12% VAT`
+                        : `${formatNumberWithCommaAndDecimal(
+                            scope.service_fee
+                          )} USD`
+                    }`;
 
-                            <Typography
-                              variant="small"
-                              className="text-center text-[15px] font-medium"
-                            >
-                              No scope of work added.
-                            </Typography>
+                    return (
+                      <div key={`scope-${index}`}>
+                        <li>
+                          <div className="flex flex-row justify-between">
+                            <div className="flex flex-col gap-1">
+                              <Typography
+                                variant="small"
+                                className="text-justify text-sm font-normal"
+                              >
+                                <span className="font-semibold text-sm">
+                                  {scope.task}
+                                </span>{" "}
+                                <span className="text-sm">
+                                  {scope.sub_task}
+                                </span>
+                              </Typography>
+                              <Typography
+                                variant="small"
+                                className="font-semibold"
+                              >
+                                Service Fee: {service_fee}
+                              </Typography>
+                              <Typography
+                                variant="small"
+                                className="font-semibold"
+                              >
+                                OOP Expenses: {scope.oop_expenses}
+                              </Typography>
+                            </div>
                           </div>
-                        </>
-                      ) : (
-                        <ul className="list-disc ml-5 flex-1">
-                          {quote.form_data.scope_of_work.map((scope, index) => {
-                            const isPHP = quote.currency == "PHP";
-                            let service_fee = `${
-                              isPHP
-                                ? `PHP ${formatNumberWithCommaAndDecimal(
-                                    scope.service_fee
-                                  )} + 12% VAT`
-                                : `${formatNumberWithCommaAndDecimal(
-                                    scope.service_fee
-                                  )} USD`
-                            }`;
-
-                            return (
-                              <div key={`scope-${index}`} className="mt-3">
-                                <li>
-                                  <div className="flex flex-row justify-between">
-                                    <div className="flex flex-col gap-1">
-                                      <Typography
-                                        variant="small"
-                                        className="text-justify font-normal"
-                                      >
-                                        <span className="font-semibold">
-                                          {scope.task}
-                                        </span>{" "}
-                                        <span>{scope.sub_task}</span>
-                                      </Typography>
-                                      <Typography
-                                        variant="small"
-                                        className="font-semibold"
-                                      >
-                                        Service Fee: {service_fee}
-                                      </Typography>
-                                      <Typography
-                                        variant="small"
-                                        className="font-semibold"
-                                      >
-                                        OOP Expenses: {scope.oop_expenses}
-                                      </Typography>
-                                    </div>
-                                  </div>
-                                </li>
-                              </div>
-                            );
-                          })}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                        </li>
+                      </div>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </ViewPageComponent>
 
       <DialogComponent
         dialogName={statusDialog}
@@ -246,40 +316,17 @@ const ViewQuotePage = () => {
         title="Change Status"
         hideFooter={true}
         hideHeader={true}
+        size="md"
       >
         <div className="p-5">
-          <TimelineComponent
-            timelines={[
-              {
-                title: "Pending Approval",
-                date: new Date(),
-                name: "Benjie Pecson",
-                description:
-                  "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim ex praesentium qui delectus reiciendis odio maiores, quam deserunt cupiditate distinctio soluta eaque aut quas dicta iure. Commodi enim necessitatibus unde?",
-              },
-              {
-                title: "Pending Approval",
-                date: new Date(),
-                name: "Benjie Pecson",
-                description:
-                  "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim ex praesentium qui delectus reiciendis odio maiores, quam deserunt cupiditate distinctio soluta eaque aut quas dicta iure. Commodi enim necessitatibus unde?",
-              },
-              {
-                title: "Pending Approval",
-                date: new Date(),
-                name: "Benjie Pecson",
-                description:
-                  "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim ex praesentium qui delectus reiciendis odio maiores, quam deserunt cupiditate distinctio soluta eaque aut quas dicta iure. Commodi enim necessitatibus unde?",
-              },
-            ]}
-          ></TimelineComponent>
+          <TimelineComponent timelines={timelines}></TimelineComponent>
         </div>
       </DialogComponent>
 
       <DialogComponent
         dialogName={deleteDialog}
         handlerDialog={deleteHandlerDialog}
-        title={`Delete ${quote.quote_name}`}
+        title={`Delete Quote`}
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
@@ -291,13 +338,21 @@ const ViewQuotePage = () => {
 
             <ButtonComponent
               className="bg-secondary"
-              onClick={() => {
-                const filteredQuotes = quotes.filter(
-                  (_) => _.quote_id !== quote.quote_id
-                );
-                setQuotes(filteredQuotes);
-                toast.success("Quote deleted successfully.");
-                navigate("/quotes");
+              onClick={async () => {
+                try {
+                  const response = await axiosInstance.delete(
+                    `/quote/${quote.quote_id}`
+                  );
+                  if (response.status == 200) {
+                    toast.success("The record was deleted successfully.");
+                    navigate("/quotes");
+                  }
+                } catch (error) {
+                  console.log(error);
+                  toast.error("There was an error deleting the record");
+                } finally {
+                  deleteHandlerDialog();
+                }
               }}
             >
               Yes
@@ -319,7 +374,7 @@ const ViewQuotePage = () => {
           <Spinner color="teal" className="text-white w-8 h-8"></Spinner>
         </div>
       </dialog>
-    </div>
+    </>
   );
 };
 
