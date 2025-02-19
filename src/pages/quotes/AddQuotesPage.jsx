@@ -264,100 +264,250 @@ const AddQuotesPage = () => {
               handleOnChange(e, "Subject is required.");
             }}
           />
-          <div className="flex flex-row justify-between items-center w-full">
-            <Typography variant="small" className="font-semibold">
-              Scope of Work: <span className="text-red-500">*</span>
-            </Typography>
-            <ButtonComponent
-              className="bg-secondary text-light"
-              onClick={handleScopeDialog}
-            >
-              Add scope
-            </ButtonComponent>
-            <DialogComponent
-              dialogName={scopeDialog}
-              handlerDialog={handleScopeDialog}
-              submitDialog={() => {
-                console.log("Status Dialog");
-              }}
-              title="Add Scope of Work"
-              footerContent={
-                <div className="flex flex-row gap-3 pb-3">
-                  <ButtonComponent
-                    variant="outlined"
-                    className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
-                    onClick={handleScopeDialog}
-                  >
-                    Cancel
-                  </ButtonComponent>
 
-                  {scopeIndex != -1 ? (
-                    <ButtonComponent
-                      className="bg-secondary"
-                      onClick={handleScopeUpdate}
-                    >
-                      Update scope
-                    </ButtonComponent>
-                  ) : (
-                    <ButtonComponent
-                      className="bg-secondary"
-                      onClick={handleScopeAdd}
-                    >
-                      Add scope
-                    </ButtonComponent>
-                  )}
-                </div>
-              }
-            >
-              <div className="flex flex-col gap-2">
-                <InputComponent
-                  label="Scope of work"
-                  required={true}
-                  name="task"
-                  value={scopeFormData.task}
-                  error_message={scopeErrors.task}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Scope of Work is required.");
+          <div className="flex flex-col gap-1">
+            {/* <hr className="border-light-gray" /> */}
+            <div className="flex flex-col gap-3 mt-3">
+              <Typography variant="small" className="font-normal text-sm">
+                <span className="font-bold">RE:</span> Service Quote for{" "}
+                <span
+                  className={`font-bold p-1 ${
+                    !formData.service_type && "bg-yellow-300"
+                  }`}
+                >
+                  {formData.service_type == ""
+                    ? "< subject here >"
+                    : formData.service_type}
+                </span>
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                Prepared by{" "}
+                <span className="font-bold">{formData.billing_account}</span>{" "}
+                (the legal company representing{" "}
+                <span className="font-bold">FullSuite Compliance</span>),
+                outlines the services and associated costs for undertaking the
+                audit fieldwork coordination with the specified government
+                entities on behalf of{" "}
+                <span className="font-bold">{formData.recipient_company}</span>{" "}
+                (herein referred to as “ Client”),
+              </Typography>
+              <Typography variant="small" className="font-normal text-sm">
+                FullSuite will carry out, under Partner Client's direction and
+                approval, the scope of work as follows:
+              </Typography>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row justify-between items-center w-full">
+                <Typography variant="small" className="font-semibold">
+                  Scope of Work: <span className="text-red-500">*</span>
+                </Typography>
+                <ButtonComponent
+                  className="bg-secondary text-light"
+                  onClick={handleScopeDialog}
+                >
+                  Add scope
+                </ButtonComponent>
+                <DialogComponent
+                  dialogName={scopeDialog}
+                  handlerDialog={handleScopeDialog}
+                  submitDialog={() => {
+                    console.log("Status Dialog");
                   }}
-                />
-                <TextAreaComponent
-                  label="Description"
-                  required={true}
-                  name="sub_task"
-                  value={scopeFormData.sub_task}
-                  error_message={scopeErrors.sub_task}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Description is required.");
-                  }}
-                />
-                <InputComponent
-                  label="Service Fee"
-                  type="number"
-                  required={true}
-                  name="service_fee"
-                  value={scopeFormData.service_fee}
-                  error_message={scopeErrors.service_fee}
-                  onChange={(e) => {
-                    handleScopeOnChange(e, "Service Fee is required.");
-                  }}
-                />
-                <InputComponent
-                  label="Out-of-pocket Expenses"
-                  required={true}
-                  name="oop_expenses"
-                  value={scopeFormData.oop_expenses}
-                  error_message={scopeErrors.oop_expenses}
-                  onChange={(e) => {
-                    handleScopeOnChange(
-                      e,
-                      "Out-of-pocket Expenses is required."
-                    );
-                  }}
-                />
+                  title="Add Scope of Work"
+                  footerContent={
+                    <div className="flex flex-row gap-3 pb-3">
+                      <ButtonComponent
+                        variant="outlined"
+                        className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
+                        onClick={handleScopeDialog}
+                      >
+                        Cancel
+                      </ButtonComponent>
+
+                      {scopeIndex != -1 ? (
+                        <ButtonComponent
+                          className="bg-secondary"
+                          onClick={handleScopeUpdate}
+                        >
+                          Update scope
+                        </ButtonComponent>
+                      ) : (
+                        <ButtonComponent
+                          className="bg-secondary"
+                          onClick={handleScopeAdd}
+                        >
+                          Add scope
+                        </ButtonComponent>
+                      )}
+                    </div>
+                  }
+                >
+                  <div className="flex flex-col gap-2">
+                    <InputComponent
+                      label="Scope of work"
+                      required={true}
+                      name="task"
+                      value={scopeFormData.task}
+                      error_message={scopeErrors.task}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Scope of Work is required.");
+                      }}
+                    />
+                    <TextAreaComponent
+                      label="Description"
+                      required={true}
+                      name="sub_task"
+                      value={scopeFormData.sub_task}
+                      error_message={scopeErrors.sub_task}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Description is required.");
+                      }}
+                    />
+                    <InputComponent
+                      label="Service Fee"
+                      type="number"
+                      required={true}
+                      name="service_fee"
+                      value={scopeFormData.service_fee}
+                      error_message={scopeErrors.service_fee}
+                      onChange={(e) => {
+                        handleScopeOnChange(e, "Service Fee is required.");
+                      }}
+                    />
+                    <InputComponent
+                      label="Out-of-pocket Expenses"
+                      required={true}
+                      name="oop_expenses"
+                      value={scopeFormData.oop_expenses}
+                      error_message={scopeErrors.oop_expenses}
+                      onChange={(e) => {
+                        handleScopeOnChange(
+                          e,
+                          "Out-of-pocket Expenses is required."
+                        );
+                      }}
+                    />
+                  </div>
+                </DialogComponent>
               </div>
-            </DialogComponent>
+              <div className=" flex flex-col gap-3">
+                {formData.scope_of_work.length == 0 ? (
+                  <>
+                    <div className="py-5 text-center justify-center items-center flex flex-col">
+                      <HiMiniExclamationCircle
+                        className="text-orange-500"
+                        size={25}
+                      />
+
+                      <Typography
+                        variant="small"
+                        className="text-center text-[15px] font-medium"
+                      >
+                        No scope of work added yet.
+                      </Typography>
+
+                      <Typography
+                        variant="small"
+                        className="font-normal text-center text-[12px]"
+                      >
+                        Click the add button above to add a new scope of work.
+                      </Typography>
+                    </div>
+                  </>
+                ) : (
+                  <ul className="list-disc ml-5 flex-1">
+                    {formData.scope_of_work.map((scope, index) => {
+                      const isPHP = formData.currency == "PHP";
+                      let service_fee = `${
+                        isPHP
+                          ? `PHP ${formatNumberWithCommaAndDecimal(
+                              scope.service_fee
+                            )} + 12% VAT`
+                          : `${formatNumberWithCommaAndDecimal(
+                              scope.service_fee
+                            )} USD`
+                      }`;
+
+                      return (
+                        <div key={`scope-${index}`} className="mt-3">
+                          <li>
+                            <div className="flex flex-row justify-between">
+                              <div className="flex flex-col gap-1">
+                                <Typography
+                                  variant="small"
+                                  className="text-justify font-normal"
+                                >
+                                  <span className="font-semibold">
+                                    {scope.task}
+                                  </span>{" "}
+                                  <span>{scope.sub_task}</span>
+                                </Typography>
+                                <Typography
+                                  variant="small"
+                                  className="font-semibold"
+                                >
+                                  Service Fee: {service_fee}
+                                </Typography>
+                                <Typography
+                                  variant="small"
+                                  className="font-semibold"
+                                >
+                                  OOP Expenses: {scope.oop_expenses}
+                                </Typography>
+                              </div>
+                              <div className="flex flex-col px-5">
+                                <Menu placement="bottom-end">
+                                  <MenuHandler>
+                                    <Button
+                                      variant="filled"
+                                      size="sm"
+                                      className="bg-white shadow-none hover:shadow-md normal-case font-medium border-light-gray focus:!border-light-gray"
+                                    >
+                                      <HiOutlineEllipsisHorizontal
+                                        size={20}
+                                        className="text-dark"
+                                      />
+                                    </Button>
+                                  </MenuHandler>
+                                  <MenuList>
+                                    <MenuItem
+                                      onClick={(e) => {
+                                        handleScopeDialog(e, scope);
+                                        setScopeIndex(index);
+                                      }}
+                                    >
+                                      Edit
+                                    </MenuItem>
+                                    <MenuItem
+                                      className="text-red-400"
+                                      onClick={() => {
+                                        let filteredScopeOfWork =
+                                          formData.scope_of_work.filter(
+                                            (_, _index) => _index != index
+                                          );
+
+                                        setFormData({
+                                          ...formData,
+                                          scope_of_work: filteredScopeOfWork,
+                                        });
+                                      }}
+                                    >
+                                      Delete
+                                    </MenuItem>
+                                  </MenuList>
+                                </Menu>
+                              </div>
+                            </div>
+                          </li>
+                        </div>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            </div>
           </div>
-          <div className=" flex flex-col gap-3">
+          {/* <div className=" flex flex-col gap-3">
             {formData.scope_of_work.length == 0 ? (
               <>
                 <div className="py-5 text-center justify-center items-center flex flex-col">
@@ -471,7 +621,7 @@ const AddQuotesPage = () => {
                 })}
               </ul>
             )}
-          </div>
+          </div> */}
         </div>
       </>
     ),

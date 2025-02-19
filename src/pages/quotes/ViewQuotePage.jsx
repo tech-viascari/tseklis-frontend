@@ -6,7 +6,6 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
-  Spinner,
   Typography,
 } from "@material-tailwind/react";
 import {
@@ -25,6 +24,8 @@ import {
   formatNumberWithCommaAndDecimal,
 } from "../../utils/global";
 import TimelineComponent from "../../components/TimelineComponent";
+import LoadingComponent from "../../components/LoadingComponent";
+import TextAreaComponent from "../../components/TextAreaComponent";
 
 const ViewQuotePage = () => {
   const { quote_id } = useParams();
@@ -32,6 +33,15 @@ const ViewQuotePage = () => {
   const { quote, setQuote } = useQuoteStore();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
+
+  const [remarks, setRemarks] = useState("");
+  const [status, setStatus] = useState("");
+
+  const [changeStatusDialog, setChangeStatusDialog] = useState(false);
+  const changeStatusHandlerDialog = () => {
+    setStatusDialog(true);
+    setChangeStatusDialog(!changeStatusDialog);
+  };
 
   const deleteHandlerDialog = () => {
     setDeleteDialog(!deleteDialog);
@@ -51,7 +61,33 @@ const ViewQuotePage = () => {
 
   const navigate = useNavigate();
 
-  const formattedTimeline = (timestamps = []) => {
+  const toggleChangeStatus = async () => {
+    const formData = {
+      quote,
+      timestamp: {
+        status,
+        remarks,
+      },
+    };
+
+    try {
+      const response = await axiosInstance.patch(
+        `/quote/${quote.quote_id}`,
+        formData
+      );
+      if (response.status == 200) {
+        toast.success("The record was updated successfully.");
+        fetchData();
+      }
+    } catch (error) {
+      toast.error("There was an error deleting the record");
+    } finally {
+      setChangeStatusDialog(false);
+      setStatusDialog(true);
+    }
+  };
+
+  const formattedTimeline = (timestamps = [], quote) => {
     if (timestamps.length === 0) {
       return [];
     }
@@ -64,17 +100,86 @@ const ViewQuotePage = () => {
       action_component: <></>,
     };
 
+    const customClassName = `bg-transparent text-black border border-black hover:bg-black/80 hover:text-white hover:border-secondary font-sm focus:!border-black py-1`;
+
     const actionComponents = {
       Drafted: (
         <>
           <div className="flex flex-row gap-3">
-            <ButtonComponent className="bg-transparent text-gray border hover:bg-primary hover:text-white font-sm">
-              Mark as 'Rejected'
+            <ButtonComponent
+              className={customClassName}
+              onClick={() => {
+                setRemarks("");
+                setStatus("Sent for Signature");
+                setChangeStatusDialog(true);
+                setStatusDialog(false);
+              }}
+            >
+              Mark as 'Sent for Signature'
             </ButtonComponent>
           </div>
         </>
       ),
-      "For Approval": <>For Approval</>,
+      "Sent for Signature": (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Signed");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Signed'
+          </ButtonComponent>
+        </div>
+      ),
+      Signed: (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Sent Invoice");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Sent Invoice'
+          </ButtonComponent>
+        </div>
+      ),
+      "Sent Invoice": (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Paid");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Paid'
+          </ButtonComponent>
+        </div>
+      ),
+      Paid: (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Completed");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Completed'
+          </ButtonComponent>
+        </div>
+      ),
     };
 
     const timeline = timestamps.map((timestamp, index) => {
@@ -97,23 +202,45 @@ const ViewQuotePage = () => {
     return timeline;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get(`/quote/${quote_id}`);
-        if (response.status == 200) {
-          const quotes = response.data.quote;
+  const handleSyncAndGenerate = async (e) => {
+    try {
+      setLoadingDialog(true);
+      const response = await axiosInstance.get(`generate-quote`, {
+        params: { quote_id },
+      });
 
-          const timeline = formattedTimeline(quotes.timestamps);
+      const newWindow = window.open("", "_blank");
 
-          setTimelines(timeline);
-          setQuote(quotes);
-        }
-      } catch (error) {
-        console.log(error);
+      if (newWindow) {
+        newWindow.document.write(response.data);
+        newWindow.document.close(); // Ensure the document is rendered
       }
-    };
 
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingDialog(false);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get(`/quote/${quote_id}`);
+      if (response.status == 200) {
+        const quotes = response.data.quote;
+
+        const timeline = formattedTimeline(quotes.timestamps, quotes);
+
+        setTimelines(timeline);
+        setQuote(quotes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -158,7 +285,7 @@ const ViewQuotePage = () => {
                 >
                   Edit Details
                 </MenuItem>
-                <MenuItem className="text-dark" onClick={loadingHandlerDialog}>
+                <MenuItem className="text-dark" onClick={handleSyncAndGenerate}>
                   Sync and Generate
                 </MenuItem>
                 <hr className="my-1 text-light-gray" />
@@ -365,15 +492,65 @@ const ViewQuotePage = () => {
         </Typography>
       </DialogComponent>
 
-      <dialog
-        open={loadingDialog}
-        onClick={loadingHandlerDialog}
-        className="w-full bg-black/70 z-20 h-screen absolute top-0"
+      <DialogComponent
+        dialogName={changeStatusDialog}
+        handlerDialog={changeStatusHandlerDialog}
+        title="Change Status"
+        footerContent={
+          <div className="flex flex-row items-center justify-center gap-5 w-full -mt-5 mb-2">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={changeStatusHandlerDialog}
+            >
+              No
+            </ButtonComponent>
+
+            <ButtonComponent
+              className="bg-secondary"
+              onClick={() => {
+                toggleChangeStatus();
+              }}
+            >
+              Yes, proceed!
+            </ButtonComponent>
+          </div>
+        }
+        hideHeader={true}
       >
-        <div className="flex flex-row justify-center items-center h-full">
-          <Spinner color="teal" className="text-white w-8 h-8"></Spinner>
+        <div className="flex flex-col gap-3 pt-5">
+          <div className="flex flex-col items-center gap-2">
+            <HiMiniExclamationCircle className="text-orange-500" size={50} />
+            <Typography
+              variant="small"
+              className="font-bold text-md text-center"
+            >
+              Are you sure?
+            </Typography>
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-center"
+            >
+              You want to proceed to the next step?
+            </Typography>
+          </div>
+
+          <TextAreaComponent
+            label={"Remarks"}
+            error_message=""
+            name="remarks"
+            value={remarks}
+            onChange={(e) => {
+              setRemarks(e.target.value);
+            }}
+            labelClass=""
+          />
         </div>
-      </dialog>
+      </DialogComponent>
+
+      <LoadingComponent
+        open={loadingDialog}
+        loadingHandlerDialog={loadingHandlerDialog}
+      />
     </>
   );
 };

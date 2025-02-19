@@ -66,7 +66,7 @@ const App = () => {
               element={<AddPermissionsPage />}
             />
             <Route
-              path="/permissions/view/:permission_id"
+              path="/permissions/view/:permission_id/"
               element={<ViewPermissionPage />}
             />
             <Route
