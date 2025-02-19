@@ -10,7 +10,6 @@ const TextAreaComponent = ({
   onChange,
   required,
   labelClass = "",
-  options = [],
 }) => {
   return (
     <>

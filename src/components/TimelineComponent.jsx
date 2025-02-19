@@ -48,13 +48,15 @@ const TimelineComponent = ({ timelines = [] }) => {
                 >
                   {getName(timeline.name)}
                 </Typography>
-                <Typography
-                  variant="small"
-                  color="black"
-                  className="font-normal text-gray mt-2"
-                >
-                  {timeline.description}
-                </Typography>
+                <div className="px-2 border-l-4 border-light-gray">
+                  <Typography
+                    variant="small"
+                    color="black"
+                    className="font-normal text-black/70 my-2"
+                  >
+                    {timeline.description}
+                  </Typography>
+                </div>
 
                 {timeline.action_component && timeline.action_component}
               </TimelineBody>
