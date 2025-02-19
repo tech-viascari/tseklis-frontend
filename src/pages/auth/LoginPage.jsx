@@ -9,6 +9,7 @@ import useAuthStore from "../../store/useAuthStore.js";
 import { googleIconSVG } from "../../components/GetIcons.jsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import LoadingComponent from "../../components/LoadingComponent.jsx";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -16,14 +17,16 @@ const LoginPage = () => {
   const [formData, setFormData] = useState(formState);
   const [errors, setErrors] = useState(formState);
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevents the default form submission behavior
     if (isFormValid()) {
       try {
+        setLoading(true);
         const response = await axiosInstance.post("/authenticate", formData);
-
         if (response.status === 200) {
           login(response.data.user);
           toast.success("Login Successfully.");
@@ -38,9 +41,42 @@ const LoginPage = () => {
         } else {
           toast.error("Failed to login. Please try again.");
         }
+      } finally {
+        setLoading(false);
       }
     }
   };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: async ({ code }) => {
+      try {
+        const response = await axiosInstance.post("/auth/google", {
+          code,
+        });
+
+        if (response.status === 200) {
+          login(response.data.user);
+          toast.success("Login Successfully.");
+          navigate("/");
+        }
+      } catch (error) {
+        if (error.response.data.status == "failed") {
+          toast.error(
+            `Login failed. ${error.response.data.message} Please contact the administrator immediately.`
+          );
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: (errorResponse) => {
+      setLoading(false);
+    },
+    onNonOAuthError: (er) => {
+      setLoading(false);
+    },
+    flow: "auth-code",
+  });
 
   const handleOnChange = (e, error_message) => {
     const { name, value } = e.target;
@@ -122,34 +158,15 @@ const LoginPage = () => {
     </form>
   );
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async ({ code }) => {
-      try {
-        const response = await axiosInstance.post("/auth/google", {
-          code,
-        });
-        if (response.status === 200) {
-          login(response.data.user);
-          toast.success("Login Successfully.");
-          navigate("/");
-        }
-      } catch (error) {
-        if (error.response.data.status == "failed") {
-          toast.error(
-            `Login failed. ${error.response.data.message} Please contact the administrator immediately.`
-          );
-        }
-      }
-    },
-    flow: "auth-code",
-  });
-
   const googleAuthComponent = (
     <>
       <ButtonComponent
         className="w-full normal-case text-dark"
         variant="outlined"
-        onClick={googleLogin}
+        onClick={() => {
+          setLoading(true);
+          googleLogin();
+        }}
       >
         <div className="flex flex-row gap-1 items-center justify-center">
           {googleIconSVG}
@@ -185,6 +202,8 @@ const LoginPage = () => {
           {googleAuthComponent}
         </div>
       </div>
+
+      <LoadingComponent open={loading} />
     </>
   );
 };

@@ -81,6 +81,20 @@ const UpdateQuotesPage = () => {
     }
   };
 
+  const handleOnChange = (e, error_message) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    if (value === "") {
+      setErrors({ ...errors, [name]: error_message });
+    } else {
+      setErrors({ ...errors, [name]: "" });
+    }
+
+    setIsDirty(true);
+  };
+
   const handleScopeDialog = (e, scope_of_work = states.scope_of_work) => {
     setScopeFormData(scope_of_work);
     setScopeDialog(!scopeDialog);
