@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { Typography } from "@material-tailwind/react";
+import { Avatar, Typography } from "@material-tailwind/react";
 import useQuoteStore from "../../store/useQuoteStore";
 import useDrawerStore from "../../store/useDrawerStore";
 import TopBar from "../layouts/TopBar";
@@ -21,42 +21,44 @@ const LegalEntitiesPage = () => {
 
   const columns = [
     {
-      name: "",
+      name: "SEC Registration Number",
       selector: (row) => {
         return (
-          <div className=" flex flex-col items-center justify-center w-full">
-            <div className="w-12 aspect-square flex flex-col items-center justify-center">
-              <img
-                className="w-14 object-contain bg-transparent"
-                src={row.company_logo}
-                alt=""
-              />
-            </div>
-          </div>
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+          >
+            {row.sec_certificate}
+          </Typography>
         );
       },
-      width: "30%",
     },
     {
       name: "Company Name",
       selector: (row) => {
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark line-clamp-1"
-          >
-            {row.company_name}
-          </Typography>
-        );
-      },
-    },
-    {
-      name: "SEC Registration Number",
-      selector: (row) => {
-        return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
-            {row.sec_certificate}
-          </Typography>
+          <div className="flex flex-row gap-3 w-full items-center">
+            <div className="w-20 aspect-square flex flex-col items-center justify-center">
+              {/* <img
+                className="w-20 object-contain bg-transparent"
+                src={row.company_logo}
+                alt=""
+              /> */}
+              <Avatar
+                src={row.company_logo}
+                alt="avatar"
+                className="object-contain"
+              />
+            </div>
+            <div className="w-full">
+              <Typography
+                variant="small"
+                className="font-normal text-sm text-dark line-clamp-1"
+              >
+                {row.company_name}
+              </Typography>
+            </div>
+          </div>
         );
       },
     },
