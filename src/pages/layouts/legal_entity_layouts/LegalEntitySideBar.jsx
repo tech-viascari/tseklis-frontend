@@ -1,75 +1,116 @@
 import React, { useEffect, useState } from "react";
 import useDrawerStore from "../../../store/useDrawerStore";
-import primary_logo from "../../../assets/logos/primary_logo.svg";
-import logo_mark from "../../../assets/logos/logo_mark.svg";
 import {
-  HiBuildingOffice2,
   HiChevronDown,
+  HiChevronUpDown,
   HiDocumentText,
+  HiHome,
+  HiMiniChatBubbleLeftRight,
   HiMiniUserGroup,
   HiSquares2X2,
 } from "react-icons/hi2";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import {
+  Menu,
+  MenuHandler,
+  MenuList,
+  Typography,
+} from "@material-tailwind/react";
+import { RiProfileFill } from "react-icons/ri";
+import { PiFilesFill } from "react-icons/pi";
+import InputComponent from "../../../components/InputComponent";
 
-const MainSideBar = () => {
+const LegalEntitySideBar = () => {
+  const { entity_id } = useParams();
   const { open, setOpen } = useDrawerStore();
 
   const [active, setActive] = useState("/");
   const navigate = useNavigate();
 
+  const [openMenu, setOpenMenu] = useState(false);
+
   const navigation = [
     {
-      title: "General",
       navigation: [
         {
           icon: <HiSquares2X2 className="text-xl" />,
           title: "Dashboard",
-          goto: "/",
+          goto: `legal-entities/v/${entity_id}/`,
+          submenus: [],
+          isExpanded: false,
+        },
+        {
+          icon: <RiProfileFill className="text-xl" />,
+          title: "Entity Profile",
+          goto: `legal-entities/v/${entity_id}/entity-profile`,
           submenus: [],
           isExpanded: false,
         },
         {
           icon: <HiDocumentText className="text-xl" />,
-          title: "Quotes",
-          goto: "/quotes",
+          title: "GIS Tracker",
+          goto: `legal-entities/v/${entity_id}/gis-tracker`,
           submenus: [],
           isExpanded: false,
         },
         {
-          icon: <HiBuildingOffice2 className="text-xl" />,
-          title: "Legal Entities",
-          goto: "/legal-entities",
+          icon: <PiFilesFill className="text-xl" />,
+          title: "Document Drafting",
+          goto: `legal-entities/v/${entity_id}/document-drafting`,
           submenus: [],
           isExpanded: false,
         },
-      ],
-    },
-    {
-      title: "Settings",
-      navigation: [
         {
-          icon: <HiMiniUserGroup className="text-xl" />,
-          title: "User Management",
+          icon: <HiMiniChatBubbleLeftRight className="text-xl" />,
+          title: "Board Meetings",
           goto: null,
           isExpanded: true,
           submenus: [
             {
               icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Users",
-              goto: "/users",
+              title: "Notice of Meeting",
+              goto: `legal-entities/v/${entity_id}/notice-of-meeting`,
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Roles",
-              goto: "/roles",
+              title: "Minutes of Meeting",
+              goto: `legal-entities/v/${entity_id}/minutes-of-meeting`,
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Permissions",
-              goto: "/permissions",
+              title: "Board Resolutions",
+              goto: `legal-entities/v/${entity_id}/board-resolutions`,
+            },
+            {
+              icon: <HiMiniUserGroup className="text-xl" />,
+              title: "Secretary Certificate",
+              goto: `legal-entities/v/${entity_id}/secretary-certificate`,
+            },
+            {
+              icon: <HiMiniUserGroup className="text-xl" />,
+              title: "Treasurer Certificate",
+              goto: `legal-entities/v/${entity_id}/treasurer-certificate`,
             },
           ],
         },
+        // {
+        //   icon: <PiListChecksFill className="text-xl" />,
+        //   title: "Projects",
+        //   goto: null,
+        //   isExpanded: true,
+        //   submenus: [
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Tasks",
+        //       goto: `legal-entities/v/${entity_id}/tasks`,
+        //     },
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Workflows",
+        //       goto: `legal-entities/v/${entity_id}/workflows`,
+        //     },
+        //   ],
+        // },
       ],
     },
   ];
@@ -101,6 +142,11 @@ const MainSideBar = () => {
   };
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [searchEntity, setSearchEntity] = useState("");
+
+  const handleOnChangeSearch = (e) => {
+    setSearchEntity(e.target.value);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -108,8 +154,11 @@ const MainSideBar = () => {
     };
 
     const params = window.location.pathname.split("/");
-    if (params.length >= 2) {
-      setActive(`/${params[1]}`);
+    if (params.length >= 4) {
+      let param = params[4] != undefined ? params[4] : "";
+      setActive(`legal-entities/v/${entity_id}/${param}`);
+    } else {
+      setActive(`legal-entities/v/1`);
     }
 
     window.addEventListener("resize", handleResize);
@@ -147,25 +196,80 @@ const MainSideBar = () => {
         setOpen(true);
       }}
     >
-      <div className="py-3 px-5 h-[60px] shadow">
+      <div className="h-[60px] shadow flex flex-col justify-center">
         {open ? (
-          <img
-            src={primary_logo}
-            alt=""
-            className="w-24 object-contain cursor-pointer"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
+          <div className="flex flex-row items-center">
+            <div
+              className="px-4 py-5 border-r-[1px] border-light-gray cursor-pointer"
+              onClick={() => {
+                navigate("/legal-entities");
+              }}
+            >
+              <HiHome size={20} />
+            </div>
+            <Menu
+              open={openMenu}
+              handler={setOpenMenu}
+              dismiss={{
+                itemPress: false,
+              }}
+            >
+              <MenuHandler>
+                <div
+                  className="w-full flex flex-row px-3 justify-between items-center h-full cursor-pointer"
+                  onClick={() => {
+                    setOpenMenu(false);
+                  }}
+                >
+                  <Typography
+                    variant="small"
+                    className="font-semibold text-sm py-5 line-clamp-1"
+                  >
+                    Cloudeats PH. Inc
+                  </Typography>
+                  <div>
+                    <HiChevronUpDown size={20} />
+                  </div>
+                </div>
+              </MenuHandler>
+              <MenuList className="w-60 p-3 gap-3 flex flex-col border border-light-gray shadow-2xl">
+                <InputComponent
+                  value={searchEntity}
+                  onChange={handleOnChangeSearch}
+                  placeholder="Search entity"
+                />
+                <div className="h-40 flex flex-col gap-1 overflow-y-auto">
+                  {[1, 2, 3, 4].map((entity, index) => {
+                    return (
+                      <div
+                        key={`entity-${index}`}
+                        className="flex flex-row items-center gap-2 hover:bg-light-gray p-2 rounded cursor-pointer"
+                        onClick={() => {
+                          setOpenMenu(false);
+                        }}
+                      >
+                        <img
+                          src="https://docs.material-tailwind.com/img/face-2.jpg"
+                          alt="avatar"
+                          className="relative inline-block h-8 w-8 !rounded-full  object-cover object-center"
+                        />
+                        <Typography
+                          variant="small"
+                          className="font-semibold text-sm text-black"
+                        >
+                          Cloudeats PH. Inc.
+                        </Typography>
+                      </div>
+                    );
+                  })}
+                </div>
+              </MenuList>
+            </Menu>
+          </div>
         ) : (
-          <img
-            src={logo_mark}
-            alt=""
-            className="w-8 duration-1000 rotate-[360deg] object-contain cursor-pointer ml-1"
-            onClick={() => {
-              navigate("/");
-            }}
-          />
+          <div className="flex flex-row gap-3 items-center justify-center md:w-[70%]">
+            <HiHome size={20} />
+          </div>
         )}
       </div>
 
@@ -241,7 +345,7 @@ const MainSideBar = () => {
                             }`}
                           >
                             <div className="w-10 flex items-center justify-center">
-                              <div className="h-full bg-light w-0.5"></div>
+                              <div className="h-full bg-light/50 w-0.5"></div>
                             </div>
                             <div className="flex flex-col w-full gap-2 py-3">
                               {navigation.submenus.map((submenu, index) => {
@@ -288,4 +392,4 @@ const MainSideBar = () => {
   );
 };
 
-export default MainSideBar;
+export default LegalEntitySideBar;

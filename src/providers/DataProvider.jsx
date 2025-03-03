@@ -12,7 +12,6 @@ const DataProvider = ({ children, setData, tableName }) => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(tableName);
-        console.log(response.data);
         if (response.status === 200) {
           setData(response.data);
         }

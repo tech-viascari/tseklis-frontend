@@ -1,7 +1,7 @@
 import { Typography } from "@material-tailwind/react";
 import React from "react";
 
-const TableComponent = ({ columns, data, onClick = () => {} }) => {
+const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
   return (
     <div className="w-full border border-light-gray rounded-xl text-dark min-w-full overflow-x-auto">
       <table className="text-left w-full shadow-sm rounded-xl  min-w-[320px]">
@@ -9,9 +9,15 @@ const TableComponent = ({ columns, data, onClick = () => {} }) => {
           <tr>
             {columns.length != 0 &&
               columns.map((row, index) => {
+                let customClass = `py-4 px-5`;
+
+                if (row.width != undefined) {
+                  customClass += " w-[${row.width}]";
+                }
+
                 return (
                   <th
-                    className="py-4 px-5"
+                    className={customClass}
                     key={`tbl-row-head-${Date.now() + Math.random()}`}
                   >
                     <Typography variant="small" className="font-medium text-sm">
@@ -38,7 +44,7 @@ const TableComponent = ({ columns, data, onClick = () => {} }) => {
                   className="hover:bg-light-gray cursor-pointer"
                   key={`tbl-row-data-${Date.now() + Math.random()}`}
                   onClick={() => {
-                    onClick(row);
+                    onClick(row, index);
                   }}
                 >
                   {columns.map((column, _index) => {
