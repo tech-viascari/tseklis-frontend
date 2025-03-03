@@ -19,31 +19,21 @@ const LegalEntitiesPage = () => {
   const toggle_status = <PiToggleRight size={30} color="#00D253" />;
   const toggle_action = <HiPencilSquare size={30} color="#00D253" />;
 
+  const navigateToEntity = () => {
+    navigate(`/legal-entities/v/1`);
+  };
+
   const columns = [
     {
-      name: "SEC Registration Number",
-      selector: (row) => {
-        return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-          >
-            {row.sec_certificate}
-          </Typography>
-        );
-      },
-    },
-    {
       name: "Company Name",
-      selector: (row) => {
+      selector: (row) => row.company_name,
+      cell: (row) => {
         return (
-          <div className="flex flex-row gap-3 w-full items-center">
+          <div
+            className="flex flex-row gap-5 w-full items-center justify-center"
+            onClick={navigateToEntity}
+          >
             <div className="w-20 aspect-square flex flex-col items-center justify-center">
-              {/* <img
-                className="w-20 object-contain bg-transparent"
-                src={row.company_logo}
-                alt=""
-              /> */}
               <Avatar
                 src={row.company_logo}
                 alt="avatar"
@@ -61,14 +51,34 @@ const LegalEntitiesPage = () => {
           </div>
         );
       },
+      width: "50%",
     },
+    {
+      name: "SEC Registration Number",
+      selector: (row) => row.sec_certificate,
+      cell: (row) => {
+        return (
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={navigateToEntity}
+          >
+            {row.sec_certificate}
+          </Typography>
+        );
+      },
+      width: "30%",
+    },
+
     {
       name: "Status",
       selector: (row) => row.status,
+      width: "10%",
     },
     {
       name: "Action",
       selector: (row) => row.action,
+      width: "10%",
     },
   ];
 
@@ -170,9 +180,7 @@ const LegalEntitiesPage = () => {
                     <TableComponent
                       columns={columns}
                       data={VGCClients}
-                      onClick={(row) => {
-                        navigate(`/legal-entities/v/1`);
-                      }}
+                      onClick={navigateToEntity}
                     />
                     <Typography
                       variant="small"
@@ -184,9 +192,7 @@ const LegalEntitiesPage = () => {
                     <TableComponent
                       columns={columns}
                       data={computerShareClients}
-                      onClick={(row) => {
-                        navigate(`/legal-entities/v/1`);
-                      }}
+                      onClick={navigateToEntity}
                     />
                     <Typography
                       variant="small"
@@ -198,9 +204,7 @@ const LegalEntitiesPage = () => {
                     <TableComponent
                       columns={columns}
                       data={externalClients}
-                      onClick={(row) => {
-                        navigate(`/legal-entities/v/1`);
-                      }}
+                      onClick={navigateToEntity}
                     />
                   </div>
                 </div>
