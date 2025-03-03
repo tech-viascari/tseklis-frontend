@@ -24,7 +24,11 @@ import ViewRolePage from "./pages/user_management/roles/ViewRolePage";
 import UpdateRolePage from "./pages/user_management/roles/UpdateRolePage";
 import ViewUsersPage from "./pages/user_management/users/ViewUsersPage";
 import UpdateUsersPage from "./pages/user_management/users/UpdateUsersPage";
-
+import LegalEntitiesPage from "./pages/legal_entities/LegalEntitiesPage";
+import AddLegalEntitiesPage from "./pages/legal_entities/AddLegalEntitiesPage";
+import LegalEntityMainLayout from "./pages/layouts/legal_entity_layouts/LegalEntityMainLayout";
+import EntityDashboardPage from "./pages/legal_entities/legal_entity/EntityDashboardPage";
+import EntityEntryPage from "./pages/legal_entities/legal_entity/EntityEntryPage";
 
 const App = () => {
   return (
@@ -42,10 +46,25 @@ const App = () => {
               element={<UpdateQuotesPage />}
             />
 
-          <Route path="/entity-enrollment" element={<EntityEnrollment />} />
-          <Route path="/entity-enrollment/add" element={<AddEntityEnrollmentPage />} />
-          <Route path="/entity-enrollment/view/:entity_id" element={<AddEntityEnrollmentPage />} />
+            <Route path="/entity-enrollment" element={<EntityEnrollment />} />
+            <Route
+              path="/entity-enrollment/add"
+              element={<AddEntityEnrollmentPage />}
+            />
+            <Route
+              path="/entity-enrollment/view/:entity_id"
+              element={<AddEntityEnrollmentPage />}
+            />
 
+            <Route path="/legal-entities" element={<LegalEntitiesPage />} />
+            <Route
+              path="/legal-entities/add-new"
+              element={<AddLegalEntitiesPage />}
+            />
+            <Route
+              path="/legal-entities/view/:entity_id"
+              element={<AddEntityEnrollmentPage />}
+            />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
@@ -72,6 +91,17 @@ const App = () => {
             <Route
               path="/permissions/update/:permission_id"
               element={<UpdatePermissionPage />}
+            />
+          </Route>
+
+          <Route element={<LegalEntityMainLayout />}>
+            <Route
+              path="/legal-entities/v/:entity_id"
+              element={<EntityDashboardPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/:test"
+              element={<EntityEntryPage />}
             />
           </Route>
 

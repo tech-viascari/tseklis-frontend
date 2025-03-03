@@ -126,25 +126,29 @@ const AddUsersPage = () => {
               }}
             />
 
-            <InputComponent
-              label="Email"
-              required={true}
-              name="email"
-              type="email"
-              value={formData.email}
-              error_message={errors.email}
-              onChange={(e) => {
-                handleOnChange(
-                  e,
-                  formData,
-                  setFormData,
-                  errors,
-                  setErrors,
-                  "Email is required",
-                  setIsDirty
-                );
-              }}
-            />
+            <div className="flex flex-col gap-2">
+              <InputComponent
+                label="Viascari Email Address"
+                required={true}
+                name="email"
+                type="email"
+                value={formData.email}
+                error_message={errors.email}
+                placeholder="example@viascari.com"
+                onChange={(e) => {
+                  handleOnChange(
+                    e,
+                    formData,
+                    setFormData,
+                    errors,
+                    setErrors,
+                    "Email is required",
+                    setIsDirty
+                  );
+                }}
+              />
+            </div>
+
             <InputComponent
               label="Password"
               required={true}
