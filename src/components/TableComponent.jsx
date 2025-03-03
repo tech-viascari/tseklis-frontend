@@ -9,15 +9,9 @@ const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
           <tr>
             {columns.length != 0 &&
               columns.map((row, index) => {
-                let customClass = `py-4 px-5`;
-
-                if (row.width != undefined) {
-                  customClass += " w-[${row.width}]";
-                }
-
                 return (
                   <th
-                    className={customClass}
+                    className="py-4 px-5"
                     key={`tbl-row-head-${Date.now() + Math.random()}`}
                   >
                     <Typography variant="small" className="font-medium text-sm">

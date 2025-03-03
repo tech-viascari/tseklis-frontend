@@ -1,18 +1,22 @@
 import React from "react";
-import TopBar from "../../layouts/TopBar";
 import { Typography } from "@material-tailwind/react";
-import useDrawerStore from "../../../store/useDrawerStore";
 import { useParams } from "react-router";
+import useDrawerStore from "../../../../store/useDrawerStore";
+import TopBar from "../../../layouts/TopBar";
 
-const EntityDashboardPage = () => {
+const NoticeOfMeetingPage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
+
   return (
     <>
       <div className="w-full relative">
         <TopBar
           items={[
-            { title: "Dashboard", goto: `/legal-entities/v/${entity_id}/` },
+            {
+              title: "Notice of Meeting",
+              goto: `/legal-entities/v/${entity_id}/notice-of-meeting`,
+            },
           ]}
         />
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
@@ -22,7 +26,7 @@ const EntityDashboardPage = () => {
                 <div className="flex flex-row justify-between items-center">
                   <div>
                     <Typography variant="small" className="font-bold text-xl">
-                      Dashboard
+                      Notice of Meeting
                     </Typography>
                   </div>
                 </div>
@@ -35,4 +39,4 @@ const EntityDashboardPage = () => {
   );
 };
 
-export default EntityDashboardPage;
+export default NoticeOfMeetingPage;

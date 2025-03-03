@@ -193,7 +193,7 @@ const LegalEntitySideBar = () => {
         open ? "w-64" : "w-20"
       } fixed h-screen left-0 z-20 shadow`}
       onMouseEnter={() => {
-        setOpen(true);
+        // setOpen(true);
       }}
     >
       <div className="h-[60px] shadow flex flex-col justify-center">
@@ -267,7 +267,7 @@ const LegalEntitySideBar = () => {
             </Menu>
           </div>
         ) : (
-          <div className="flex flex-row gap-3 items-center justify-center md:w-[70%]">
+          <div className="flex flex-row gap-3 items-center justify-center">
             <HiHome size={20} />
           </div>
         )}

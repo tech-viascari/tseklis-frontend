@@ -4,15 +4,19 @@ import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
 import { useParams } from "react-router";
 
-const EntityDashboardPage = () => {
+const EntityProfilePage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
+
   return (
     <>
       <div className="w-full relative">
         <TopBar
           items={[
-            { title: "Dashboard", goto: `/legal-entities/v/${entity_id}/` },
+            {
+              title: "Entity Profile",
+              goto: `/legal-entities/v/${entity_id}/entity-profile`,
+            },
           ]}
         />
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
@@ -22,7 +26,7 @@ const EntityDashboardPage = () => {
                 <div className="flex flex-row justify-between items-center">
                   <div>
                     <Typography variant="small" className="font-bold text-xl">
-                      Dashboard
+                      Entity Profile
                     </Typography>
                   </div>
                 </div>
@@ -35,4 +39,4 @@ const EntityDashboardPage = () => {
   );
 };
 
-export default EntityDashboardPage;
+export default EntityProfilePage;
