@@ -17,9 +17,14 @@ const QuotesPage = () => {
   const columns = [
     {
       name: "Quote Number",
-      selector: (row) => {
+      selector: (row) => row.quote_number,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => navigateToQuote(row)}
+          >
             {row.quote_number}
           </Typography>
         );
@@ -27,9 +32,14 @@ const QuotesPage = () => {
     },
     {
       name: "Company Name",
-      selector: (row) => {
+      selector: (row) => row.form_data.recipient_company,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => navigateToQuote(row)}
+          >
             {row.form_data.recipient_company}
           </Typography>
         );
@@ -37,9 +47,14 @@ const QuotesPage = () => {
     },
     {
       name: "Quote Name",
-      selector: (row) => {
+      selector: (row) => row.quote_name,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => navigateToQuote(row)}
+          >
             {row.quote_name}
           </Typography>
         );
@@ -48,14 +63,26 @@ const QuotesPage = () => {
     {
       name: "Status",
       selector: (row) => {
+        return row.timestamps.length != 0 ? row.timestamps[0].status : "";
+      },
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => navigateToQuote(row)}
+          >
             {row.timestamps.length != 0 && row.timestamps[0].status}
           </Typography>
         );
       },
     },
   ];
+
+  const navigateToQuote = (row) => {
+    navigate("/quotes/view/" + row.quote_id);
+    setQuote(row);
+  };
 
   return (
     <div className="w-full relative">
@@ -90,10 +117,7 @@ const QuotesPage = () => {
                     <TableComponent
                       columns={columns}
                       data={quotes}
-                      onClick={(row) => {
-                        navigate("/quotes/view/" + row.quote_id);
-                        setQuote(row);
-                      }}
+                      onClick={navigateToQuote}
                     />
                   </div>
                 </div>
