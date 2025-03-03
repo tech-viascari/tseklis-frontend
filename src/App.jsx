@@ -29,6 +29,14 @@ import AddLegalEntitiesPage from "./pages/legal_entities/AddLegalEntitiesPage";
 import LegalEntityMainLayout from "./pages/layouts/legal_entity_layouts/LegalEntityMainLayout";
 import EntityDashboardPage from "./pages/legal_entities/legal_entity/EntityDashboardPage";
 import EntityEntryPage from "./pages/legal_entities/legal_entity/EntityEntryPage";
+import EntityGISPage from "./pages/legal_entities/legal_entity/EntityGISPage";
+import EntityProfilePage from "./pages/legal_entities/legal_entity/EntityProfilePage";
+import EntityDocumentDraftingPage from "./pages/legal_entities/legal_entity/EntityDocumentDraftingPage";
+import NoticeOfMeetingPage from "./pages/legal_entities/legal_entity/board_meetings/NoticeOfMeetingPage";
+import MinutesOfMeetingPage from "./pages/legal_entities/legal_entity/board_meetings/MinutesOfMeetingPage";
+import SecretaryCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/SecretaryCertificatePage";
+import BoardResolutionPage from "./pages/legal_entities/legal_entity/board_meetings/BoardResolutionPage";
+import TreasurerCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/TreasurerCertificatePage";
 
 const App = () => {
   return (
@@ -100,8 +108,36 @@ const App = () => {
               element={<EntityDashboardPage />}
             />
             <Route
-              path="/legal-entities/v/:entity_id/:test"
-              element={<EntityEntryPage />}
+              path="/legal-entities/v/:entity_id/entity-profile"
+              element={<EntityProfilePage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/gis-tracker"
+              element={<EntityGISPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/document-drafting"
+              element={<EntityDocumentDraftingPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/notice-of-meeting"
+              element={<NoticeOfMeetingPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/minutes-of-meeting"
+              element={<MinutesOfMeetingPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/board-resolutions"
+              element={<BoardResolutionPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/secretary-certificate"
+              element={<SecretaryCertificatePage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/treasurer-certificate"
+              element={<TreasurerCertificatePage />}
             />
           </Route>
 

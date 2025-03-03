@@ -144,7 +144,7 @@ const MainSideBar = () => {
         open ? "w-64" : "w-20"
       } fixed h-screen left-0 z-20 shadow`}
       onMouseEnter={() => {
-        setOpen(true);
+        // setOpen(true);
       }}
     >
       <div className="py-3 px-5 h-[60px] shadow">
