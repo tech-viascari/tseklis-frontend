@@ -17,9 +17,16 @@ const RolesPage = () => {
   const columns = [
     {
       name: "Role Name",
-      selector: (row) => {
+      selector: (row) => row.role_name,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToRoles(row);
+            }}
+          >
             {row.role_name}
           </Typography>
         );
@@ -27,10 +34,17 @@ const RolesPage = () => {
     },
     {
       name: "Permissions",
-      selector: (row) => {
+      selector: (row) => row.role_id,
+      cell: (row) => {
         return (
           <>
-            <div key={`role-${row.role_id}`} className="flex flex-row gap-2">
+            <div
+              key={`role-${row.role_id}`}
+              className="flex flex-row gap-2"
+              onClick={() => {
+                navigateToRoles(row);
+              }}
+            >
               {[0, 1].map((element, index) => {
                 if (row.permissions.length == 0) return;
                 if (index == 1 && row.permissions.length == 1) return;
@@ -70,6 +84,11 @@ const RolesPage = () => {
     },
   ];
 
+  const navigateToRoles = (row) => {
+    navigate("/roles/view/" + row.role_id);
+    setRole(row);
+  };
+
   return (
     <div className="w-full relative">
       <TopBar items={[{ title: "Roles", goto: "/roles" }]} />
@@ -103,10 +122,7 @@ const RolesPage = () => {
                     <TableComponent
                       columns={columns}
                       data={roles}
-                      onClick={(row) => {
-                        navigate("/roles/view/" + row.role_id);
-                        setRole(row);
-                      }}
+                      onClick={navigateToRoles}
                     />
                   </div>
                 </div>

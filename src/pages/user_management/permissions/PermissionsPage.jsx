@@ -17,15 +17,27 @@ const PermissionsPage = () => {
   const columns = [
     {
       name: "Permission Name",
-      selector: (row) => {
+      selector: (row) => row.permission_name,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToPermission(row);
+            }}
+          >
             {row.permission_name}
           </Typography>
         );
       },
     },
   ];
+
+  const navigateToPermission = (row) => {
+    navigate("/permissions/view/" + row.permission_id);
+    setPermission(row);
+  };
 
   return (
     <div className="w-full relative">
@@ -60,10 +72,7 @@ const PermissionsPage = () => {
                     <TableComponent
                       columns={columns}
                       data={permissions}
-                      onClick={(row) => {
-                        navigate("/permissions/view/" + row.permission_id);
-                        setPermission(row);
-                      }}
+                      onClick={navigateToPermission}
                     />
                   </div>
                 </div>

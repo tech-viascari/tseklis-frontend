@@ -22,9 +22,16 @@ const UsersPage = () => {
   const columns = [
     {
       name: "Email",
-      selector: (row) => {
+      selector: (row) => row.email,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToUser(row);
+            }}
+          >
             {row.email}
           </Typography>
         );
@@ -32,9 +39,16 @@ const UsersPage = () => {
     },
     {
       name: "Name",
-      selector: (row) => {
+      selector: (row) => `${row.first_name} ${row.last_name}`,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToUser(row);
+            }}
+          >
             {`${row.first_name} ${row.last_name}`}
           </Typography>
         );
@@ -42,9 +56,16 @@ const UsersPage = () => {
     },
     {
       name: "Role",
-      selector: (row) => {
+      selector: (row) => (row.roles.length != 0 ? row.roles[0].role_name : ""),
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToUser(row);
+            }}
+          >
             {row.roles.length != 0 && row.roles[0].role_name}
           </Typography>
         );
@@ -52,9 +73,16 @@ const UsersPage = () => {
     },
     {
       name: "Last Login",
-      selector: (row) => {
+      selector: (row) => moment(row.last_login).format("MMM DD, YYYY hh:mm A"),
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToUser(row);
+            }}
+          >
             {moment(row.last_login).format("MMM DD, YYYY hh:mm A")}
           </Typography>
         );
@@ -62,15 +90,27 @@ const UsersPage = () => {
     },
     {
       name: "Status",
-      selector: (row) => {
+      selector: (row) => row.status,
+      cell: (row) => {
         return (
-          <Typography variant="small" className="font-normal text-sm text-dark">
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToUser(row);
+            }}
+          >
             {row.status}
           </Typography>
         );
       },
     },
   ];
+
+  const navigateToUser = (row) => {
+    navigate("/users/view/" + row.user_id);
+    setUser(row);
+  };
 
   return (
     <div className="w-full relative">
@@ -105,10 +145,7 @@ const UsersPage = () => {
                     <TableComponent
                       columns={columns}
                       data={users}
-                      onClick={(row) => {
-                        navigate("/users/view/" + row.user_id);
-                        setUser(row);
-                      }}
+                      onClick={navigateToUser}
                     />
                   </div>
                 </div>

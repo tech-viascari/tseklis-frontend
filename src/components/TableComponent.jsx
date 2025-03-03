@@ -98,7 +98,7 @@ const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
   );
 
   return (
-    <div className="p-2 rounded-xl bg-white shadow-sm border border-light-gray">
+    <div className=" rounded-xl bg-white shadow-sm border border-light-gray">
       <DataTable
         columns={columns}
         data={data}
@@ -107,9 +107,7 @@ const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
         theme="customized"
         // onRowClicked={onClick}
         pointerOnHover={true}
-        onRowClicked={(row, index) => {
-          console.log("clicked");
-        }}
+        onRowClicked={onClick}
         noDataComponent={
           <Typography variant="small" className="font-normal text-sm py-5">
             No records found.
