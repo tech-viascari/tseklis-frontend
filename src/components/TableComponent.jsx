@@ -1,8 +1,36 @@
 import { Typography } from "@material-tailwind/react";
 import React from "react";
+import DataTable, { createTheme } from "react-data-table-component";
 
 const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
-  return (
+  createTheme("customized", {
+    text: {
+      primary: "#000000",
+    },
+    background: {
+      default: "transparent",
+    },
+    divider: {
+      default: "#d9d9d9",
+    },
+  });
+
+  const customStyles = {
+    headCells: {
+      style: {
+        font: "bold",
+      },
+    },
+    cells: {
+      style: {
+        font: "normal",
+        // backgroundColor: "#000",
+        padding: "10px",
+      },
+    },
+  };
+
+  const OldTable = (
     <div className="w-full border border-light-gray rounded-xl text-dark min-w-full overflow-x-auto">
       <table className="text-left w-full shadow-sm rounded-xl  min-w-[320px]">
         <thead className="border-b border-light-gray">
@@ -51,11 +79,11 @@ const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
                         }`}
                       >
                         {/* <Typography
-                          variant="small"
-                          className="font-normal text-sm text-dark"
-                        >
-                          {column.selector(row)}
-                        </Typography> */}
+                      variant="small"
+                      className="font-normal text-sm text-dark"
+                    >
+                      {column.selector(row)}
+                    </Typography> */}
                         {column.selector(row)}
                       </td>
                     );
@@ -66,6 +94,29 @@ const TableComponent = ({ columns, data, onClick = (row, index) => {} }) => {
           )}
         </tbody>
       </table>
+    </div>
+  );
+
+  return (
+    <div className="p-2 rounded-xl bg-white shadow-sm border border-light-gray">
+      <DataTable
+        columns={columns}
+        data={data}
+        persistTableHead={true}
+        customStyles={customStyles}
+        theme="customized"
+        // onRowClicked={onClick}
+        pointerOnHover={true}
+        onRowClicked={(row, index) => {
+          console.log("clicked");
+        }}
+        noDataComponent={
+          <Typography variant="small" className="font-normal text-sm py-5">
+            No records found.
+          </Typography>
+        }
+        highlightOnHover
+      />
     </div>
   );
 };
