@@ -40,7 +40,7 @@ const RolesPage = () => {
           <>
             <div
               key={`role-${row.role_id}`}
-              className="flex flex-row gap-2"
+              className="flex flex-row gap-2 w-full"
               onClick={() => {
                 navigateToRoles(row);
               }}
@@ -51,7 +51,7 @@ const RolesPage = () => {
                 return (
                   <div
                     key={`permission-${row.permissions[index].permission_id}`}
-                    className="flex flex-col text-center justify-center border px-4 py-0 rounded-full border-gray"
+                    className="flex flex-col text-center justify-center border rounded-full border-gray w-full h-5 px-5 line-clamp-1 text-nowrap"
                   >
                     <Typography
                       variant="small"
@@ -67,7 +67,7 @@ const RolesPage = () => {
                   key={`permission-${
                     row.permissions[row.permissions.length - 1].permission_id
                   }`}
-                  className="flex flex-col text-center justify-center border px-2 py-0 rounded-full border-gray"
+                  className="flex flex-col text-center justify-center border rounded-full border-gray w-full h-5 line-clamp-1 text-nowrap"
                 >
                   <Typography
                     variant="small"

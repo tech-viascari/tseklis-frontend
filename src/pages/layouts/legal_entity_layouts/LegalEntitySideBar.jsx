@@ -267,7 +267,12 @@ const LegalEntitySideBar = () => {
             </Menu>
           </div>
         ) : (
-          <div className="flex flex-row gap-3 items-center justify-center">
+          <div
+            className="flex flex-row gap-3 items-center justify-center cursor-pointer"
+            onClick={() => {
+              navigate("/legal-entities");
+            }}
+          >
             <HiHome size={20} />
           </div>
         )}
