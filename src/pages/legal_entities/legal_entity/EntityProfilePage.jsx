@@ -3,16 +3,22 @@ import TopBar from "../../layouts/TopBar";
 import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
 import { useParams } from "react-router";
+import useLegalEntities from "../../../store/useLegalEntities";
 
 const EntityProfilePage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
+  const { states, entity } = useLegalEntities();
 
   return (
     <>
       <div className="w-full relative">
         <TopBar
           items={[
+            {
+              title: entity.company_name,
+              goto: `/legal-entities/v/${entity_id}/`,
+            },
             {
               title: "Entity Profile",
               goto: `/legal-entities/v/${entity_id}/entity-profile`,

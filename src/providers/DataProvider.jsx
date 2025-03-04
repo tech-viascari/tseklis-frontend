@@ -32,7 +32,7 @@ const DataProvider = ({ children, setData, tableName }) => {
   return (
     <div>
       {/* Pass down the auth state and actions as props */}
-      {isLoading ? <LoadingComponent /> : children}
+      {isLoading ? <LoadingComponent open={isLoading} /> : children}
     </div>
   );
 };

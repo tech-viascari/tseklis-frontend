@@ -97,7 +97,9 @@ const UsersPage = () => {
         return (
           <Typography
             variant="small"
-            className="font-normal text-sm text-dark"
+            className={`font-normal text-sm rounded-lg px-2 text-white ${
+              row.status == "Active" ? " bg-primary" : "bg-red-300"
+            }`}
             onClick={() => {
               navigateToUser(row);
             }}

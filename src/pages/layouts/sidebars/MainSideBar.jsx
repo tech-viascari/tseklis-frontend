@@ -138,6 +138,17 @@ const MainSideBar = () => {
     }
   }, [windowWidth]);
 
+  useEffect(() => {
+    setActive(
+      window.location.pathname.split("/")[1] === "" ||
+        window.location.pathname.split("/")[1] === undefined
+        ? "/"
+        : `/${
+            window.location.pathname.split("/")[1]
+          }`
+    );
+  }, [window.location.pathname]);
+
   return (
     <div
       className={`bg-[#F5F7F9] ${
