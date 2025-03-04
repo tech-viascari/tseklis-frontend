@@ -59,15 +59,17 @@ const UsersPage = () => {
       selector: (row) => (row.roles.length != 0 ? row.roles[0].role_name : ""),
       cell: (row) => {
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => {
-              navigateToUser(row);
-            }}
-          >
-            {row.roles.length != 0 && row.roles[0].role_name}
-          </Typography>
+          <div className="flex flex-col text-center justify-center border rounded-full border-gray w-full h-5 line-clamp-1 text-nowrap">
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-dark"
+              onClick={() => {
+                navigateToUser(row);
+              }}
+            >
+              {row.roles.length != 0 && row.roles[0].role_name}
+            </Typography>
+          </div>
         );
       },
     },
