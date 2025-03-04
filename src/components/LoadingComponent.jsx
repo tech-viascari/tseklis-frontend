@@ -7,7 +7,7 @@ const LoadingComponent = ({ open, loadingHandlerDialog = () => {} }) => {
       <dialog
         open={open}
         onClick={loadingHandlerDialog}
-        className="w-full bg-black/70 z-20 h-screen absolute top-0"
+        className="w-full bg-black/50 z-20 h-screen absolute top-0"
       >
         <div className="flex flex-row justify-center items-center h-full">
           <Spinner color="teal" className="text-white w-8 h-8"></Spinner>

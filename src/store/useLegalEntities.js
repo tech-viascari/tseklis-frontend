@@ -49,6 +49,9 @@ const LegalEntityState = {
 // Create the Zustand store
 const useLegalEntities = create((set) => ({
   entities: [],
+  viascari_group_of_companies: [],
+  computershare_clients: [],
+  external_clients: [],
   entity: LegalEntityState,
   states: {
     entity: LegalEntityState,
@@ -59,6 +62,25 @@ const useLegalEntities = create((set) => ({
   },
   setEntities: (payload) => set({ entities: payload }),
   setEntity: (payload) => set({ entity: payload }),
+  filterEntities: (payload) => {
+    let viascari_group_of_companies = payload.filter(
+      (entity) => entity.client_type === "Viascari Group of Companies"
+    );
+
+    let computershare_clients = payload.filter(
+      (entity) => entity.client_type === "Computershare Clients"
+    );
+
+    let external_clients = payload.filter(
+      (entity) => entity.client_type === "External Clients"
+    );
+
+    return set({
+      viascari_group_of_companies,
+      computershare_clients,
+      external_clients,
+    });
+  },
 }));
 
 export default useLegalEntities;

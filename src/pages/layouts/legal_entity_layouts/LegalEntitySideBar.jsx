@@ -19,6 +19,7 @@ import {
 import { RiProfileFill } from "react-icons/ri";
 import { PiFilesFill } from "react-icons/pi";
 import InputComponent from "../../../components/InputComponent";
+import useLegalEntities from "../../../store/useLegalEntities";
 
 const LegalEntitySideBar = () => {
   const { entity_id } = useParams();
@@ -28,6 +29,8 @@ const LegalEntitySideBar = () => {
   const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(false);
+
+  const { states, entity } = useLegalEntities();
 
   const navigation = [
     {
@@ -187,6 +190,19 @@ const LegalEntitySideBar = () => {
     }
   }, [windowWidth]);
 
+  useEffect(() => {
+    setActive(
+      window.location.pathname.split("/")[4] === "" ||
+        window.location.pathname.split("/")[4] === undefined
+        ? `legal-entities/v/${entity_id}/`
+        : `legal-entities/v/${entity_id}/${window.location.pathname.split("/")[4]}`
+    );
+  }, [window.location.pathname]);
+
+  useEffect(() => {
+    console.log(entity);
+  }, [entity]);
+
   return (
     <div
       className={`bg-[#F5F7F9] ${
@@ -198,7 +214,7 @@ const LegalEntitySideBar = () => {
     >
       <div className="h-[60px] shadow flex flex-col justify-center">
         {open ? (
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center w-full">
             <div
               className="px-4 py-5 border-r-[1px] border-light-gray cursor-pointer"
               onClick={() => {
@@ -216,16 +232,16 @@ const LegalEntitySideBar = () => {
             >
               <MenuHandler>
                 <div
-                  className="w-full flex flex-row px-3 justify-between items-center h-full cursor-pointer"
+                  className="w-[203px] flex flex-row px-3 justify-between items-center h-full cursor-pointer"
                   onClick={() => {
                     setOpenMenu(false);
                   }}
                 >
                   <Typography
                     variant="small"
-                    className="font-semibold text-sm py-5 line-clamp-1"
+                    className="font-semibold text-sm py-5 text-nowrap line-clamp-1 text-ellipsis"
                   >
-                    Cloudeats PH. Inc
+                    {entity.company_name}
                   </Typography>
                   <div>
                     <HiChevronUpDown size={20} />
