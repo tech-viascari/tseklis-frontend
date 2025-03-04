@@ -3,16 +3,23 @@ import { Typography } from "@material-tailwind/react";
 import { useParams } from "react-router";
 import useDrawerStore from "../../../../store/useDrawerStore";
 import TopBar from "../../../layouts/TopBar";
+import useLegalEntities from "../../../../store/useLegalEntities";
 
 const TreasurerCertificatePage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
+
+  const { states, entity } = useLegalEntities();
 
   return (
     <>
       <div className="w-full relative">
         <TopBar
           items={[
+            {
+              title: entity.company_name,
+              goto: `/legal-entities/v/${entity_id}/`,
+            },
             {
               title: "Treasury Certificate",
               goto: `/legal-entities/v/${entity_id}/treasurer-certificate`,

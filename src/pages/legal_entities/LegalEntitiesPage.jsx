@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Avatar, Typography } from "@material-tailwind/react";
-import useQuoteStore from "../../store/useQuoteStore";
 import useDrawerStore from "../../store/useDrawerStore";
 import TopBar from "../layouts/TopBar";
 import DataProvider from "../../providers/DataProvider";
@@ -9,18 +8,24 @@ import ButtonComponent from "../../components/ButtonComponent";
 import TableComponent from "../../components/TableComponent";
 import { PiToggleRight } from "react-icons/pi";
 import { HiPencilSquare } from "react-icons/hi2";
+import useLegalEntities from "../../store/useLegalEntities";
 
 const LegalEntitiesPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
-  // const { setQuote, setQuotes } = useQuoteStore();
+  const {
+    states,
+    viascari_group_of_companies,
+    computershare_clients,
+    external_clients,
+    filterEntities,
+    setEntity,
+  } = useLegalEntities();
 
-  const toggle_status = <PiToggleRight size={30} color="#00D253" />;
-  const toggle_action = <HiPencilSquare size={30} color="#00D253" />;
-
-  const navigateToEntity = () => {
-    navigate(`/legal-entities/v/1`);
+  const navigateToEntity = (row) => {
+    setEntity(row);
+    navigate(`/legal-entities/v/${row.entity_id}`);
   };
 
   const columns = [
@@ -31,7 +36,9 @@ const LegalEntitiesPage = () => {
         return (
           <div
             className="flex flex-row gap-5 w-full items-center justify-center"
-            onClick={navigateToEntity}
+            onClick={() => {
+              navigateToEntity(row);
+            }}
           >
             <div className="w-20 aspect-square flex flex-col items-center justify-center">
               <Avatar
@@ -55,15 +62,17 @@ const LegalEntitiesPage = () => {
     },
     {
       name: "SEC Registration Number",
-      selector: (row) => row.sec_certificate,
+      selector: (row) => row.sec_registration_number,
       cell: (row) => {
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={navigateToEntity}
+            onClick={() => {
+              navigateToEntity(row);
+            }}
           >
-            {row.sec_certificate}
+            {row.sec_registration_number}
           </Typography>
         );
       },
@@ -72,73 +81,102 @@ const LegalEntitiesPage = () => {
 
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => (
+        <PiToggleRight
+          size={25}
+          className="text-primary"
+          onClick={() => {
+            console.log("Toggle status");
+          }}
+        />
+      ),
       width: "10%",
     },
     {
       name: "Action",
-      selector: (row) => row.action,
+      selector: (row) => (
+        <HiPencilSquare
+          size={25}
+          className="text-primary"
+          onClick={() => {
+            console.log("Toggle Action");
+          }}
+        />
+      ),
       width: "10%",
     },
   ];
 
-  const VGCClients = [
+  function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
+
+  const data = [
     {
+      ...states.entity,
+      entity_id: generateUUID(),
+      company_name: "Cloudeats PH Inc.",
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1720151475/CoMS/Companies/Logos/CloudEats%20Ph%2C%20Inc..png",
-      company_name: "Cloudeats PH. Inc",
-      sec_certificate: 2022060054609 - 86,
-      status: toggle_status,
-      action: toggle_action,
+      sec_registration_number: "2022060054609 - 86",
     },
     {
+      ...states.entity,
+      entity_id: generateUUID(),
+      company_name: "Offshore Concept BPO Services Inc.",
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1715325752/CoMS/Companies/Logos/Offshore%20Concept%20BPO%20Services%20Inc..png",
-      company_name: "Offshore Concept BPO Services Inc.",
-      sec_certificate: "CS201419616",
-      status: toggle_status,
-      action: toggle_action,
+      sec_registration_number: "CS201419616",
     },
-  ];
-
-  const computerShareClients = [
     {
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1729152589/CoMS/Companies/Logos/Equinix%20%28Philippines%29%20Services%20Inc.%20%28formerly%20known%20as%20Packethost%20Inc.%29.png",
+      ...states.entity,
+      entity_id: generateUUID(),
       company_name:
         "Equinix (Philippines) Services Inc. (formerly known as Packethost Inc.)",
-      sec_certificate: "CS201901415",
-      status: toggle_status,
-      action: toggle_action,
+      company_logo:
+        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1729152589/CoMS/Companies/Logos/Equinix%20%28Philippines%29%20Services%20Inc.%20%28formerly%20known%20as%20Packethost%20Inc.%29.png",
+      sec_registration_number: "CS201901415",
+      client_type: "Computershare Clients",
     },
     {
+      ...states.entity,
+      entity_id: generateUUID(),
+      company_name: "Booking.com Philippines, Inc.",
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1720148187/CoMS/Companies/Logos/Booking.com%20Philippines%2C%20Inc..svg",
-      company_name: "Booking.com Philippines, Inc.",
-      sec_certificate: "CS201203871",
-      status: toggle_status,
-      action: toggle_action,
+      sec_registration_number: "CS201203871",
+      client_type: "Computershare Clients",
     },
     {
+      ...states.entity,
+      entity_id: generateUUID(),
+      company_name: "Twitter Philippines Inc.",
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1721120580/CoMS/Companies/Logos/Twitter%20Philippines%20Inc..png",
-      company_name: "Twitter Philippines Inc.",
-      sec_certificate: "CS201716724",
-      status: toggle_status,
-      action: toggle_action,
+      sec_registration_number: "CS201716724",
+      client_type: "Computershare Clients",
+    },
+    {
+      ...states.entity,
+      entity_id: generateUUID(),
+      company_name: "Utakpos",
+      company_logo:
+        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1735893034/CoMS/Companies/Logos/Utakpos.png",
+      sec_registration_number: "CS201812157",
+      client_type: "External Clients",
     },
   ];
 
-  const externalClients = [
-    {
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1735893034/CoMS/Companies/Logos/Utakpos.png",
-      company_name: "Utakpos",
-      sec_certificate: "CS201812157",
-      status: toggle_status,
-      action: toggle_action,
-    },
-  ];
+  useEffect(() => {
+    filterEntities(data);
+  }, []);
 
   return (
     <div className="w-full relative">
@@ -169,43 +207,52 @@ const LegalEntitiesPage = () => {
                   </div>
                 </div>
                 <div className="flex-1 h-full">
-                  <div className="flex flex-col gap-5 h-full">
-                    <Typography
-                      variant="small"
-                      className="font-semibold text-sm"
-                    >
-                      Viascari Group of Companies
-                    </Typography>
-                    <hr className="border-light-gray" />
-                    <TableComponent
-                      columns={columns}
-                      data={VGCClients}
-                      onClick={navigateToEntity}
-                    />
-                    <Typography
-                      variant="small"
-                      className="font-semibold text-sm"
-                    >
-                      Computershare Clients
-                    </Typography>
-                    <hr className="border-light-gray" />
-                    <TableComponent
-                      columns={columns}
-                      data={computerShareClients}
-                      onClick={navigateToEntity}
-                    />
-                    <Typography
-                      variant="small"
-                      className="font-semibold text-sm"
-                    >
-                      External Clients
-                    </Typography>
-                    <hr className="border-light-gray" />
-                    <TableComponent
-                      columns={columns}
-                      data={externalClients}
-                      onClick={navigateToEntity}
-                    />
+                  <div className="flex flex-col gap-7 h-full pb-5">
+                    <div className="flex flex-col gap-3">
+                      <Typography
+                        variant="small"
+                        className="font-semibold text-sm"
+                      >
+                        Viascari Group of Companies
+                      </Typography>
+                      <TableComponent
+                        columns={columns}
+                        data={viascari_group_of_companies}
+                        onClick={(row) => {
+                          navigateToEntity(row);
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <Typography
+                        variant="small"
+                        className="font-semibold text-sm"
+                      >
+                        Computershare Clients
+                      </Typography>
+                      <TableComponent
+                        columns={columns}
+                        data={computershare_clients}
+                        onClick={(row) => {
+                          navigateToEntity(row);
+                        }}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <Typography
+                        variant="small"
+                        className="font-semibold text-sm"
+                      >
+                        External Clients
+                      </Typography>
+                      <TableComponent
+                        columns={columns}
+                        data={external_clients}
+                        onClick={(row) => {
+                          navigateToEntity(row);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
