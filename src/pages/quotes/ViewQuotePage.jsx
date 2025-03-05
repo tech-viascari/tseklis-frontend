@@ -286,7 +286,7 @@ const ViewQuotePage = () => {
                   Edit Details
                 </MenuItem>
                 <MenuItem className="text-dark" onClick={handleSyncAndGenerate}>
-                  Sync and Generate
+                  Generate
                 </MenuItem>
                 <hr className="my-1 text-light-gray" />
                 <MenuItem onClick={deleteHandlerDialog}>
@@ -340,10 +340,15 @@ const ViewQuotePage = () => {
             <div className="flex flex-col gap-3 mt-3">
               <Typography variant="small" className="font-normal text-sm">
                 <span className="font-bold">RE:</span> Service Quote for{" "}
-                <span className="font-bold">
-                  {quote.form_data.service_type}
+                <span
+                  className={`font-bold ${
+                    !quote.form_data.subject && "bg-yellow-300"
+                  }`}
+                >
+                  {quote.form_data.subject == ""
+                    ? "<subject here>"
+                    : quote.form_data.subject}
                 </span>
-                .
               </Typography>
               <Typography variant="small" className="font-normal text-sm">
                 Prepared by{" "}
@@ -352,9 +357,15 @@ const ViewQuotePage = () => {
                 </span>{" "}
                 (the legal company representing{" "}
                 <span className="font-bold">FullSuite Compliance</span>),
-                outlines the services and associated costs for undertaking the
-                audit fieldwork coordination with the specified government
-                entities on behalf of{" "}
+                outlines the services and associated costs for{" "}
+                <span
+                  className={`${!quote.form_data.scope && "bg-yellow-300"}`}
+                >
+                  {quote.form_data.scope == ""
+                    ? "<scope here>"
+                    : quote.form_data.scope}
+                </span>{" "}
+                with the specified government entities on behalf of{" "}
                 <span className="font-bold">
                   {quote.form_data.recipient_company}
                 </span>{" "}
@@ -386,14 +397,16 @@ const ViewQuotePage = () => {
                 <ul className="list-disc ml-5 flex-1 mt-1 gap-1 flex flex-col">
                   {quote.form_data.scope_of_work.map((scope, index) => {
                     const isPHP = quote.form_data.currency == "PHP";
+                    const isVATIncluded =
+                      quote.form_data.include_vat == "Yes" ? " + 12% VAT" : "";
                     let service_fee = `${
                       isPHP
                         ? `PHP ${formatNumberWithCommaAndDecimal(
                             scope.service_fee
-                          )} + 12% VAT`
+                          )} ${isVATIncluded}`
                         : `${formatNumberWithCommaAndDecimal(
                             scope.service_fee
-                          )} USD`
+                          )} USD ${isVATIncluded}`
                     }`;
 
                     return (
