@@ -22,11 +22,13 @@ import {
 import TableComponent from "../../components/TableComponent";
 
 const AddLegalEntitiesPage = () => {
+  //#region Form States
   const { states, entity, setEntity } = useLegalEntities();
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
   const [formData, setFormData] = useState(states.entity);
+  const [officerEntity, setOfficerEntity] = useState(entity.officer_information);
   const [errors, setErrors] = useState({});
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
@@ -58,10 +60,13 @@ const AddLegalEntitiesPage = () => {
     }
   };
 
+  //dito ka - Anthony
+
   const toggleUpdateOfficer = () => {
+
     let officers = formData.officer_information.map((officer, index) => {
       if (index === officerIndex) {
-        officer = officerFormData;
+        return officerFormData;
       }
       return officer;
     });
@@ -73,7 +78,7 @@ const AddLegalEntitiesPage = () => {
 
     setOfficerIndex(-1);
 
-    handleOfficersDialog();
+    handleOfficersDialog(false);
   };
 
   const toggleRemoveOfficer = () => {
@@ -182,6 +187,7 @@ const AddLegalEntitiesPage = () => {
     }
   };
 
+
   const getFormState = (title, form_contents) => {
     const formState = {
       title: "",
@@ -223,10 +229,15 @@ const AddLegalEntitiesPage = () => {
             columns={[
               {
                 name: "Name",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.officer_name}
                   </Typography>
@@ -234,10 +245,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Address",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.current_residence}
                   </Typography>
@@ -245,10 +261,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Nationality",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.nationality}
                   </Typography>
@@ -256,10 +277,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Incorporator",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.incorporator}
                   </Typography>
@@ -267,10 +293,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Board",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.board}
                   </Typography>
@@ -278,10 +309,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Gender",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.gender}
                   </Typography>
@@ -289,10 +325,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Stock Holder",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.stockholder}
                   </Typography>
@@ -300,10 +341,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Officer",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.officer}
                   </Typography>
@@ -311,10 +357,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Exec. Comm.",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.executive_committee}
                   </Typography>
@@ -322,27 +373,30 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "TIN",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.tax_identification_number}
                   </Typography>
                 ),
               },
-            ]}
+            ]
+            }
             data={formData.officer_information}
-            onClick={(row, index) => {
-              setOfficerFormData(row);
-              setOfficerIndex(index);
-              handleOfficersDialog();
-            }}
           />
         )}
       </>
     );
   };
+
+  //#endregion
 
   const formComponent = [
     getFormState(
@@ -398,27 +452,27 @@ const AddLegalEntitiesPage = () => {
       <>
         <div className="grid grid-cols-1 gap-5 pb-10">
           <InputComponent
-            label="Company Name"
+            label="Entity Name"
             required={true}
             name="company_name"
             value={formData.company_name}
             error_message={errors.company_name}
             onChange={(e) => {
-              handleOnChange(e, "Company Name is required.");
+              handleOnChange(e, "Entity Name is required.");
             }}
           />
           <InputComponent
-            label="Company Address"
+            label="Entity Address"
             required={true}
             name="company_address"
             value={formData.company_address}
             error_message={errors.company_address}
             onChange={(e) => {
-              handleOnChange(e, "Company Address is required.");
+              handleOnChange(e, "Entity Address is required.");
             }}
           />
           <SelectComponent
-            label="Type of Company"
+            label="Type of Entity"
             name="type_of_company"
             value={formData.type_of_company}
             error_message={errors.type_of_company}
@@ -426,7 +480,7 @@ const AddLegalEntitiesPage = () => {
               handleOnSelectChange(
                 "type_of_company",
                 value,
-                "Type of Company is required."
+                "Type of Entity is required."
               );
             }}
             required={true}
@@ -498,10 +552,10 @@ const AddLegalEntitiesPage = () => {
             }}
           />
         </div>
-        <div className="grid grid-cols-1 gap-5 pb-10">
+        {/* <div className="grid grid-cols-1 gap-5 pb-10">
           <div className="flex flex-col gap-1">
             <Typography variant="small" className={`mb-1 font-normal`}>
-              Company Logo
+              Entity Logo
             </Typography>
 
             <div
@@ -545,7 +599,7 @@ const AddLegalEntitiesPage = () => {
               </label>
             )}
           </div>
-        </div>
+        </div> */}
       </>
     ),
 
@@ -572,9 +626,8 @@ const AddLegalEntitiesPage = () => {
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${
-                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                }`}
+                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                  }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -844,40 +897,40 @@ const AddLegalEntitiesPage = () => {
             title="Basic Information"
             data={[
               {
-                name: "Company Name",
-                value: formData.company_name,
+                name: "Entity Name",
+                value: formData.company_name || "N/A",
               },
               {
-                name: "Company Address",
-                value: formData.company_address,
+                name: "Entity Address",
+                value: formData.company_address || "N/A",
               },
               {
-                name: "Type of Company",
-                value: formData.type_of_company,
+                name: "Type of Entity",
+                value: formData.type_of_company || "N/A",
               },
               {
                 name: "Corporate TIN",
-                value: formData.corporate_tin,
+                value: formData.corporate_tin || "N/A",
               },
               {
                 name: "SEC Registration Number",
-                value: formData.sec_registration_number,
+                value: formData.sec_registration_number || "N/A",
               },
               {
                 name: "Official Email",
-                value: formData.official_email,
+                value: formData.official_email || "N/A",
               },
               {
                 name: "Alternative Email",
-                value: formData.alternative_email,
+                value: formData.alternative_email || "N/A",
               },
               {
                 name: "Official Contact Number",
-                value: formData.official_contact_number,
+                value: formData.official_contact_number || "N/A",
               },
               {
                 name: "Alternative Contact Number",
-                value: formData.alternative_contact_number,
+                value: formData.alternative_contact_number || "N/A",
               },
             ]}
           />
