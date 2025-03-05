@@ -14,8 +14,8 @@ const OfficerInformationState = {
   executive_committee: "N/A",
   tax_identification_number: "",
 };
-
-const BusinessTypes = ["Sole", "Partnership", "Corporation"];
+// business types are composed of Sole, Partnership, and Corporation
+const BusinessTypes = ["Corporation"];
 const ClientTypes = [
   "Viascari Group of Companies",
   "Computershare Clients",
