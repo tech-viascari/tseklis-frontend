@@ -476,7 +476,7 @@ const AddLegalEntitiesPage = () => {
             }}
           />
           <SelectComponent
-            label="Type of Entity"
+            label="Type of Company"
             name="type_of_company"
             value={formData.type_of_company}
             error_message={errors.type_of_company}
@@ -484,7 +484,7 @@ const AddLegalEntitiesPage = () => {
               handleOnSelectChange(
                 "type_of_company",
                 value,
-                "Type of Entity is required."
+                "Type of Company is required."
               );
             }}
             required={true}
@@ -909,7 +909,7 @@ const AddLegalEntitiesPage = () => {
                 value: formData.company_address,
               },
               {
-                name: "Type of Entity",
+                name: "Type of Company",
                 value: formData.type_of_company || "N/A",
               },
               {
