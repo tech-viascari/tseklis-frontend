@@ -22,11 +22,17 @@ import {
 import TableComponent from "../../components/TableComponent";
 
 const AddLegalEntitiesPage = () => {
+  //#region Form States
   const { states, entity, setEntity } = useLegalEntities();
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
+
   const [formData, setFormData] = useState(states.entity.entity_details);
+
+
+  const [officerEntity, setOfficerEntity] = useState(entity.officer_information);
+
   const [errors, setErrors] = useState({});
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
@@ -58,10 +64,13 @@ const AddLegalEntitiesPage = () => {
     }
   };
 
+  //dito ka - Anthony
+
   const toggleUpdateOfficer = () => {
+
     let officers = formData.officer_information.map((officer, index) => {
       if (index === officerIndex) {
-        officer = officerFormData;
+        return officerFormData;
       }
       return officer;
     });
@@ -73,7 +82,7 @@ const AddLegalEntitiesPage = () => {
 
     setOfficerIndex(-1);
 
-    handleOfficersDialog();
+    handleOfficersDialog(false);
   };
 
   const toggleRemoveOfficer = () => {
@@ -180,6 +189,7 @@ const AddLegalEntitiesPage = () => {
       handleSubmitDialog();
     }
   };
+
 
   const getFormState = (title, form_contents) => {
     const formState = {
@@ -380,7 +390,8 @@ const AddLegalEntitiesPage = () => {
                   </Typography>
                 ),
               },
-            ]}
+            ]
+            }
             data={formData.officer_information}
 
           />
@@ -388,6 +399,8 @@ const AddLegalEntitiesPage = () => {
       </>
     );
   };
+
+  //#endregion
 
   const formComponent = [
     getFormState(
@@ -443,27 +456,27 @@ const AddLegalEntitiesPage = () => {
       <>
         <div className="grid grid-cols-1 gap-5 pb-10">
           <InputComponent
-            label="Company Name"
+            label="Entity Name"
             required={true}
             name="company_name"
             value={formData.company_name}
             error_message={errors.company_name}
             onChange={(e) => {
-              handleOnChange(e, "Company Name is required.");
+              handleOnChange(e, "Entity Name is required.");
             }}
           />
           <InputComponent
-            label="Company Address"
+            label="Entity Address"
             required={true}
             name="company_address"
             value={formData.company_address}
             error_message={errors.company_address}
             onChange={(e) => {
-              handleOnChange(e, "Company Address is required.");
+              handleOnChange(e, "Entity Address is required.");
             }}
           />
           <SelectComponent
-            label="Type of Company"
+            label="Type of Entity"
             name="type_of_company"
             value={formData.type_of_company}
             error_message={errors.type_of_company}
@@ -471,7 +484,7 @@ const AddLegalEntitiesPage = () => {
               handleOnSelectChange(
                 "type_of_company",
                 value,
-                "Type of Company is required."
+                "Type of Entity is required."
               );
             }}
             required={true}
@@ -546,7 +559,7 @@ const AddLegalEntitiesPage = () => {
         {/* <div className="grid grid-cols-1 gap-5 pb-10">
           <div className="flex flex-col gap-1">
             <Typography variant="small" className={`mb-1 font-normal`}>
-              Company Logo
+              Entity Logo
             </Typography>
 
             <div
@@ -896,32 +909,32 @@ const AddLegalEntitiesPage = () => {
                 value: formData.company_address,
               },
               {
-                name: "Type of Company",
-                value: formData.type_of_company,
+                name: "Type of Entity",
+                value: formData.type_of_company || "N/A",
               },
               {
                 name: "Corporate TIN",
-                value: formData.corporate_tin,
+                value: formData.corporate_tin || "N/A",
               },
               {
                 name: "SEC Registration Number",
-                value: formData.sec_registration_number,
+                value: formData.sec_registration_number || "N/A",
               },
               {
                 name: "Official Email",
-                value: formData.official_email,
+                value: formData.official_email || "N/A",
               },
               {
                 name: "Alternative Email",
-                value: formData.alternative_email,
+                value: formData.alternative_email || "N/A",
               },
               {
                 name: "Official Contact Number",
-                value: formData.official_contact_number,
+                value: formData.official_contact_number || "N/A",
               },
               {
                 name: "Alternative Contact Number",
-                value: formData.alternative_contact_number,
+                value: formData.alternative_contact_number || "N/A",
               },
             ]}
           />

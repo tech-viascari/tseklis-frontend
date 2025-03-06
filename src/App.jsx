@@ -55,6 +55,7 @@ const App = () => {
               element={<UpdateQuotesPage />}
             />
 
+            {/* My routes starts from entity-enrollment - Anthony */}
             <Route path="/entity-enrollment" element={<EntityEnrollment />} />
             <Route
               path="/entity-enrollment/add"
