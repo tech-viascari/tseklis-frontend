@@ -37,6 +37,7 @@ import MinutesOfMeetingPage from "./pages/legal_entities/legal_entity/board_meet
 import SecretaryCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/SecretaryCertificatePage";
 import BoardResolutionPage from "./pages/legal_entities/legal_entity/board_meetings/BoardResolutionPage";
 import TreasurerCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/TreasurerCertificatePage";
+import AllWorkflow from "./pages/project_management/AllWorkflow";
 
 const App = () => {
   return (
@@ -70,10 +71,13 @@ const App = () => {
               path="/legal-entities/add-new"
               element={<AddLegalEntitiesPage />}
             />
+
             <Route
               path="/legal-entities/view/:entity_id"
               element={<AddEntityEnrollmentPage />}
             />
+
+            <Route path="/workflow" element={<AllWorkflow />} />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
