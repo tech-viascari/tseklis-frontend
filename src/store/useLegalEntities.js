@@ -1,5 +1,3 @@
-// store/useRoleStore.js
-
 import { create } from "zustand";
 
 const OfficerInformationState = {
@@ -23,14 +21,21 @@ const ClientTypes = [
 ];
 
 const CompanyTypes = [
-  "Non Stock",
+  "Domestic - Stock",
+  "Domestic - Non Stock",
+  "Foreign Branch Office",
+  "Foreign Representative Office",
+  "Foreign Regional Area Headquarters",
+  "Foreign Regional Operating Headquarters",
+
   "Stock Domestic",
   "Stock Foreign Branch Office",
   "Stock Foreign Representative Office",
 ];
 
-const LegalEntityState = {
-  entity_id: "",
+const LegalEntityDetailsState = {
+
+  //corporation muna ito
   business_type: "Corporation",
   client_type: "Viascari Group of Companies",
   company_name: "",
@@ -42,8 +47,28 @@ const LegalEntityState = {
   alternative_email: "",
   official_contact_number: "",
   alternative_contact_number: "",
-  company_logo: "",
   officer_information: [],
+};
+
+const GdriveFolderState = {
+  root_folder_id: "",
+  final_docs_id: "",
+  sec_cert: "",
+  articles_of_incorporation: "",
+  by_laws: "",
+  bir_cor: "",
+  lgu_business_permit: "",
+}
+
+
+const LegalEntityState = {
+  entity_id: "",
+  entity_details: LegalEntityDetailsState,
+  entity_logo: "",
+  status: "Active",
+  gdrive_folder: GdriveFolderState, 
+  created_at: "",
+  updated_at: "",
 };
 
 // Create the Zustand store
@@ -55,6 +80,7 @@ const useLegalEntities = create((set) => ({
   entity: LegalEntityState,
   states: {
     entity: LegalEntityState,
+    entity_details: LegalEntityDetailsState,
     officer_information: OfficerInformationState,
     business_types: BusinessTypes,
     client_types: ClientTypes,
@@ -64,15 +90,15 @@ const useLegalEntities = create((set) => ({
   setEntity: (payload) => set({ entity: payload }),
   filterEntities: (payload) => {
     let viascari_group_of_companies = payload.filter(
-      (entity) => entity.client_type === "Viascari Group of Companies"
+      (entity) => entity.entity_details.client_type === "Viascari Group of Companies"
     );
 
     let computershare_clients = payload.filter(
-      (entity) => entity.client_type === "Computershare Clients"
+      (entity) => entity.entity_details.client_type === "Computershare Clients"
     );
 
     let external_clients = payload.filter(
-      (entity) => entity.client_type === "External Clients"
+      (entity) => entity.entity_details.client_type === "External Clients"
     );
 
     return set({

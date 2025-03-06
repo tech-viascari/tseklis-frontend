@@ -27,8 +27,12 @@ const AddLegalEntitiesPage = () => {
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
-  const [formData, setFormData] = useState(states.entity);
+
+  const [formData, setFormData] = useState(states.entity.entity_details);
+
+
   const [officerEntity, setOfficerEntity] = useState(entity.officer_information);
+
   const [errors, setErrors] = useState({});
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
@@ -161,20 +165,19 @@ const AddLegalEntitiesPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const { quote_id, created_at, updated_at, ...filteredData } = formData;
+      // const { quote_id, created_at, updated_at, ...filteredData } = formData;
 
-      console.log(formData);
-      toast.success("Entity has been successfully added!");
-      navigate("/legal-entities");
-      return;
+      // console.log(formData);
 
-      const response = await axiosInstance.post("/legal-entities", {
-        form_data: filteredData,
-        timestamp: {
-          status: "Drafted",
-          remarks: "",
-        },
-      });
+
+
+      let { entity_id, created_at, updated_at, ...filteredEntity } = states.entity;
+
+      filteredEntity.entity_details = formData;
+
+      //console.log(filteredEntity);
+
+      const response = await axiosInstance.post("/legal-entities", filteredEntity);
       if (response.status == 200) {
         toast.success("Entity has been successfully added!");
         navigate("/legal-entities");
@@ -390,6 +393,7 @@ const AddLegalEntitiesPage = () => {
             ]
             }
             data={formData.officer_information}
+
           />
         )}
       </>
@@ -898,11 +902,11 @@ const AddLegalEntitiesPage = () => {
             data={[
               {
                 name: "Entity Name",
-                value: formData.company_name || "N/A",
+                value: formData.company_name,
               },
               {
                 name: "Entity Address",
-                value: formData.company_address || "N/A",
+                value: formData.company_address,
               },
               {
                 name: "Type of Entity",
@@ -972,9 +976,9 @@ const AddLegalEntitiesPage = () => {
     setPageIsLoading(false);
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
 
   return (
     <>
