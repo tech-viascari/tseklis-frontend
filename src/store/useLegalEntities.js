@@ -27,10 +27,6 @@ const CompanyTypes = [
   "Foreign Representative Office",
   "Foreign Regional Area Headquarters",
   "Foreign Regional Operating Headquarters",
-
-  "Stock Domestic",
-  "Stock Foreign Branch Office",
-  "Stock Foreign Representative Office",
 ];
 
 const LegalEntityDetailsState = {
@@ -40,7 +36,7 @@ const LegalEntityDetailsState = {
   client_type: "Viascari Group of Companies",
   company_name: "",
   company_address: "",
-  type_of_company: "Non Stock",
+  type_of_company: "Domestic - Stock",
   corporate_tin: "",
   sec_registration_number: "",
   official_email: "",
