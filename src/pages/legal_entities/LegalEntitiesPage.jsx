@@ -31,8 +31,10 @@ const LegalEntitiesPage = () => {
   const columns = [
     {
       name: "Company Name",
-      selector: (row) => row.company_name,
+      selector: (row) => row.entity_details.company_name,
       cell: (row) => {
+        console.log(row);
+
         return (
           <div
             className="flex flex-row gap-5 w-full items-center justify-center"
@@ -41,18 +43,18 @@ const LegalEntitiesPage = () => {
             }}
           >
             <div className="w-20 aspect-square flex flex-col items-center justify-center">
-              <Avatar
+              {/* <Avatar
                 src={row.company_logo}
                 alt="avatar"
                 className="object-contain"
-              />
+              /> */}
             </div>
             <div className="w-full">
               <Typography
                 variant="small"
                 className="font-normal text-sm text-dark line-clamp-1"
               >
-                {row.company_name}
+                {row.entity_details.company_name}
               </Typography>
             </div>
           </div>
@@ -62,7 +64,7 @@ const LegalEntitiesPage = () => {
     },
     {
       name: "SEC Registration Number",
-      selector: (row) => row.sec_registration_number,
+      selector: (row) => row.entity_details.sec_registration_number,
       cell: (row) => {
         return (
           <Typography
@@ -72,7 +74,7 @@ const LegalEntitiesPage = () => {
               navigateToEntity(row);
             }}
           >
-            {row.sec_registration_number}
+            {row.entity_details.sec_registration_number}
           </Typography>
         );
       },
@@ -126,6 +128,7 @@ const LegalEntitiesPage = () => {
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1720151475/CoMS/Companies/Logos/CloudEats%20Ph%2C%20Inc..png",
       sec_registration_number: "2022060054609 - 86",
+      client_type: "Viascari Group of Companies",
     },
     {
       ...states.entity,
@@ -134,6 +137,7 @@ const LegalEntitiesPage = () => {
       company_logo:
         "https://res.cloudinary.com/dmhaxgniu/image/upload/v1715325752/CoMS/Companies/Logos/Offshore%20Concept%20BPO%20Services%20Inc..png",
       sec_registration_number: "CS201419616",
+      client_type: "Viascari Group of Companies",
     },
     {
       ...states.entity,
@@ -174,15 +178,15 @@ const LegalEntitiesPage = () => {
     },
   ];
 
-  useEffect(() => {
-    filterEntities(data);
-  }, []);
+  // useEffect(() => {
+  //   filterEntities(data);
+  // }, []);
 
   return (
     <div className="w-full relative">
       <TopBar items={[{ title: "Legal Entities", goto: "/legal-entities" }]} />
 
-      <DataProvider tableName="/quotes" setData={() => {}}>
+      <DataProvider tableName="/legal-entities" setData={filterEntities}>
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
