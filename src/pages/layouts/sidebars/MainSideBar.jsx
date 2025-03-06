@@ -8,6 +8,7 @@ import {
   HiDocumentText,
   HiMiniUserGroup,
   HiSquares2X2,
+  HiMiniClipboardDocumentCheck,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router";
 
@@ -39,6 +40,13 @@ const MainSideBar = () => {
           icon: <HiBuildingOffice2 className="text-xl" />,
           title: "Legal Entities",
           goto: "/legal-entities",
+          submenus: [],
+          isExpanded: false,
+        },
+        {
+          icon: <HiMiniClipboardDocumentCheck className="text-xl" />,
+          title: "Project Management",
+          goto: "/workflow",
           submenus: [],
           isExpanded: false,
         },
@@ -143,9 +151,7 @@ const MainSideBar = () => {
       window.location.pathname.split("/")[1] === "" ||
         window.location.pathname.split("/")[1] === undefined
         ? "/"
-        : `/${
-            window.location.pathname.split("/")[1]
-          }`
+        : `/${window.location.pathname.split("/")[1]}`
     );
   }, [window.location.pathname]);
 
