@@ -26,7 +26,7 @@ const AddLegalEntitiesPage = () => {
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
-  const [formData, setFormData] = useState(states.entity);
+  const [formData, setFormData] = useState(states.entity.entity_details);
   const [errors, setErrors] = useState({});
 
   const [pageIsLoading, setPageIsLoading] = useState(true);
@@ -156,20 +156,19 @@ const AddLegalEntitiesPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const { quote_id, created_at, updated_at, ...filteredData } = formData;
+      // const { quote_id, created_at, updated_at, ...filteredData } = formData;
 
-      console.log(formData);
-      toast.success("Entity has been successfully added!");
-      navigate("/legal-entities");
-      return;
+      // console.log(formData);
 
-      const response = await axiosInstance.post("/legal-entities", {
-        form_data: filteredData,
-        timestamp: {
-          status: "Drafted",
-          remarks: "",
-        },
-      });
+
+
+      let { entity_id, created_at, updated_at, ...filteredEntity } = states.entity;
+
+      filteredEntity.entity_details = formData;
+
+      //console.log(filteredEntity);
+
+      const response = await axiosInstance.post("/legal-entities", filteredEntity);
       if (response.status == 200) {
         toast.success("Entity has been successfully added!");
         navigate("/legal-entities");
@@ -223,10 +222,15 @@ const AddLegalEntitiesPage = () => {
             columns={[
               {
                 name: "Name",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.officer_name}
                   </Typography>
@@ -234,10 +238,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Address",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.current_residence}
                   </Typography>
@@ -245,10 +254,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Nationality",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.nationality}
                   </Typography>
@@ -256,10 +270,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Incorporator",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.incorporator}
                   </Typography>
@@ -267,10 +286,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Board",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.board}
                   </Typography>
@@ -278,10 +302,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Gender",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.gender}
                   </Typography>
@@ -289,10 +318,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Stock Holder",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.stockholder}
                   </Typography>
@@ -300,10 +334,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Officer",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.officer}
                   </Typography>
@@ -311,10 +350,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Exec. Comm.",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.executive_committee}
                   </Typography>
@@ -322,10 +366,15 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "TIN",
-                selector: (row) => (
+                selector: (row, index) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
+                    onClick={() => {
+                      setOfficerFormData(row);
+                      setOfficerIndex(index);
+                      handleOfficersDialog();
+                    }}
                   >
                     {row.tax_identification_number}
                   </Typography>
@@ -333,11 +382,7 @@ const AddLegalEntitiesPage = () => {
               },
             ]}
             data={formData.officer_information}
-            onClick={(row, index) => {
-              setOfficerFormData(row);
-              setOfficerIndex(index);
-              handleOfficersDialog();
-            }}
+
           />
         )}
       </>
@@ -498,7 +543,7 @@ const AddLegalEntitiesPage = () => {
             }}
           />
         </div>
-        <div className="grid grid-cols-1 gap-5 pb-10">
+        {/* <div className="grid grid-cols-1 gap-5 pb-10">
           <div className="flex flex-col gap-1">
             <Typography variant="small" className={`mb-1 font-normal`}>
               Company Logo
@@ -545,7 +590,7 @@ const AddLegalEntitiesPage = () => {
               </label>
             )}
           </div>
-        </div>
+        </div> */}
       </>
     ),
 
@@ -572,9 +617,8 @@ const AddLegalEntitiesPage = () => {
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${
-                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                }`}
+                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                  }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -844,11 +888,11 @@ const AddLegalEntitiesPage = () => {
             title="Basic Information"
             data={[
               {
-                name: "Company Name",
+                name: "Entity Name",
                 value: formData.company_name,
               },
               {
-                name: "Company Address",
+                name: "Entity Address",
                 value: formData.company_address,
               },
               {
@@ -919,9 +963,9 @@ const AddLegalEntitiesPage = () => {
     setPageIsLoading(false);
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
 
   return (
     <>
