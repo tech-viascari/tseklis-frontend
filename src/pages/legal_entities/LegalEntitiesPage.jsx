@@ -33,8 +33,6 @@ const LegalEntitiesPage = () => {
       name: "Company Name",
       selector: (row) => row.entity_details.company_name,
       cell: (row) => {
-        console.log(row);
-
         return (
           <div
             className="flex flex-row gap-5 w-full items-center justify-center"
