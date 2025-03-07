@@ -28,7 +28,6 @@ import LegalEntitiesPage from "./pages/legal_entities/LegalEntitiesPage";
 import AddLegalEntitiesPage from "./pages/legal_entities/AddLegalEntitiesPage";
 import LegalEntityMainLayout from "./pages/layouts/legal_entity_layouts/LegalEntityMainLayout";
 import EntityDashboardPage from "./pages/legal_entities/legal_entity/EntityDashboardPage";
-import EntityEntryPage from "./pages/legal_entities/legal_entity/EntityEntryPage";
 import EntityGISPage from "./pages/legal_entities/legal_entity/EntityGISPage";
 import EntityProfilePage from "./pages/legal_entities/legal_entity/EntityProfilePage";
 import EntityDocumentDraftingPage from "./pages/legal_entities/legal_entity/EntityDocumentDraftingPage";
@@ -38,6 +37,8 @@ import SecretaryCertificatePage from "./pages/legal_entities/legal_entity/board_
 import BoardResolutionPage from "./pages/legal_entities/legal_entity/board_meetings/BoardResolutionPage";
 import TreasurerCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/TreasurerCertificatePage";
 import AllWorkflow from "./pages/project_management/AllWorkflow";
+import ViewWorkflow from "./pages/project_management/ViewWorkflow";
+import AddWorkflow from "./pages/project_management/AddWorkflow";
 
 const App = () => {
   return (
@@ -77,7 +78,13 @@ const App = () => {
               element={<AddEntityEnrollmentPage />}
             />
 
+            {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
+            <Route path="/workflow/addworkflow" element={<AddWorkflow />} />
+            <Route
+              path="/workflow/view/:workflow_id"
+              element={<ViewWorkflow />}
+            />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />

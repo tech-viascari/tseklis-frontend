@@ -16,7 +16,7 @@ const EntityGISPage = () => {
         <TopBar
           items={[
             {
-              title: entity.company_name,
+              title: entity.entity_details.company_name,
               goto: `/legal-entities/v/${entity_id}/`,
             },
             {
