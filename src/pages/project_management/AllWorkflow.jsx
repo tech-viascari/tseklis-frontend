@@ -11,32 +11,42 @@ import TableComponent from "../../components/TableComponent";
 const AllWorkflow = () => {
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
+  const [workflowPage, setWorkflowPage] = useState();
+
+  // Define navigateToWorkflow before it is used
+  const navigateToWorkflow = (row) => {
+    navigate("/workflow/view/" + row.workflow_id);
+    setWorkflowPage(row);
+  };
 
   const workflowSampleData = [
     {
-      company: "FULLSUITE1",
-      workflow: "sec registration",
-      open: "asdad",
-      closed: "asdasd",
-      remarks: "asdasd",
-      assignee: "sasdasd",
+      workflow_id: 1,
+      company: "UtakPOS",
+      workflow: "INCORPORATION",
+      open: "01/02/2025",
+      closed: "",
+      remarks: "",
+      assignee: "Hannah",
     },
 
     {
-      company: "FULLSUITE2",
-      workflow: "sec registration",
-      open: "asdad",
-      closed: "asdasd",
-      remarks: "asdasd",
-      assignee: "sasdasd",
+      workflow_id: 2,
+      company: "Bold Business",
+      workflow: "INCORPORATION",
+      open: "01/02/2025",
+      closed: "",
+      remarks: "",
+      assignee: "Hannah",
     },
     {
-      company: "FULLSUITE3",
-      workflow: "sec registration",
-      open: "asdad",
-      closed: "asdasd",
-      remarks: "asdasd",
-      assignee: "sasdasd",
+      workflow_id: 3,
+      company: "Growth Rocket",
+      workflow: "INCORPORATION",
+      open: "01/02/2025",
+      closed: "",
+      remarks: "",
+      assignee: "Hannah",
     },
   ];
 
@@ -50,7 +60,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.company}
@@ -67,7 +77,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.workflow}
@@ -84,7 +94,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.open}
@@ -101,7 +111,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.closed}
@@ -118,7 +128,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.remarks}
@@ -127,7 +137,7 @@ const AllWorkflow = () => {
       },
     },
     {
-      name: "Assigned To",
+      name: "Assignee",
       selector: (row) => `${row.assignee}`,
       cell: (row) => {
         return (
@@ -135,7 +145,7 @@ const AllWorkflow = () => {
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => {
-              navigateToUser(row);
+              navigateToWorkflow(row);
             }}
           >
             {row.assignee}
@@ -154,7 +164,7 @@ const AllWorkflow = () => {
             <TableComponent
               columns={columns}
               data={workflowSampleData}
-              // onClick={navigateToUser}
+              onClick={navigateToWorkflow}
             />
           </div>
         </div>
@@ -164,10 +174,7 @@ const AllWorkflow = () => {
       title: "VGC",
       content: (
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-2">Account Settings</h2>
-          <p className="text-gray-600">
-            Manage your preferences and account options.
-          </p>
+          <h2 className="text-xl font-bold mb-2">TBA</h2>
         </div>
       ),
     },
@@ -175,19 +182,12 @@ const AllWorkflow = () => {
       title: "Computer Share",
       content: (
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-2">Notifications</h2>
-          <p className="text-gray-600">
-            Check and configure your notification settings.
-          </p>
+          <h2 className="text-xl font-bold mb-2">TBA</h2>
         </div>
       ),
     },
   ];
 
-  const navigateToUser = (row) => {
-    navigate("/users/view/" + row.user_id);
-    setUser(row);
-  };
   return (
     <>
       <div className="w-full relative">
@@ -242,7 +242,7 @@ const AllWorkflow = () => {
                     <div>
                       <ButtonComponent
                         onClick={() => {
-                          navigate("/users/add-new");
+                          navigate("/workflow/addworkflow");
                         }}
                       >
                         Add New Workflow
