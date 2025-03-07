@@ -28,7 +28,6 @@ import LegalEntitiesPage from "./pages/legal_entities/LegalEntitiesPage";
 import AddLegalEntitiesPage from "./pages/legal_entities/AddLegalEntitiesPage";
 import LegalEntityMainLayout from "./pages/layouts/legal_entity_layouts/LegalEntityMainLayout";
 import EntityDashboardPage from "./pages/legal_entities/legal_entity/EntityDashboardPage";
-import EntityEntryPage from "./pages/legal_entities/legal_entity/EntityEntryPage";
 import EntityGISPage from "./pages/legal_entities/legal_entity/EntityGISPage";
 import EntityProfilePage from "./pages/legal_entities/legal_entity/EntityProfilePage";
 import EntityDocumentDraftingPage from "./pages/legal_entities/legal_entity/EntityDocumentDraftingPage";

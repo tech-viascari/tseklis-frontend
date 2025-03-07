@@ -20,6 +20,7 @@ import { RiProfileFill } from "react-icons/ri";
 import { PiFilesFill } from "react-icons/pi";
 import InputComponent from "../../../components/InputComponent";
 import useLegalEntities from "../../../store/useLegalEntities";
+import axiosInstance from "../../../utils/axiosHelper";
 
 const LegalEntitySideBar = () => {
   const { entity_id } = useParams();
@@ -30,7 +31,7 @@ const LegalEntitySideBar = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
 
-  const { states, entity } = useLegalEntities();
+  const { states, entity, setEntity } = useLegalEntities();
 
   const navigation = [
     {
@@ -190,18 +191,36 @@ const LegalEntitySideBar = () => {
     }
   }, [windowWidth]);
 
+  const fetchEntity = async () => {
+    if (entity.entity_id == "") {
+      try {
+        const response = await axiosInstance.get(
+          `/legal-entities/${entity_id}/`
+        );
+        if (response.status === 200) {
+          console.log(response.data.entity);
+
+          setEntity(response.data.entity);
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+  };
+
   useEffect(() => {
     setActive(
       window.location.pathname.split("/")[4] === "" ||
         window.location.pathname.split("/")[4] === undefined
         ? `legal-entities/v/${entity_id}/`
-        : `legal-entities/v/${entity_id}/${window.location.pathname.split("/")[4]}`
+        : `legal-entities/v/${entity_id}/${
+            window.location.pathname.split("/")[4]
+          }`
     );
-  }, [window.location.pathname]);
 
-  useEffect(() => {
-    console.log(entity);
-  }, [entity]);
+    fetchEntity();
+  }, [window.location.pathname]);
 
   return (
     <div
@@ -241,7 +260,7 @@ const LegalEntitySideBar = () => {
                     variant="small"
                     className="font-semibold text-sm py-5 text-nowrap line-clamp-1 text-ellipsis"
                   >
-                    {entity.company_name}
+                    {entity.entity_details.company_name}
                   </Typography>
                   <div>
                     <HiChevronUpDown size={20} />
