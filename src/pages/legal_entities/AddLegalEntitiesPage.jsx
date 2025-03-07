@@ -42,6 +42,8 @@ const AddLegalEntitiesPage = () => {
     states.officer_information
   );
 
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
   const [fakePath, setFakePath] = useState("");
   const letterHeaderRef = useRef();
 
@@ -158,6 +160,7 @@ const AddLegalEntitiesPage = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsFormSubmitting(true);
       let { entity_id, created_at, updated_at, ...filteredEntity } =
         states.entity;
       filteredEntity.entity_details = formData;
@@ -176,6 +179,7 @@ const AddLegalEntitiesPage = () => {
       toast.error("There was an error in adding the record.");
     } finally {
       handleSubmitDialog();
+      setIsFormSubmitting(false);
     }
   };
 
@@ -737,10 +741,10 @@ const AddLegalEntitiesPage = () => {
                         name: "Independent Director",
                         value: "I",
                       },
-                    {
-                      name: "Not Applicable",
-                      value: "N/A",
-                    }
+                      {
+                        name: "Not Applicable",
+                        value: "N/A",
+                      },
                     ]}
                   />
 
@@ -1004,7 +1008,12 @@ const AddLegalEntitiesPage = () => {
               No
             </ButtonComponent>
 
-            <ButtonComponent className="bg-secondary" onClick={handleSubmit}>
+            <ButtonComponent
+              disabled={isFormSubmitting}
+              loading={isFormSubmitting}
+              className="bg-secondary"
+              onClick={handleSubmit}
+            >
               Yes
             </ButtonComponent>
           </div>
