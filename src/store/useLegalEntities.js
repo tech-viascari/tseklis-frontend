@@ -6,7 +6,7 @@ const OfficerInformationState = {
   nationality: "",
   incorporator: "Y",
   board: "N/A",
-  gender: "Male",
+  gender: "M",
   stockholder: "Yes",
   officer: "Corporate Secretary",
   executive_committee: "N/A",
