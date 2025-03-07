@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Typography,
-} from "@material-tailwind/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import ReviewComponent from "../../components/ReviewComponent";
@@ -20,6 +18,7 @@ import {
   HiMiniExclamationTriangle,
 } from "react-icons/hi2";
 import TableComponent from "../../components/TableComponent";
+import { convertBase64 } from "../../utils/global";
 
 const AddLegalEntitiesPage = () => {
   //#region Form States
@@ -27,11 +26,7 @@ const AddLegalEntitiesPage = () => {
 
   const { isDirty, setIsDirty } = useDirtyContext();
 
-
   const [formData, setFormData] = useState(states.entity.entity_details);
-
-
-  const [officerEntity, setOfficerEntity] = useState(entity.officer_information);
 
   const [errors, setErrors] = useState({});
 
@@ -46,6 +41,9 @@ const AddLegalEntitiesPage = () => {
   const [officerErrors, setOfficerErrors] = useState(
     states.officer_information
   );
+
+  const [fakePath, setFakePath] = useState("");
+  const letterHeaderRef = useRef();
 
   const [officersDialog, setOfficersDialog] = useState(false);
   const handleOfficersDialog = () => {
@@ -64,10 +62,7 @@ const AddLegalEntitiesPage = () => {
     }
   };
 
-  //dito ka - Anthony
-
   const toggleUpdateOfficer = () => {
-
     let officers = formData.officer_information.map((officer, index) => {
       if (index === officerIndex) {
         return officerFormData;
@@ -111,11 +106,9 @@ const AddLegalEntitiesPage = () => {
 
   const [officerIndex, setOfficerIndex] = useState(-1);
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
+  const handleFileChange = async (e) => {
+    let base64 = await convertBase64(e.target.files[0]);
+    setFakePath(base64);
   };
 
   const handleOfficerOnSelectChange = (name, value, error_message) => {
@@ -165,19 +158,15 @@ const AddLegalEntitiesPage = () => {
 
   const handleSubmit = async () => {
     try {
-      // const { quote_id, created_at, updated_at, ...filteredData } = formData;
-
-      // console.log(formData);
-
-
-
-      let { entity_id, created_at, updated_at, ...filteredEntity } = states.entity;
-
+      let { entity_id, created_at, updated_at, ...filteredEntity } =
+        states.entity;
       filteredEntity.entity_details = formData;
+      filteredEntity.entity_logo = fakePath;
 
-      //console.log(filteredEntity);
-
-      const response = await axiosInstance.post("/legal-entities", filteredEntity);
+      const response = await axiosInstance.post(
+        "/legal-entities",
+        filteredEntity
+      );
       if (response.status == 200) {
         toast.success("Entity has been successfully added!");
         navigate("/legal-entities");
@@ -189,7 +178,6 @@ const AddLegalEntitiesPage = () => {
       handleSubmitDialog();
     }
   };
-
 
   const getFormState = (title, form_contents) => {
     const formState = {
@@ -390,10 +378,8 @@ const AddLegalEntitiesPage = () => {
                   </Typography>
                 ),
               },
-            ]
-            }
+            ]}
             data={formData.officer_information}
-
           />
         )}
       </>
@@ -546,7 +532,7 @@ const AddLegalEntitiesPage = () => {
             }}
           />
           <InputComponent
-            label="Alternative Email"
+            label="Alternative Contact Number"
             required={true}
             name="alternative_contact_number"
             value={formData.alternative_contact_number}
@@ -556,14 +542,16 @@ const AddLegalEntitiesPage = () => {
             }}
           />
         </div>
-        {/* <div className="grid grid-cols-1 gap-5 pb-10">
+        <div className="grid grid-cols-1 gap-5 pb-10">
           <div className="flex flex-col gap-1">
             <Typography variant="small" className={`mb-1 font-normal`}>
               Entity Logo
             </Typography>
 
             <div
-              className="w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer"
+              className={`w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer ${
+                fakePath != "" && "hidden"
+              }`}
               onClick={triggerFileInput}
             >
               <HiArrowDownTray size={25} className="text-black/60" />
@@ -580,20 +568,22 @@ const AddLegalEntitiesPage = () => {
                 Supported file types: .jpg, .jpeg, .png
               </Typography>
             </div>
-
             <input
               id="file-input"
               type="file"
               className="hidden"
-              accept=".jpg,.jpeg,.png" // Restrict file types
+              accept="image/jpeg, image/jpg, image/png"
+              ref={letterHeaderRef}
               onChange={handleFileChange}
             />
 
-            {selectedFile && (
-              <div className="mt-4 text-center">
-                <p className="text-xl text-gray-800">Selected File:</p>
-                <p className="text-sm text-gray-600">{selectedFile.name}</p>
-              </div>
+            {fakePath != "" && (
+              <img
+                className="cursor-pointer aspect-square w-32 object-contain"
+                src={fakePath}
+                alt="Logo"
+                onClick={triggerFileInput}
+              />
             )}
 
             {errors.company_logo && (
@@ -603,7 +593,7 @@ const AddLegalEntitiesPage = () => {
               </label>
             )}
           </div>
-        </div> */}
+        </div>
       </>
     ),
 
@@ -630,8 +620,9 @@ const AddLegalEntitiesPage = () => {
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                  }`}
+                title={`${
+                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
