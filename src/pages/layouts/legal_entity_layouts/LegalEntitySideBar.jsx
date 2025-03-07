@@ -31,7 +31,8 @@ const LegalEntitySideBar = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
 
-  const { states, entity, setEntity } = useLegalEntities();
+  const { states, entity, setEntity, entities, setEntities } =
+    useLegalEntities();
 
   const navigation = [
     {
@@ -198,13 +199,23 @@ const LegalEntitySideBar = () => {
           `/legal-entities/${entity_id}/`
         );
         if (response.status === 200) {
-          console.log(response.data.entity);
-
           setEntity(response.data.entity);
         }
       } catch (error) {
         console.log(error);
-        
+      }
+    }
+  };
+
+  const fetchEntities = async () => {
+    if (entities.length == 0) {
+      try {
+        const response = await axiosInstance.get(`/legal-entities/`);
+        if (response.status === 200) {
+          setEntities(response.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -221,6 +232,10 @@ const LegalEntitySideBar = () => {
 
     fetchEntity();
   }, [window.location.pathname]);
+
+  useEffect(() => {
+    fetchEntities();
+  }, []);
 
   return (
     <div
@@ -273,31 +288,35 @@ const LegalEntitySideBar = () => {
                   onChange={handleOnChangeSearch}
                   placeholder="Search entity"
                 />
-                <div className="h-40 flex flex-col gap-1 overflow-y-auto">
-                  {[1, 2, 3, 4].map((entity, index) => {
-                    return (
-                      <div
-                        key={`entity-${index}`}
-                        className="flex flex-row items-center gap-2 hover:bg-light-gray p-2 rounded cursor-pointer"
-                        onClick={() => {
-                          setOpenMenu(false);
-                        }}
-                      >
-                        <img
-                          src="https://docs.material-tailwind.com/img/face-2.jpg"
-                          alt="avatar"
-                          className="relative inline-block h-8 w-8 !rounded-full  object-cover object-center"
-                        />
-                        <Typography
-                          variant="small"
-                          className="font-semibold text-sm text-black"
+                {entities.length == 0 ? (
+                  <>No records found.</>
+                ) : (
+                  <div className="h-40 flex flex-col gap-1 overflow-y-auto">
+                    {entities.map((entity, index) => {
+                      return (
+                        <div
+                          key={entity.entity_id}
+                          className="flex flex-row items-center gap-2 hover:bg-light-gray p-2 rounded cursor-pointer"
+                          onClick={() => {
+                            window.location.href = `/legal-entities/v/${entity.entity_id}/`;
+                          }}
                         >
-                          Cloudeats PH. Inc.
-                        </Typography>
-                      </div>
-                    );
-                  })}
-                </div>
+                          <img
+                            src={entity.entity_logo}
+                            alt="avatar"
+                            className="relative inline-block h-8 w-8 !rounded-full  object-cover object-center"
+                          />
+                          <Typography
+                            variant="small"
+                            className="font-medium text-sm text-black"
+                          >
+                            {entity.entity_details.company_name}
+                          </Typography>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </MenuList>
             </Menu>
           </div>
