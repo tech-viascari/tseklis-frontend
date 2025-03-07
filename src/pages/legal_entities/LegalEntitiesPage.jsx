@@ -33,7 +33,7 @@ const LegalEntitiesPage = () => {
       name: "Company Name",
       selector: (row) => row.entity_details.company_name,
       cell: (row) => {
-        console.log(row);
+        //console.log(row);
 
         return (
           <div

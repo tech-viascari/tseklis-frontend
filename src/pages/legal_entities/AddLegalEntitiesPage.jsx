@@ -712,8 +712,8 @@ const AddLegalEntitiesPage = () => {
                     }}
                     required={true}
                     options={[
-                      { name: "Yes", value: "Yes" },
-                      { name: "No", value: "No" },
+                      { name: "Yes", value: "Y" },
+                      { name: "No", value: "N" },
                     ]}
                   />
 
@@ -731,12 +731,16 @@ const AddLegalEntitiesPage = () => {
                     }}
                     required={true}
                     options={[
-                      { name: "Chairman", value: "Chairman" },
-                      { name: "Member", value: "Member" },
+                      { name: "Chairman", value: "C" },
+                      { name: "Member", value: "M" },
                       {
                         name: "Independent Director",
-                        value: "Independent Director",
+                        value: "I",
                       },
+                    {
+                      name: "Not Applicable",
+                      value: "N/A",
+                    }
                     ]}
                   />
 
@@ -754,8 +758,8 @@ const AddLegalEntitiesPage = () => {
                     }}
                     required={true}
                     options={[
-                      { name: "Male", value: "Male" },
-                      { name: "Female", value: "Female" },
+                      { name: "Male", value: "M" },
+                      { name: "Female", value: "F" },
                     ]}
                   />
 
@@ -773,8 +777,8 @@ const AddLegalEntitiesPage = () => {
                     }}
                     required={true}
                     options={[
-                      { name: "Yes", value: "Yes" },
-                      { name: "No", value: "No" },
+                      { name: "Yes", value: "Y" },
+                      { name: "No", value: "N" },
                     ]}
                   />
 
@@ -804,7 +808,7 @@ const AddLegalEntitiesPage = () => {
                         value: "Compliance Officer",
                       },
                       { name: "Associated Person", value: "Associated Person" },
-                      { name: "Not Applicable", value: "Not Applicable" },
+                      { name: "Not Applicable", value: "N/A" },
                     ]}
                   />
 
