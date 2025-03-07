@@ -43,11 +43,11 @@ const LegalEntitiesPage = () => {
             }}
           >
             <div className="w-20 aspect-square flex flex-col items-center justify-center">
-              {/* <Avatar
-                src={row.company_logo}
+              <Avatar
+                src={row.entity_logo}
                 alt="avatar"
                 className="object-contain"
-              /> */}
+              />
             </div>
             <div className="w-full">
               <Typography
