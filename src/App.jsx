@@ -38,6 +38,8 @@ import SecretaryCertificatePage from "./pages/legal_entities/legal_entity/board_
 import BoardResolutionPage from "./pages/legal_entities/legal_entity/board_meetings/BoardResolutionPage";
 import TreasurerCertificatePage from "./pages/legal_entities/legal_entity/board_meetings/TreasurerCertificatePage";
 import AllWorkflow from "./pages/project_management/AllWorkflow";
+import ViewWorkflow from "./pages/project_management/ViewWorkflow";
+import AddWorkflow from "./pages/project_management/AddWorkflow";
 
 const App = () => {
   return (
@@ -77,7 +79,13 @@ const App = () => {
               element={<AddEntityEnrollmentPage />}
             />
 
+            {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
+            <Route path="/workflow/addworkflow" element={<AddWorkflow />} />
+            <Route
+              path="/workflow/view/:workflow_id"
+              element={<ViewWorkflow />}
+            />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />
