@@ -1,0 +1,143 @@
+
+    <ViewPageComponent
+        items={[
+          {
+            title: entity.entity_details.company_name,
+            goto: `/legal-entities/v/${entity_id}/`,
+          },
+          {
+            title: "Entity Profile",
+            goto: `/legal-entities/v/${entity_id}/entity-profile`,
+          },
+        ]}
+        title={entity.entity_details.company_name}
+        goBackTo="/legal-entities"
+      >
+        <div className="flex flex-col gap-5 h-full">
+          <ReviewComponent
+            title="Basic Information"
+            data={[
+              {
+                name: "Business Type",
+                value: entity.entity_details.business_type,
+              },
+              {
+                name: "Client Type",
+                value: entity.entity_details.client_type,
+              },
+              {
+                name: "Company Address",
+                value: entity.entity_details.company_address,
+              },
+              {
+                name: "Type of Company",
+                value: entity.entity_details.type_of_company,
+              },
+              {
+                name: "Corporate TIN",
+                value: entity.entity_details.corporate_tin,
+              },
+              {
+                name: "SEC Registration Number",
+                value: entity.entity_details.sec_registration_number,
+              },
+              {
+                name: "Official Email",
+                value: entity.entity_details.official_email,
+              },
+              {
+                name: "Alternative Email",
+                value: entity.entity_details.alternative_email,
+              },
+              {
+                name: "Official Contact Number",
+                value: entity.entity_details.official_contact_number,
+              },
+              {
+                name: "Alternative Contact Number",
+                value: entity.entity_details.alternative_contact_number,
+              },
+            ]}
+          />
+          <div>
+            <Typography variant="small" className="font-semibold text-sm">
+              Officer Information
+            </Typography>
+            <hr className="border-light-gray my-3" />
+            <DisplayOfficersTable />
+          </div>
+        </div>
+    </ViewPageComponent>
+  },
+  {
+    component:
+    <ViewPageComponent
+        items={[
+          {
+            title: entity.entity_details.company_name,
+            goto: `/legal-entities/v/${entity_id}/`,
+          },
+          {
+            title: "Entity Profile",
+            goto: `/legal-entities/v/${entity_id}/entity-profile`,
+          },
+        ]}
+        title={entity.entity_details.company_name}
+        goBackTo="/legal-entities"
+      >
+        <div className="flex flex-col gap-5 h-full">
+          <ReviewComponent
+            title="Basic Information"
+            data={[
+              {
+                name: "Business Type",
+                value: entity.entity_details.business_type,
+              },
+              {
+                name: "Client Type",
+                value: entity.entity_details.client_type,
+              },
+              {
+                name: "Company Address",
+                value: entity.entity_details.company_address,
+              },
+              {
+                name: "Type of Company",
+                value: entity.entity_details.type_of_company,
+              },
+              {
+                name: "Corporate TIN",
+                value: entity.entity_details.corporate_tin,
+              },
+              {
+                name: "SEC Registration Number",
+                value: entity.entity_details.sec_registration_number,
+              },
+              {
+                name: "Official Email",
+                value: entity.entity_details.official_email,
+              },
+              {
+                name: "Alternative Email",
+                value: entity.entity_details.alternative_email,
+              },
+              {
+                name: "Official Contact Number",
+                value: entity.entity_details.official_contact_number,
+              },
+              {
+                name: "Alternative Contact Number",
+                value: entity.entity_details.alternative_contact_number,
+              },
+            ]}
+          />
+          <div>
+            <Typography variant="small" className="font-semibold text-sm">
+              Officer Information
+            </Typography>
+            <hr className="border-light-gray my-3" />
+            <DisplayOfficersTable />
+          </div>
+        </div>
+    </ViewPageComponent>
+ 
