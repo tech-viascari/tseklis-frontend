@@ -4,6 +4,7 @@ import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
 import { useParams } from "react-router";
 import useLegalEntities from "../../../store/useLegalEntities";
+import UnderConstructionComponent from "../../../components/UnderConstructionComponent";
 
 const EntityDashboardPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -31,6 +32,10 @@ const EntityDashboardPage = () => {
                     <Typography variant="small" className="font-bold text-xl">
                       Dashboard
                     </Typography>
+
+                    <div className="h-screen p-5 flex flex-col items-center justify-center -mt-[60px] gap-3">
+                      <UnderConstructionComponent />
+                    </div>
                   </div>
                 </div>
               </div>

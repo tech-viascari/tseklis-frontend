@@ -118,68 +118,6 @@ const LegalEntitiesPage = () => {
     );
   }
 
-  const data = [
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name: "Cloudeats PH Inc.",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1720151475/CoMS/Companies/Logos/CloudEats%20Ph%2C%20Inc..png",
-      sec_registration_number: "2022060054609 - 86",
-      client_type: "Viascari Group of Companies",
-    },
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name: "Offshore Concept BPO Services Inc.",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1715325752/CoMS/Companies/Logos/Offshore%20Concept%20BPO%20Services%20Inc..png",
-      sec_registration_number: "CS201419616",
-      client_type: "Viascari Group of Companies",
-    },
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name:
-        "Equinix (Philippines) Services Inc. (formerly known as Packethost Inc.)",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1729152589/CoMS/Companies/Logos/Equinix%20%28Philippines%29%20Services%20Inc.%20%28formerly%20known%20as%20Packethost%20Inc.%29.png",
-      sec_registration_number: "CS201901415",
-      client_type: "Computershare Clients",
-    },
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name: "Booking.com Philippines, Inc.",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1720148187/CoMS/Companies/Logos/Booking.com%20Philippines%2C%20Inc..svg",
-      sec_registration_number: "CS201203871",
-      client_type: "Computershare Clients",
-    },
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name: "Twitter Philippines Inc.",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1721120580/CoMS/Companies/Logos/Twitter%20Philippines%20Inc..png",
-      sec_registration_number: "CS201716724",
-      client_type: "Computershare Clients",
-    },
-    {
-      ...states.entity,
-      entity_id: generateUUID(),
-      company_name: "Utakpos",
-      company_logo:
-        "https://res.cloudinary.com/dmhaxgniu/image/upload/v1735893034/CoMS/Companies/Logos/Utakpos.png",
-      sec_registration_number: "CS201812157",
-      client_type: "External Clients",
-    },
-  ];
-
-  // useEffect(() => {
-  //   filterEntities(data);
-  // }, []);
-
   return (
     <div className="w-full relative">
       <TopBar items={[{ title: "Legal Entities", goto: "/legal-entities" }]} />
