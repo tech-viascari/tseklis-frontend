@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const FileLinksTable = () => {
-  const [rows, setRows] = useState([]);
-
+const FileLinksTable = ({ rows = [], setRows }) => {
   const [newRow, setNewRow] = useState({
     file: "",
     link: "",
@@ -23,17 +21,17 @@ const FileLinksTable = () => {
     if (newRow.file.trim() !== "" || newRow.link.trim() !== "") {
       const newId =
         rows.length > 0 ? Math.max(...rows.map((row) => row.id)) + 1 : 1;
-      setRows((prev) => [...prev, { id: newId, ...newRow }]);
+      setRows([...rows, { id: newId, ...newRow }]);
       setNewRow({ file: "", link: "" });
     }
   };
 
   const removeRow = (id) => {
-    setRows((prev) => prev.filter((row) => row.id !== id));
+    setRows(rows.filter((row) => row.id !== id));
   };
 
   return (
-    <div className="w-full  mx-auto border border-[#CEDEE1] rounded-lg">
+    <div className="w-full mx-auto border border-[#CEDEE1] rounded-lg">
       <table className="min-w-full divide-y divide-[#CEDEE1]">
         <thead className="bg-gray-50">
           <tr>
