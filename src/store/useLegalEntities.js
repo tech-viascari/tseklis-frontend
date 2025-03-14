@@ -1,5 +1,15 @@
 import { create } from "zustand";
 
+const OfficerTypes = [
+ {label: "President", value: "President"},
+ {label: "Vice President", value: "Vice President"},
+ {label: "Corporate Secretary", value: "Corporate Secretary"},
+ {label: "Treasurer", value: "Treasurer"},
+ {label: "Compliance Officer", value: "Compliance Officer"},
+ {label: "Associated Person", value: "Associated Person"},
+ {label: "Not Applicable", value: "N/A"},
+];
+
 const OfficerInformationState = {
   officer_name: "",
   current_residence: "",
@@ -8,7 +18,7 @@ const OfficerInformationState = {
   board: "N/A",
   gender: "M",
   stockholder: "Y",
-  officer: "Corporate Secretary",
+  officer: OfficerTypes,
   executive_committee: "N/A",
   tax_identification_number: "",
 };
@@ -23,10 +33,10 @@ const ClientTypes = [
 const CompanyTypes = [
   "Domestic - Stock",
   "Domestic - Non Stock",
-  "Foreign Branch Office",
-  "Foreign Representative Office",
-  "Foreign Regional Area Headquarters",
-  "Foreign Regional Operating Headquarters",
+  "Foreign - Branch Office",
+  "Foreign - Representative Office",
+  //"Foreign Regional Area Headquarters",
+  //"Foreign Regional Operating Headquarters",
 ];
 
 const LegalEntityDetailsState = {
@@ -36,7 +46,7 @@ const LegalEntityDetailsState = {
   client_type: "Viascari Group of Companies",
   company_name: "",
   company_address: "",
-  type_of_company: "Domestic - Stock",
+  type_of_company: "",
   corporate_tin: "",
   sec_registration_number: "",
   official_email: "",
@@ -81,6 +91,7 @@ const useLegalEntities = create((set) => ({
     business_types: BusinessTypes,
     client_types: ClientTypes,
     company_types: CompanyTypes,
+    officer_types: OfficerTypes,
   },
   setEntities: (payload) => set({ entities: payload }),
   setEntity: (payload) => set({ entity: payload }),
