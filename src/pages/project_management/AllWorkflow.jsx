@@ -52,7 +52,7 @@ const AllWorkflow = () => {
 
   const columns = [
     {
-      name: "Company",
+      name: "Legal Entity",
       selector: (row) => `${row.company}`,
       cell: (row) => {
         return (
@@ -69,7 +69,7 @@ const AllWorkflow = () => {
       },
     },
     {
-      name: "Workflow",
+      name: "Project",
       selector: (row) => `${row.workflow}`,
       cell: (row) => {
         return (
@@ -153,6 +153,23 @@ const AllWorkflow = () => {
         );
       },
     },
+    {
+      name: "Requestor",
+      selector: (row) => `${row.assignee}`,
+      cell: (row) => {
+        return (
+          <Typography
+            variant="small"
+            className="font-normal text-sm text-dark"
+            onClick={() => {
+              navigateToWorkflow(row);
+            }}
+          >
+            {row.assignee}
+          </Typography>
+        );
+      },
+    },
   ];
 
   const tabs = [
@@ -200,7 +217,7 @@ const AllWorkflow = () => {
                   <div className="flex flex-row justify-between items-center border rounded-lg p-4 border-[#CEDEE1]">
                     <div className="">
                       <Typography variant="small" className="font-bold text-xl">
-                        Workflow
+                        All Projects
                       </Typography>
                       <Typography
                         variant="small"
@@ -210,7 +227,7 @@ const AllWorkflow = () => {
                           <div className="flex flex-row">
                             {" "}
                             <p className="text-md font-medium">
-                              Ongoing Workflows
+                              Ongoing Projects
                             </p>
                             <IoIosArrowDown className="my-1 ml-1" />
                           </div>
@@ -242,10 +259,10 @@ const AllWorkflow = () => {
                     <div>
                       <ButtonComponent
                         onClick={() => {
-                          navigate("/workflow/addworkflow");
+                          navigate("/project/add-project");
                         }}
                       >
-                        Add New Workflow
+                        Add New Project
                       </ButtonComponent>
                     </div>
                   </div>

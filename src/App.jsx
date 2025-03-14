@@ -39,6 +39,8 @@ import TreasurerCertificatePage from "./pages/legal_entities/legal_entity/board_
 import AllWorkflow from "./pages/project_management/AllWorkflow";
 import ViewWorkflow from "./pages/project_management/ViewWorkflow";
 import AddWorkflow from "./pages/project_management/AddWorkflow";
+import AddDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/AddDocumentDraftingPage";
+import AddProjectsPage from "./pages/project_management/AddProjects";
 
 const App = () => {
   return (
@@ -81,6 +83,7 @@ const App = () => {
             {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
             <Route path="/workflow/addworkflow" element={<AddWorkflow />} />
+            <Route path="/project/add-project" element={<AddProjectsPage />} />
             <Route
               path="/workflow/view/:workflow_id"
               element={<ViewWorkflow />}
@@ -127,10 +130,16 @@ const App = () => {
               path="/legal-entities/v/:entity_id/gis-tracker"
               element={<EntityGISPage />}
             />
+
             <Route
               path="/legal-entities/v/:entity_id/document-drafting"
               element={<EntityDocumentDraftingPage />}
             />
+            <Route
+              path="/legal-entities/v/:entity_id/document-drafting/add-new"
+              element={<AddDocumentDraftingPage />}
+            />
+
             <Route
               path="/legal-entities/v/:entity_id/notice-of-meeting"
               element={<NoticeOfMeetingPage />}
