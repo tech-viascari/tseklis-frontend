@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Typography } from "@material-tailwind/react";
+import { select, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import ReviewComponent from "../../components/ReviewComponent";
@@ -19,6 +19,7 @@ import {
 } from "react-icons/hi2";
 import TableComponent from "../../components/TableComponent";
 import { convertBase64 } from "../../utils/global";
+import SelectMultipleComponent from "../../components/SelectMultipleComponent";
 
 const AddLegalEntitiesPage = () => {
   //#region Form States
@@ -41,6 +42,8 @@ const AddLegalEntitiesPage = () => {
   const [officerErrors, setOfficerErrors] = useState(
     states.officer_information
   );
+
+  const [officerOptions, setOfficerOptions] = useState(states.officer_types);
 
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
@@ -336,8 +339,10 @@ const AddLegalEntitiesPage = () => {
               },
               {
                 name: "Officer",
-                selector: (row, index) => (
-                  <Typography
+                selector: (row, index) => row.officer,
+                cell: (row, index) => {
+                  console.log(row.officer);
+                  return <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
                     onClick={() => {
@@ -346,9 +351,11 @@ const AddLegalEntitiesPage = () => {
                       handleOfficersDialog();
                     }}
                   >
-                    {row.officer}
+                    {row.officer.map((officer, index) => {
+                      return officer + ", ";
+                    })}
                   </Typography>
-                ),
+                }
               },
               {
                 name: "Exec. Comm.",
@@ -553,9 +560,8 @@ const AddLegalEntitiesPage = () => {
             </Typography>
 
             <div
-              className={`w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer ${
-                fakePath != "" && "hidden"
-              }`}
+              className={`w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer ${fakePath != "" && "hidden"
+                }`}
               onClick={triggerFileInput}
             >
               <HiArrowDownTray size={25} className="text-black/60" />
@@ -624,9 +630,8 @@ const AddLegalEntitiesPage = () => {
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${
-                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                }`}
+                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                  }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -786,34 +791,24 @@ const AddLegalEntitiesPage = () => {
                     ]}
                   />
 
-                  <SelectComponent
+                  <SelectMultipleComponent
                     label="Officer"
                     name="officer"
-                    value={officerFormData.officer}
                     error_message={officerErrors.officer}
-                    onSelectChange={(value) => {
-                      handleOfficerOnSelectChange(
-                        "officer",
-                        value,
-                        "Officer is required."
+                    options={officerOptions}
+                    isMulti={true}
+                    onSelectChange={(values) => {
+                      let selected = Object.entries(values).map(
+                        ([key, value]) => {
+                          return value.value;
+                        }
                       );
+
+                      setOfficerFormData({
+                        ...officerFormData,
+                        officer: selected,
+                      });
                     }}
-                    required={true}
-                    options={[
-                      { name: "President", value: "President" },
-                      { name: "Vice President", value: "Vice President" },
-                      {
-                        name: "Corporate Secretary",
-                        value: "Corporate Secretary",
-                      },
-                      { name: "Treasurer", value: "Treasurer" },
-                      {
-                        name: "Compliance Officer",
-                        value: "Compliance Officer",
-                      },
-                      { name: "Associated Person", value: "Associated Person" },
-                      { name: "Not Applicable", value: "N/A" },
-                    ]}
                   />
 
                   <SelectComponent

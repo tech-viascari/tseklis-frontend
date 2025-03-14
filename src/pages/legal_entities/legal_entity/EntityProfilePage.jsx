@@ -126,12 +126,13 @@ const EntityProfilePage = () => {
               },
               {
                 name: "Officer",
-                selector: (row) => (
+                selector: (row) => (row.officer),
+                cell: (row) => (
                   <Typography
                     variant="small"
                     className="font-normal text-sm text-dark"
                   >
-                    {row.officer}
+                    {row.officer.toString().replace(/,/g, ", ")}
                   </Typography>
                 ),
               },
