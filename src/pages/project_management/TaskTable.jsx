@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const TaskTable = () => {
-  const [tasks, setTasks] = useState([]);
-
+const TaskTable = ({ tasks = [], setTasks }) => {
+  console.log("Tasks:", tasks);
   const [newTask, setNewTask] = useState({
     name: "",
     priority: "",
@@ -19,12 +18,26 @@ const TaskTable = () => {
     }));
   };
 
+  // const addTask = () => {
+  //   // Validate that at least task name is provided
+  //   if (newTask.name.trim() !== "") {
+  //     const newId =
+  //       tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) + 1 : 1;
+  //     setTasks((prev) => [...prev, { id: newId, ...newTask }]);
+  //     setNewTask({ name: "", priority: "", date: "" });
+  //   }
+  // };
+  // In your TaskTable component
   const addTask = () => {
     // Validate that at least task name is provided
     if (newTask.name.trim() !== "") {
+      const currentTasks = Array.isArray(tasks) ? tasks : [];
       const newId =
-        tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) + 1 : 1;
-      setTasks((prev) => [...prev, { id: newId, ...newTask }]);
+        currentTasks.length > 0
+          ? Math.max(...currentTasks.map((task) => task.id)) + 1
+          : 1;
+
+      setTasks([...currentTasks, { id: newId, ...newTask }]);
       setNewTask({ name: "", priority: "", date: "" });
     }
   };
