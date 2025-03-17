@@ -12,6 +12,7 @@ const InputComponent = ({
   onChange,
   required = false,
   labelClass = "",
+  disabled = false,
 }) => {
   return (
     <>
@@ -22,6 +23,7 @@ const InputComponent = ({
         >
           {label} {required && <span className="text-red-400">*</span>}
         </Typography>
+
         <Input
           type={type}
           name={name}
@@ -32,6 +34,7 @@ const InputComponent = ({
             className: "before:content-none after:content-none",
           }}
           placeholder={placeholder}
+          disabled={disabled}
         />
         {error_message && (
           <label className="text-xs text-red-500 flex flex-row gap-1 items-center">

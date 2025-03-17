@@ -40,6 +40,7 @@ import AllWorkflow from "./pages/project_management/AllWorkflow";
 import ViewWorkflow from "./pages/project_management/ViewWorkflow";
 import AddWorkflow from "./pages/project_management/AddWorkflow";
 import AddDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/AddDocumentDraftingPage";
+import AddGISPage from "./pages/legal_entities/legal_entity/gis/AddGISPage";
 import AddProjectsPage from "./pages/project_management/AddProjects";
 
 const App = () => {
@@ -122,13 +123,19 @@ const App = () => {
               path="/legal-entities/v/:entity_id"
               element={<EntityDashboardPage />}
             />
+
             <Route
               path="/legal-entities/v/:entity_id/entity-profile"
               element={<EntityProfilePage />}
             />
+
             <Route
               path="/legal-entities/v/:entity_id/gis-tracker"
               element={<EntityGISPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/gis-tracker/add-new"
+              element={<AddGISPage />}
             />
 
             <Route
