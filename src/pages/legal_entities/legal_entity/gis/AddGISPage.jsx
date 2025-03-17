@@ -1,0 +1,192 @@
+import React, { useEffect, useState } from "react";
+import { Typography } from "@material-tailwind/react";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
+import AddPageComponent from "../../../../components/AddPageComponent";
+import DialogComponent from "../../../../components/DialogComponent";
+import ButtonComponent from "../../../../components/ButtonComponent";
+import { useDirtyContext } from "../../../../providers/DirtyProvider";
+import useLegalEntities from "../../../../store/useLegalEntities";
+import useGISDocumentStore from "../../../../store/useGISDocumentStore";
+import { GeneralInformationForm } from "./form_data/GeneralInformationForm";
+import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
+import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
+import ReviewComponent from "../../../../components/ReviewComponent";
+import { ReviewForm } from "./form_data/ReviewForm";
+
+const AddGISPage = () => {
+  const { entity_id } = useParams();
+
+  const PATH = `/legal-entities/v/${entity_id}`;
+
+  const { states } = useGISDocumentStore();
+
+  const { entity } = useLegalEntities();
+
+  const { isDirty, setIsDirty } = useDirtyContext();
+
+  const [formData, setFormData] = useState(states.GISDocument.document_data);
+
+  const [errors, setErrors] = useState({});
+
+  const [pageIsLoading, setPageIsLoading] = useState(true);
+
+  const [submitDialog, setSubmitDialog] = useState(false);
+
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmitDialog = () => {
+    setSubmitDialog(!submitDialog);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const { quote_id, created_at, updated_at, ...filteredData } = formData;
+
+      setIsFormSubmitting(true);
+
+      // const response = await axiosInstance.post("/quotes", {
+      //   form_data: filteredData,
+      //   timestamp: {
+      //     status: "Drafted",
+      //     remarks: "",
+      //   },
+      // });
+      // if (response.status == 200) {
+      toast.success("Quote has been successfully added!");
+      navigate(`${PATH}/gis-tracker`);
+      // }
+    } catch (error) {
+      console.log(error);
+      toast.error("There was an error in adding the record.");
+    } finally {
+      handleSubmitDialog();
+      setIsFormSubmitting(false);
+    }
+  };
+
+  const setToDefault = async () => {
+    let form_data = { ...states.GISDocument.document_data };
+    // Loop through each key and set its value to an empty string
+    for (let key in form_data) {
+      if (form_data.hasOwnProperty(key)) {
+        form_data[key] = "";
+      }
+    }
+    setErrors(form_data);
+    setPageIsLoading(false);
+  };
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  const getFormState = (title, form_contents) => {
+    const formState = {
+      title: "",
+      form_contents: <></>,
+    };
+
+    return {
+      ...formState,
+      title,
+      form_contents,
+    };
+  };
+
+  const formComponent = [
+    getFormState(
+      "General Information",
+      <GeneralInformationForm
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+      />
+    ),
+    getFormState(
+      "Capital Structure",
+      <CapitalStructureForm
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+      />
+    ),
+    getFormState(
+      "Beneficial Ownership Declaration",
+      <BeneficialOwnershipForm
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+      />
+    ),
+    getFormState(
+      "Review Information",
+      <ReviewForm
+        formData={formData}
+        setFormData={setFormData}
+        errors={errors}
+      />
+    ),
+  ];
+
+  return (
+    <>
+      <AddPageComponent
+        items={[
+          {
+            title: entity.entity_details.company_name,
+            goto: PATH,
+          },
+          {
+            title: "GIS Tracker",
+            goto: `${PATH}/gis-tracker`,
+          },
+          {
+            title: "Add New GIS",
+            goto: `${PATH}/gis-tracker/add-new`,
+          },
+        ]}
+        title="Add New GIS"
+        subtitle="Please fill in the necessary details below."
+        handleSubmit={handleSubmitDialog}
+        goBackTo={`${PATH}/gis-tracker`}
+        formComponent={formComponent}
+        setToDefault={setToDefault}
+        pageIsLoading={pageIsLoading}
+      />
+
+      <DialogComponent
+        dialogName={submitDialog}
+        handlerDialog={handleSubmitDialog}
+        title="Add New Quote"
+        footerContent={
+          <div className="flex flex-row items-center justify-end gap-3 w-full">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={handleSubmitDialog}
+            >
+              No
+            </ButtonComponent>
+
+            <ButtonComponent
+              loading={isFormSubmitting}
+              disabled={isFormSubmitting}
+              className="bg-secondary"
+              onClick={handleSubmit}
+            >
+              Yes
+            </ButtonComponent>
+          </div>
+        }
+      >
+        <Typography variant="small" className="font-normal text-sm">
+          Are you sure you want to add this record?
+        </Typography>
+      </DialogComponent>
+    </>
+  );
+};
+
+export default AddGISPage;

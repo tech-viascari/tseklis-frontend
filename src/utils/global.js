@@ -36,6 +36,18 @@ export const formatNumberWithCommaAndDecimal = (number) => {
   return `${formattedIntegerPart}.${formattedDecimalPart}`;
 };
 
+export const formatNumberWithCommaOnly = (number) => {
+  if (number == null || number == "") return "";
+  const numStr = number.toString();
+  const [integerPart, decimalPart] = numStr.split(".");
+  if (decimalPart != undefined) {
+    const formattedInteger = formatIntegerWithComma(integerPart);
+    const formattedDecimal = decimalPart.substring(0, 4);
+    return `${formattedInteger}.${formattedDecimal}`;
+  }
+  return formatIntegerWithComma(integerPart);
+};
+
 export const formattedDate = (date) => {
   if (!date) {
     return "";
