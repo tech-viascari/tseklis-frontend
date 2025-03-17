@@ -41,6 +41,7 @@ import ViewWorkflow from "./pages/project_management/ViewWorkflow";
 import AddWorkflow from "./pages/project_management/AddWorkflow";
 import AddDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/AddDocumentDraftingPage";
 import AddGISPage from "./pages/legal_entities/legal_entity/gis/AddGISPage";
+import AddProjectsPage from "./pages/project_management/AddProjects";
 
 const App = () => {
   return (
@@ -83,6 +84,7 @@ const App = () => {
             {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
             <Route path="/workflow/addworkflow" element={<AddWorkflow />} />
+            <Route path="/project/add-project" element={<AddProjectsPage />} />
             <Route
               path="/workflow/view/:workflow_id"
               element={<ViewWorkflow />}
