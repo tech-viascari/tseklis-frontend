@@ -191,7 +191,11 @@ export const CapitalStructureForm = ({
 
     const updated = updateStockHoldersData(stockholdersData);
 
-    setFormData(updated);
+    setFormData({
+      ...updated,
+      total_assets_based_on_latest_audited:
+        updateData.total_assets_based_on_latest_audited,
+    });
 
     setStockholdersInformationDialog(false);
   };
