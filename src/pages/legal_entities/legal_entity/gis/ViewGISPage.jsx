@@ -211,15 +211,19 @@ const ViewGISPage = () => {
   const handleSyncAndGenerate = async (e) => {
     try {
       setLoadingDialog(true);
-      const response = await axiosInstance.get(
+      let response = await axiosInstance.post(
         `/generate-gis/${gis_document_id}`
       );
 
-      const newWindow = window.open("", "_blank");
+      if (response.status === 200) {
+        const newWindow = window.open("", "_blank");
 
-      if (newWindow) {
-        newWindow.document.write(response.data);
-        newWindow.document.close(); // Ensure the document is rendered
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close(); // Ensure the document is rendered
+        }
+
+        // dispatch(fetchRecord(recordId));
       }
     } catch (error) {
       console.log(error);
