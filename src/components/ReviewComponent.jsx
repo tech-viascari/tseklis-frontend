@@ -17,7 +17,8 @@ const ReviewComponent = ({ title, data }) => {
                   {row.name}
                 </Typography>
               </div>
-              <div className="w-full">
+             
+              <div className="w-full pl-20">
                 <Typography variant="small" className="font-normal text-sm">
                   {row.value}
                 </Typography>
