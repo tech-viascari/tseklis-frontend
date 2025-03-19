@@ -212,7 +212,7 @@ const ViewGISPage = () => {
     try {
       setLoadingDialog(true);
       const response = await axiosInstance.get(
-        `/generate-quote/${gis_document_id}`
+        `/generate-gis/${gis_document_id}`
       );
 
       const newWindow = window.open("", "_blank");
