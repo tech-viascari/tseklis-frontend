@@ -601,15 +601,17 @@ export const ReviewForm = ({
               },
               {
                 name: "Number of Shares",
-                selector: (row) => row.number_of_shares,
+                selector: (row) =>
+                  formatNumberWithCommaOnly(row.number_of_shares),
               },
               {
                 name: "Par or Stated Value",
-                selector: (row) => row.par_or_stated_value,
+                selector: (row) =>
+                  formatNumberWithCommaAndDecimal(row.par_or_stated_value),
               },
               {
                 name: "Amount",
-                selector: (row) => row.amount,
+                selector: (row) => formatNumberWithCommaAndDecimal(row.amount),
               },
             ]}
           />
@@ -646,19 +648,21 @@ export const ReviewForm = ({
               },
               {
                 name: "Number",
-                selector: (row) => row.number,
+                selector: (row) => formatNumberWithCommaOnly(row.number),
               },
               {
                 name: "Amount",
-                selector: (row) => row.amount,
+                selector: (row) => formatNumberWithCommaAndDecimal(row.amount),
               },
               {
                 name: "% of Ownership",
-                selector: (row) => row.percent_of_ownership,
+                selector: (row) =>
+                  formatNumberWithCommaAndDecimal(row.percent_of_ownership),
               },
               {
                 name: "Amount Paid in PHP",
-                selector: (row) => row.amount_paid,
+                selector: (row) =>
+                  formatNumberWithCommaAndDecimal(row.amount_paid),
               },
               {
                 name: "Tax Identification Number",
