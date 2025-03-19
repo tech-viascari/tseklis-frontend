@@ -7,7 +7,13 @@ import {
   formatNumberWithCommaOnly,
 } from "../../../../../utils/global";
 
-export const ReviewForm = ({ formData, setFormData, errors, onChange }) => {
+export const ReviewForm = ({
+  formData,
+  setFormData,
+  errors,
+  onChange,
+  isPreview = false,
+}) => {
   const companyDetails = () => {
     let list = [
       {
@@ -514,17 +520,21 @@ export const ReviewForm = ({ formData, setFormData, errors, onChange }) => {
 
   return (
     <>
-      <Typography variant="small" className="font-normal text-sm">
-        STEP FOUR
-      </Typography>
-      <Typography variant="small" className="font-bold text-md">
-        Review Information
-      </Typography>
-      <Typography variant="small" className="font-normal text-sm">
-        Kindly verify the details before submitting the record.
-      </Typography>
+      {!isPreview && (
+        <>
+          <Typography variant="small" className="font-normal text-sm">
+            STEP FOUR
+          </Typography>
+          <Typography variant="small" className="font-bold text-md">
+            Review Information
+          </Typography>
+          <Typography variant="small" className="font-normal text-sm">
+            Kindly verify the details before submitting the record.
+          </Typography>
+        </>
+      )}
 
-      <div className="py-10 flex flex-col gap-5">
+      <div className={`flex flex-col gap-5 ${!isPreview && "py-10"}`}>
         <ReviewComponent title="Company Details" data={companyDetails()} />
         <ReviewComponent
           title="Intercompany Affiliations"

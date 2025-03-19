@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TopBar from "../../layouts/TopBar";
 import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
@@ -7,6 +7,8 @@ import useLegalEntities from "../../../store/useLegalEntities";
 import DataProvider from "../../../providers/DataProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
+import useGISDocumentStore from "../../../store/useGISDocumentStore";
+import { formattedDate } from "../../../utils/global";
 
 const EntityGISPage = () => {
   const { entity_id } = useParams();
@@ -17,12 +19,15 @@ const EntityGISPage = () => {
 
   const { states, entity } = useLegalEntities();
 
+  const { GISDocuments, setGISDocuments, setGISDocument } =
+    useGISDocumentStore();
+
   const navigate = useNavigate();
 
   const columns = [
     {
       name: "GIS Name",
-      selector: (row) => row.quote_number,
+      selector: (row) => row.gis_document_name,
       cell: (row) => {
         return (
           <Typography
@@ -30,29 +35,30 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.quote_number}
+            {row.gis_document_name}
           </Typography>
         );
       },
     },
     {
       name: "Date Received",
-      selector: (row) => row.form_data.recipient_company,
+      selector: (row) => row.date_received,
       cell: (row) => {
+        if (row.date_received == null) return;
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.form_data.recipient_company}
+            {row.date_received}
           </Typography>
         );
       },
     },
     {
       name: "Status",
-      selector: (row) => row.quote_name,
+      selector: (row) => row.timestamps[0].status,
       cell: (row) => {
         return (
           <Typography
@@ -60,14 +66,15 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.quote_name}
+            {row.timestamps[0].status}
           </Typography>
         );
       },
     },
     {
       name: "Type of Meeting",
-      selector: (row) => row.quote_name,
+      selector: (row) =>
+        row.document_data.is_special_meeting ? "Special" : "Annual",
       cell: (row) => {
         return (
           <Typography
@@ -75,14 +82,14 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.quote_name}
+            {row.document_data.is_special_meeting ? "Special" : "Annual"}
           </Typography>
         );
       },
     },
     {
       name: "Last Modified",
-      selector: (row) => row.quote_name,
+      selector: (row) => row.timestamps[0].datetime,
       cell: (row) => {
         return (
           <Typography
@@ -90,7 +97,7 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.quote_name}
+            {formattedDate(row.timestamps[0].datetime)}
           </Typography>
         );
       },
@@ -98,8 +105,8 @@ const EntityGISPage = () => {
   ];
 
   const navigateToGISPage = (row) => {
-    navigate(PATH);
-    setQuote(row);
+    navigate(`${PATH}/${row.gis_document_id}`);
+    setGISDocument(row);
   };
 
   return (
@@ -117,7 +124,10 @@ const EntityGISPage = () => {
         ]}
       />
 
-      <DataProvider tableName="/quotes" setData={() => {}}>
+      <DataProvider
+        tableName={`/legal-entities/${entity_id}/gis-tracker`}
+        setData={setGISDocuments}
+      >
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
@@ -147,7 +157,7 @@ const EntityGISPage = () => {
                   <div>
                     <TableComponent
                       columns={columns}
-                      data={[]}
+                      data={GISDocuments}
                       onClick={navigateToGISPage}
                     />
                   </div>
