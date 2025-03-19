@@ -11,15 +11,15 @@ import useGISDocumentStore from "../../../../store/useGISDocumentStore";
 import { GeneralInformationForm } from "./form_data/GeneralInformationForm";
 import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
 import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
-import ReviewComponent from "../../../../components/ReviewComponent";
 import { ReviewForm } from "./form_data/ReviewForm";
+import axiosInstance from "../../../../utils/axiosHelper";
 
 const AddGISPage = () => {
   const { entity_id } = useParams();
 
   const PATH = `/legal-entities/v/${entity_id}`;
 
-  const { states } = useGISDocumentStore();
+  const { states, document_state } = useGISDocumentStore();
 
   const { entity } = useLegalEntities();
 
@@ -41,23 +41,27 @@ const AddGISPage = () => {
     setSubmitDialog(!submitDialog);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e, status = "Pending for Approval") => {
     try {
-      const { quote_id, created_at, updated_at, ...filteredData } = formData;
-
       setIsFormSubmitting(true);
 
-      // const response = await axiosInstance.post("/quotes", {
-      //   form_data: filteredData,
-      //   timestamp: {
-      //     status: "Drafted",
-      //     remarks: "",
-      //   },
-      // });
-      // if (response.status == 200) {
-      toast.success("Quote has been successfully added!");
-      navigate(`${PATH}/gis-tracker`);
-      // }
+      const payload = {
+        document_data: formData,
+        timestamp: {
+          status: status,
+          remarks: "",
+        },
+        attachments: states.GISAttachment,
+      };
+
+      const response = await axiosInstance.post(
+        `/legal-entities/${entity_id}/gis-tracker`,
+        payload
+      );
+      if (response.status == 200) {
+        toast.success("Record has been successfully added!");
+        navigate(`${PATH}/gis-tracker`);
+      }
     } catch (error) {
       console.log(error);
       toast.error("There was an error in adding the record.");
@@ -78,6 +82,64 @@ const AddGISPage = () => {
     setErrors(form_data);
     setPageIsLoading(false);
   };
+
+  useEffect(() => {
+    if (entity.entity_id != "") {
+      let newFormData = { ...formData };
+
+      //company_name
+      newFormData.corporate_name = entity.entity_details.company_name;
+
+      //corporate_tin
+      newFormData.corporate_tin = entity.entity_details.corporate_tin;
+
+      //sec_registration_number
+      newFormData.sec_registration_number =
+        entity.entity_details.sec_registration_number;
+
+      //company_address
+      newFormData.complete_principal_office_address =
+        entity.entity_details.company_address;
+
+      //official_email
+      newFormData.official_email_address = entity.entity_details.official_email;
+
+      //alternative_email
+      newFormData.alternate_email_address =
+        entity.entity_details.alternative_email;
+
+      //official_contact_number
+      newFormData.official_mobile_number =
+        entity.entity_details.official_contact_number;
+
+      //alternative_contact_number
+      newFormData.alternate_phone_number =
+        entity.entity_details.alternative_contact_number;
+
+      //directors_officers
+      const directors = entity.entity_details.officer_information.map(
+        (director) => {
+          return {
+            ...document_state.directorsOrOfficers,
+            name: director.officer_name,
+            current_residential_address: director.current_residence,
+            nationality: director.nationality,
+            incorporator: director.incorporator,
+            board: director.board,
+            gender: director.gender,
+            stock_holder: director.stockholder,
+            officer: director.officer,
+            executive_committee: director.executive_committee,
+            tax_id_number: director.tax_identification_number,
+          };
+        }
+      );
+
+      newFormData.directors_or_officers = directors;
+
+      setFormData(newFormData);
+    }
+  }, [entity]);
 
   useEffect(() => {
     console.log(formData);
@@ -160,7 +222,7 @@ const AddGISPage = () => {
       <DialogComponent
         dialogName={submitDialog}
         handlerDialog={handleSubmitDialog}
-        title="Add New Quote"
+        title="Add New GIS"
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
@@ -174,7 +236,9 @@ const AddGISPage = () => {
               loading={isFormSubmitting}
               disabled={isFormSubmitting}
               className="bg-secondary"
-              onClick={handleSubmit}
+              onClick={(e) => {
+                handleSubmit(e, "Pending for Approval");
+              }}
             >
               Yes
             </ButtonComponent>

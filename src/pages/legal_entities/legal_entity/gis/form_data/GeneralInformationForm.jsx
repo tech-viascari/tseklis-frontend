@@ -150,10 +150,13 @@ export const GeneralInformationForm = ({
         required: true,
       },
       {
-        label: "Actual Date of Special Meeting",
+        label: `Actual Date of ${
+          formData.is_special_meeting ? "Special" : "Annual"
+        } Meeting`,
         name: "actual_date_of_annual_meeting",
         value: formData.actual_date_of_annual_meeting,
         required: true,
+        type: "date",
       },
       {
         label: "Telephone Number",
@@ -210,6 +213,47 @@ export const GeneralInformationForm = ({
               Update Details
             </ButtonComponent>
           )}
+        </div>
+        <div className="flex flex-col pt-5">
+          <Typography variant="small" className={`mb-1 font-normal`}>
+            Type of Meeting <span className="text-red-400">*</span>
+          </Typography>
+          <div className="flex flex-col sm:flex-row">
+            <Radio
+              name={`${purpose}-is_special_meeting`}
+              label={
+                <Typography variant="small" className={`font-normal`}>
+                  Special
+                </Typography>
+              }
+              disabled={disabled}
+              checked={formData.is_special_meeting === true}
+              onChange={() => {
+                setUpdateData({
+                  ...formData,
+                  is_special_meeting: true,
+                  is_amended: true,
+                });
+              }}
+            />
+            <Radio
+              name={`${purpose}-is_special_meeting`}
+              label={
+                <Typography variant="small" className={`font-normal`}>
+                  Annual
+                </Typography>
+              }
+              disabled={disabled}
+              checked={formData.is_special_meeting === false}
+              onChange={() => {
+                setUpdateData({
+                  ...formData,
+                  is_special_meeting: false,
+                  is_amended: false,
+                });
+              }}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 items-end py-5">
           {inputs_list.map((input) => {
