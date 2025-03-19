@@ -209,19 +209,18 @@ const ViewGISPage = () => {
   };
 
   const handleSyncAndGenerate = async (e) => {
-    
     try {
       setLoadingDialog(true);
-      // const response = await axiosInstance.get(`generate-GISDocument`, {
-      //   params: { quote_id },
-      // });
+      const response = await axiosInstance.get(
+        `/generate-quote/${gis_document_id}`
+      );
 
-      // const newWindow = window.open("", "_blank");
+      const newWindow = window.open("", "_blank");
 
-      // if (newWindow) {
-      //   newWindow.document.write(response.data);
-      //   newWindow.document.close(); // Ensure the document is rendered
-      // }
+      if (newWindow) {
+        newWindow.document.write(response.data);
+        newWindow.document.close(); // Ensure the document is rendered
+      }
     } catch (error) {
       console.log(error);
     } finally {
