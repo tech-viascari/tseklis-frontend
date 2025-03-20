@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 const OfficerTypes = [
+ {label: "Chairman", value: "Chairman"},
+ {label: "Director", value: "Director"},
  {label: "President", value: "President"},
  {label: "Vice President", value: "Vice President"},
  {label: "Corporate Secretary", value: "Corporate Secretary"},

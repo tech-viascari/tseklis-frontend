@@ -40,6 +40,7 @@ import AllWorkflow from "./pages/project_management/AllWorkflow";
 import ViewWorkflow from "./pages/project_management/ViewWorkflow";
 import AddWorkflow from "./pages/project_management/AddWorkflow";
 import AddDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/AddDocumentDraftingPage";
+import { UpdateLegalEntitiesPage } from "./pages/legal_entities/UpdateLegalEntitiesPage";
 
 const App = () => {
   return (
@@ -73,11 +74,11 @@ const App = () => {
               path="/legal-entities/add-new"
               element={<AddLegalEntitiesPage />}
             />
-
             <Route
-              path="/legal-entities/view/:entity_id"
-              element={<AddEntityEnrollmentPage />}
+              path="/legal-entities/update/:entity_id"
+              element={<UpdateLegalEntitiesPage />}
             />
+
 
             {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
@@ -115,6 +116,7 @@ const App = () => {
             />
           </Route>
 
+          {/* dito legal entities - Anthony */}
           <Route element={<LegalEntityMainLayout />}>
             <Route
               path="/legal-entities/v/:entity_id"
