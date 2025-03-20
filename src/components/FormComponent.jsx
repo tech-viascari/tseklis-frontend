@@ -9,7 +9,7 @@ const FormComponent = ({
 }) => {
   return (
     <div className="w-full h-full flex flex-col gap-3">
-      <div className="flex flex-row gap-3 w-full">
+      <div className="flex flex-row gap-3 w-full overflow-x-auto">
         {formComponent.map((form, index) => {
           let className = ``;
           if (index <= selectedIndex) {

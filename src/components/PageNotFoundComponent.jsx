@@ -1,9 +1,8 @@
 import React from "react";
-import { underConstructionSVG } from "./GetIcons";
+import { pageNotFoundSVG } from "./GetIcons";
 import { Typography } from "@material-tailwind/react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import ButtonComponent from "./ButtonComponent";
-import { BiHome } from "react-icons/bi";
 import { HiArrowTurnDownLeft, HiHome } from "react-icons/hi2";
 
 const PageNotFoundComponent = () => {
@@ -12,7 +11,7 @@ const PageNotFoundComponent = () => {
     <>
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="flex flex-col items-center justify-center gap-3">
-          {underConstructionSVG}
+          <div>{pageNotFoundSVG}</div>
           <Typography className="w-full md:w-1/2 text-center text-md font-semibold">
             Oops! Page Not Found.
           </Typography>

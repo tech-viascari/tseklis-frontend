@@ -10,6 +10,7 @@ const TextAreaComponent = ({
   onChange,
   required,
   labelClass = "",
+  disabled = false,
 }) => {
   return (
     <>
@@ -29,6 +30,7 @@ const TextAreaComponent = ({
             className: "before:content-none after:content-none",
           }}
           error={true}
+          disabled={disabled}
         ></Textarea>
         {error_message && (
           <label className="text-xs text-red-500 flex flex-row gap-1 items-center">
