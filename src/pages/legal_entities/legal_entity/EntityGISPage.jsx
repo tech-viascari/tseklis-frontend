@@ -105,7 +105,7 @@ const EntityGISPage = () => {
   ];
 
   const navigateToGISPage = (row) => {
-    navigate(`${PATH}/${row.gis_document_id}`);
+    navigate(`${PATH}/view/${row.gis_document_id}`);
     setGISDocument(row);
   };
 

@@ -44,6 +44,7 @@ import { UpdateLegalEntitiesPage } from "./pages/legal_entities/UpdateLegalEntit
 import AddGISPage from "./pages/legal_entities/legal_entity/gis/AddGISPage";
 import AddProjectsPage from "./pages/project_management/AddProjects";
 import ViewGISPage from "./pages/legal_entities/legal_entity/gis/ViewGISPage";
+import UpdateGISPage from "./pages/legal_entities/legal_entity/gis/UpdateGISPage";
 
 
 const App = () => {
@@ -142,8 +143,12 @@ const App = () => {
               element={<AddGISPage />}
             />
             <Route
-              path="/legal-entities/v/:entity_id/gis-tracker/:gis_document_id"
+              path="/legal-entities/v/:entity_id/gis-tracker/view/:gis_document_id"
               element={<ViewGISPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/gis-tracker/update/:gis_document_id"
+              element={<UpdateGISPage />}
             />
 
             <Route
