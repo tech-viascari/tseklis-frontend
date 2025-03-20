@@ -1,5 +1,5 @@
 import { Card, Radio, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputComponent from "../../../../../components/InputComponent";
 import ButtonComponent from "../../../../../components/ButtonComponent";
 import TextAreaComponent from "../../../../../components/TextAreaComponent";
@@ -1166,6 +1166,12 @@ export const CapitalStructureForm = ({
       </div>
     );
   };
+
+  useEffect(() => {
+    if (formData.corporate_name != "") {
+      setUpdateData(formData);
+    }
+  }, [formData]);
 
   return (
     <div className="flex flex-col gap-1">

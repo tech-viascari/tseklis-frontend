@@ -32,8 +32,6 @@ const ViewGISPage = () => {
 
   const PATH = `/legal-entities/v/${entity_id}`;
 
-  const { quote, setQuote } = useQuoteStore();
-
   const { entity } = useLegalEntities();
 
   const { GISDocument, setGISDocument } = useGISDocumentStore();
@@ -298,18 +296,23 @@ const ViewGISPage = () => {
                 <MenuItem
                   className="text-dark"
                   onClick={() => {
-                    setQuote(GISDocument);
-                    navigate(`/quotes/update/${quote_id}`);
+                    setGISDocument(GISDocument);
+                    navigate(
+                      `${PATH}/gis-tracker/update/${GISDocument.gis_document_id}`
+                    );
                   }}
                 >
                   Edit Details
                 </MenuItem>
+
                 <MenuItem className="text-dark" onClick={handleSyncAndGenerate}>
-                  Generate
+                  Sync and Generate
                 </MenuItem>
 
+                <hr className="my-1 text-light-gray" />
+
                 <MenuItem onClick={deleteHandlerDialog}>
-                  <div className="text-red-400">Delete</div>
+                  <span className="text-red-400">Delete</span>
                 </MenuItem>
               </MenuList>
             </Menu>
