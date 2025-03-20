@@ -24,9 +24,9 @@ import UnderConstructionComponent from "../../../components/UnderConstructionCom
 const EntityProfilePage = () => {
   const { entity_id } = useParams();
   const { entity } = useLegalEntities();
-  useEffect(() => {
-    console.log(entity);
-  }, [entity]);
+  // useEffect(() => {
+  //   console.log(entity);
+  // }, [entity]);
 
   const DisplayOfficersTable = () => {
     return (

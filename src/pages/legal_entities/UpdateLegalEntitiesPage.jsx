@@ -1,27 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
-import { select, Typography } from "@material-tailwind/react";
-import { useNavigate } from "react-router";
-import { toast } from "sonner";
-import ReviewComponent from "../../components/ReviewComponent";
+import { useNavigate, useParams } from "react-router";
+import useLegalEntities from "../../store/useLegalEntities";
+import { useDirtyContext } from "../../providers/DirtyProvider";
 import AddPageComponent from "../../components/AddPageComponent";
 import DialogComponent from "../../components/DialogComponent";
 import ButtonComponent from "../../components/ButtonComponent";
-import { useDirtyContext } from "../../providers/DirtyProvider";
-import InputComponent from "../../components/InputComponent";
-import axiosInstance from "../../utils/axiosHelper";
-import SelectComponent from "../../components/SelectComponent";
-
-import useLegalEntities from "../../store/useLegalEntities";
 import {
-  HiArrowDownTray,
-  HiMiniExclamationCircle,
-  HiMiniExclamationTriangle,
-} from "react-icons/hi2";
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
+} from "@material-tailwind/react";
+import UpdatePageComponent from "../../components/UpdatePageComponent";
+import SelectComponent from "../../components/SelectComponent";
+import InputComponent from "../../components/InputComponent";
+import { HiArrowDownTray, HiMiniExclamationTriangle } from "react-icons/hi2";
+import SelectMultipleComponent from "../../components/SelectMultipleComponent";
+import ReviewComponent from "../../components/ReviewComponent";
+import axiosInstance from "../../utils/axiosHelper";
 import TableComponent from "../../components/TableComponent";
 import { convertBase64 } from "../../utils/global";
-import SelectMultipleComponent from "../../components/SelectMultipleComponent";
+import { toast } from "sonner";
 
-const AddLegalEntitiesPage = () => {
+export const UpdateLegalEntitiesPage = () => {
+  const { entity_id } = useParams();
+  const navigate = useNavigate();
+
   //#region Form States
   const { states, entity, setEntity } = useLegalEntities();
 
@@ -131,8 +136,6 @@ const AddLegalEntitiesPage = () => {
     document.getElementById("file-input").click();
   };
 
-  const navigate = useNavigate();
-
   const handleSubmitDialog = () => {
     setSubmitDialog(!submitDialog);
   };
@@ -164,18 +167,21 @@ const AddLegalEntitiesPage = () => {
   const handleSubmit = async () => {
     try {
       setIsFormSubmitting(true);
-      let { entity_id, created_at, updated_at, ...filteredEntity } =
-        states.entity;
-      filteredEntity.entity_details = formData;
-      filteredEntity.entity_logo = fakePath;
-
-      const response = await axiosInstance.post(
-        "/legal-entities",
-        filteredEntity
+         let { created_at, updated_at, ...filteredEntity } = states.entity;
+      const updateData = {
+        filteredEntity,
+        entity_details: formData,
+        entity_logo: fakePath,
+      };
+      const response = await axiosInstance.patch(
+        `/legal-entities/${entity_id}`,
+        updateData
       );
       if (response.status == 200) {
-        toast.success("Entity has been successfully added!");
         navigate("/legal-entities");
+        toast.success("Entity updated successfully.");
+      } else {
+        throw Error("Failed to update the record.");
       }
     } catch (error) {
       console.log(error);
@@ -341,7 +347,6 @@ const AddLegalEntitiesPage = () => {
                 name: "Officer",
                 selector: (row, index) => row.officer,
                 cell: (row, index) => {
-                  console.log(row.officer);
                   return (
                     <Typography
                       variant="small"
@@ -352,11 +357,7 @@ const AddLegalEntitiesPage = () => {
                         handleOfficersDialog();
                       }}
                     >
-                      {row.officer.map((officer, index) => {
-                      return officer + ", ";
-                    })}
-
-                      {/* {row.officer.toString().replace(/,/g, ", ")} */}
+                      {row.officer.toString().replace(/,/g, ", ")}
                     </Typography>
                   );
                 },
@@ -621,7 +622,7 @@ const AddLegalEntitiesPage = () => {
               <Typography variant="small" className="font-semibold">
                 Directors/Officers: <span className="text-red-500">*</span>
               </Typography>
-              <ButtonComponent
+              {/* <ButtonComponent
                 className="bg-secondary text-light"
                 onClick={() => {
                   setOfficerFormData(states.officer_information);
@@ -630,14 +631,13 @@ const AddLegalEntitiesPage = () => {
                 }}
               >
                 Add officer
-              </ButtonComponent>
-              <DialogComponent
+              </ButtonComponent> */}
+              {/* <DialogComponent
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${
-                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                }`}
+                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                  }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -815,6 +815,7 @@ const AddLegalEntitiesPage = () => {
                         officer: selected,
                       });
                     }}
+                    
                   />
 
                   <SelectComponent
@@ -860,7 +861,7 @@ const AddLegalEntitiesPage = () => {
                     }}
                   />
                 </div>
-              </DialogComponent>
+              </DialogComponent> */}
             </div>
             <div className="flex flex-col gap-3">
               <DisplayOfficersTable />
@@ -954,53 +955,65 @@ const AddLegalEntitiesPage = () => {
   ];
 
   const setToDefault = async () => {
-    let form_data = { ...states.entity };
+    let form_data = { ...states.entity.entity_details };
     // Loop through each key and set its value to an empty string
     for (let key in form_data) {
       if (form_data.hasOwnProperty(key)) {
         form_data[key] = "";
       }
     }
-
     setErrors(form_data);
-
-    let officer_form_data = { ...states.officer_information };
-
-    for (let key in officer_form_data) {
-      if (officer_form_data.hasOwnProperty(key)) {
-        officer_form_data[key] = "";
-      }
-    }
-
-    setOfficerErrors(officer_form_data);
     setPageIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   console.log(formData);
-  // }, [formData]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axiosInstance.get(`/legal-entities/${entity_id}`);
+      if (response.status == 200) {
+        setFormData(response.data.entity.entity_details);
+        setEntity(response.data.entity);
+      }
+    };
+    fetchData();
+    setToDefault();
+  }, []);
 
   return (
-    <>
-      <AddPageComponent
+    <div>
+      <UpdatePageComponent
         items={[
           { title: "Legal Entities", goto: "/legal-entities" },
-          { title: "Add New Entity", goto: "/legal-entities/add-new" },
+          {
+            title: `${entity.entity_details.company_name}`,
+            goto: `/legal-entities/v/${entity.entity_id}/entity-profile`,
+          },
+          {
+            title: "Update Legal Entity",
+            goto: `/legal-entities/update/${entity.entity_id}`,
+          },
         ]}
-        title="Add New Entity"
-        subtitle="Please fill in the necessary details below."
-        handleSubmit={handleSubmitDialog}
-        goBackTo="/legal-entities"
+        goBackTo={"/legal-entities"}
+        title={"Legal Entity"}
+        handleSubmitDialog={handleSubmitDialog}
         formComponent={formComponent}
-        setToDefault={setToDefault}
         pageIsLoading={pageIsLoading}
-      />
+      ></UpdatePageComponent>
 
-      <DialogComponent
-        dialogName={submitDialog}
-        handlerDialog={handleSubmitDialog}
-        title="Add New Entity"
-        footerContent={
+      <Dialog open={submitDialog} handler={handleSubmitDialog} size="sm">
+        <DialogHeader>
+          <Typography variant="small" className="font-bold text-base">
+            Update Legal Entity
+          </Typography>
+        </DialogHeader>
+        <hr className="border-light-gray" />
+        <DialogBody className="text-dark">
+          <div className="flex flex-col gap-2">
+            <Typography variant="small" className="font-normal text-sm">
+              Are you sure you want to update this record?
+            </Typography>
+          </div>
+        </DialogBody>
+        <DialogFooter>
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
               className="bg-red-400"
@@ -1010,22 +1023,16 @@ const AddLegalEntitiesPage = () => {
             </ButtonComponent>
 
             <ButtonComponent
-              disabled={isFormSubmitting}
               loading={isFormSubmitting}
+              disabled={isFormSubmitting}
               className="bg-secondary"
               onClick={handleSubmit}
             >
               Yes
             </ButtonComponent>
           </div>
-        }
-      >
-        <Typography variant="small" className="font-normal text-sm">
-          Are you sure you want to add this record?
-        </Typography>
-      </DialogComponent>
-    </>
+        </DialogFooter>
+      </Dialog>
+    </div>
   );
 };
-
-export default AddLegalEntitiesPage;
