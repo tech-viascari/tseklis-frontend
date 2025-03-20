@@ -141,10 +141,6 @@ const AddGISPage = () => {
     }
   }, [entity]);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const getFormState = (title, form_contents) => {
     const formState = {
       title: "",

@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputComponent from "../../../../../components/InputComponent";
 import ButtonComponent from "../../../../../components/ButtonComponent";
 import DialogComponent from "../../../../../components/DialogComponent";
@@ -150,9 +150,10 @@ export const BeneficialOwnershipForm = ({
             <ButtonComponent
               className=" bg-transparent"
               onClick={() => {
-                const filteredData = updateData.beneficial_ownership_declaration.filter(
-                  (_, index) => index != rowIndex
-                );
+                const filteredData =
+                  updateData.beneficial_ownership_declaration.filter(
+                    (_, index) => index != rowIndex
+                  );
                 setUpdateData({
                   ...updateData,
                   beneficial_ownership_declaration: filteredData,
@@ -219,6 +220,12 @@ export const BeneficialOwnershipForm = ({
     );
   };
 
+  useEffect(() => {
+    if (formData.corporate_name != "") {
+      setUpdateData(formData);
+    }
+  }, [formData]);
+
   return (
     <div className="flex flex-col gap-1">
       <Typography variant="small" className="font-normal text-sm">
@@ -273,14 +280,15 @@ export const BeneficialOwnershipForm = ({
               <ButtonComponent
                 className="bg-secondary"
                 onClick={() => {
-                  const updatedData = updateData.beneficial_ownership_declaration.map(
-                    (bod, index) => {
-                      if (index == selectedBODIndex) {
-                        return BODForm;
+                  const updatedData =
+                    updateData.beneficial_ownership_declaration.map(
+                      (bod, index) => {
+                        if (index == selectedBODIndex) {
+                          return BODForm;
+                        }
+                        return bod;
                       }
-                      return bod;
-                    }
-                  );
+                    );
                   setUpdateData({
                     ...updateData,
                     beneficial_ownership_declaration: updatedData,
