@@ -11,6 +11,7 @@ import {
 } from "react-icons/hi2";
 import { useNavigate, useParams } from "react-router";
 import {
+  Avatar,
   Menu,
   MenuHandler,
   MenuList,
@@ -291,7 +292,7 @@ const LegalEntitySideBar = () => {
                 {entities.length == 0 ? (
                   <>No records found.</>
                 ) : (
-                  <div className="h-40 flex flex-col gap-1 overflow-y-auto">
+                  <div className="max-h-40 flex flex-col gap-1 overflow-y-auto">
                     {entities.map((entity, index) => {
                       return (
                         <div
@@ -301,11 +302,18 @@ const LegalEntitySideBar = () => {
                             window.location.href = `/legal-entities/v/${entity.entity_id}/`;
                           }}
                         >
-                          <img
+                          <div className="w-10 aspect-square flex flex-col items-center justify-center">
+                            <Avatar
+                              src={entity.entity_logo}
+                              alt="avatar"
+                              className="object-contain"
+                            />
+                          </div>
+                          {/* <img
                             src={entity.entity_logo}
                             alt="avatar"
                             className="relative inline-block h-8 w-8 !rounded-full  object-cover object-center"
-                          />
+                          /> */}
                           <Typography
                             variant="small"
                             className="font-medium text-sm text-black"
