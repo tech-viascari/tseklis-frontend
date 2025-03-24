@@ -111,6 +111,19 @@ export const UpdateLegalEntitiesPage = () => {
       officer_information: [...formData.officer_information, officerFormData],
     });
 
+    // setFormData({
+    //   ...formData,
+    //   officer_information: [
+    //     ...formData.officer_information,
+    //     {
+    //       ...officerFormData,
+    //       officer: officerFormData.officer.map((officer) => {
+    //         return officer.value;
+    //       }),
+    //     },
+    //   ]
+    // })
+
     handleOfficersDialog();
   };
 
@@ -167,7 +180,7 @@ export const UpdateLegalEntitiesPage = () => {
   const handleSubmit = async () => {
     try {
       setIsFormSubmitting(true);
-         let { created_at, updated_at, ...filteredEntity } = states.entity;
+      let { created_at, updated_at, ...filteredEntity } = states.entity;
       const updateData = {
         filteredEntity,
         entity_details: formData,
@@ -622,7 +635,7 @@ export const UpdateLegalEntitiesPage = () => {
               <Typography variant="small" className="font-semibold">
                 Directors/Officers: <span className="text-red-500">*</span>
               </Typography>
-              {/* <ButtonComponent
+              <ButtonComponent
                 className="bg-secondary text-light"
                 onClick={() => {
                   setOfficerFormData(states.officer_information);
@@ -631,13 +644,14 @@ export const UpdateLegalEntitiesPage = () => {
                 }}
               >
                 Add officer
-              </ButtonComponent> */}
-              {/* <DialogComponent
+              </ButtonComponent>
+              <DialogComponent
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                  }`}
+                title={`${
+                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -800,14 +814,16 @@ export const UpdateLegalEntitiesPage = () => {
                   <SelectMultipleComponent
                     label="Officer"
                     name="officer"
-                    error_message={officerErrors.officer}
                     options={officerOptions}
                     isMulti={true}
                     onSelectChange={(values) => {
-                      let selected = Object.entries(values).map(
-                        ([key, value]) => {
-                          return value.value;
-                        }
+                      let selected = Object.entries(
+                        values.map((value) => {
+                          return {
+                            value: value.value,
+                            label: value.label,
+                          };
+                        })
                       );
 
                       setOfficerFormData({
@@ -815,7 +831,6 @@ export const UpdateLegalEntitiesPage = () => {
                         officer: selected,
                       });
                     }}
-                    
                   />
 
                   <SelectComponent
@@ -861,7 +876,7 @@ export const UpdateLegalEntitiesPage = () => {
                     }}
                   />
                 </div>
-              </DialogComponent> */}
+              </DialogComponent>
             </div>
             <div className="flex flex-col gap-3">
               <DisplayOfficersTable />
