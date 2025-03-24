@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TopBar from "../../layouts/TopBar";
 import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
@@ -7,56 +7,62 @@ import useLegalEntities from "../../../store/useLegalEntities";
 import DataProvider from "../../../providers/DataProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
+import useDocumentDraftingStore from "../../../store/useDocumentDraftingStore";
 
 const EntityDocumentDraftingPage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
-  const { states, entity } = useLegalEntities();
+  const { entity } = useLegalEntities();
+
+  const PATH = `/legal-entities/v/${entity_id}/document-drafting`;
+
+  const { documents, setDocuments, states } = useDocumentDraftingStore();
 
   const navigate = useNavigate();
 
   const columns = [
     {
       name: "Document Name",
-      selector: (row) => row.quote_number,
+      selector: (row) => row.document_name,
       cell: (row) => {
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
+            onClick={() => navigateToDocumentDrafting(row)}
           >
-            {row.quote_number}
+            {row.document_name}
           </Typography>
         );
       },
     },
     {
       name: "Status",
-      selector: (row) => row.form_data.recipient_company,
+      selector: (row) => null,
       cell: (row) => {
+        if (row.timestamps.length == 0) return;
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
+            onClick={() => navigateToDocumentDrafting(row)}
           >
-            {row.form_data.recipient_company}
+            {row.timestamps[0].status}
           </Typography>
         );
       },
     },
     {
       name: "Last Modified",
-      selector: (row) => row.quote_name,
+      selector: (row) => row.document_name,
       cell: (row) => {
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
+            onClick={() => navigateToDocumentDrafting(row)}
           >
-            {row.quote_name}
+            {row.document_name}
           </Typography>
         );
       },
@@ -64,8 +70,8 @@ const EntityDocumentDraftingPage = () => {
   ];
 
   const navigateToDocumentDrafting = (row) => {
-    navigate("/quotes/view/" + row.quote_id);
-    setQuote(row);
+    console.log(`${PATH}/view/${row.document_id}`);
+    // navigate(`${PATH}/view/${row.document_id}`);
   };
 
   return (
@@ -111,11 +117,7 @@ const EntityDocumentDraftingPage = () => {
                 </div>
                 <div className="flex-1 h-full">
                   <div>
-                    <TableComponent
-                      columns={columns}
-                      data={[]}
-                      onClick={navigateToDocumentDrafting}
-                    />
+                    <TableComponent columns={columns} data={documents} />
                   </div>
                 </div>
               </div>
