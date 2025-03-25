@@ -11,6 +11,7 @@ import useDocumentDraftingStore from "../../../../store/useDocumentDraftingStore
 import { DocumentTypeForm } from "./form_data/DocumentTypeForm";
 import { DocumentDetailsForm } from "./form_data/DocumentDetailsForm";
 import { DocumentReviewForm } from "./form_data/DocumentReviewForm";
+import axiosInstance from "../../../../utils/axiosHelper";
 
 const AddDocumentDraftingPage = () => {
   const { entity_id } = useParams();
@@ -44,20 +45,28 @@ const AddDocumentDraftingPage = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(formData);
-
       setIsFormSubmitting(true);
-      // const response = await axiosInstance.post("/quotes", {
-      //   form_data: filteredData,
-      //   timestamp: {
-      //     status: "Drafted",
-      //     remarks: "",
-      //   },
-      // });
-      // if (response.status == 200) {
-      // toast.success("Quote has been successfully added!");
-      // navigate(`${PATH}`);
-      // }
+      
+      const toInsert = {
+        document_data: formData,
+        attachments: {
+          google_doc_id: "",
+          final_doc: "",
+        },
+        timestamp: {
+          status: "Drafted",
+        },
+      };
+
+      const response = await axiosInstance.post(
+        `/legal-entities/${entity_id}/document-drafting`,
+        toInsert
+      );
+
+      if (response.status == 200) {
+        toast.success("Record has been successfully added!");
+        navigate(`${PATH}`);
+      }
     } catch (error) {
       console.log(error);
       toast.error("There was an error in adding the record.");

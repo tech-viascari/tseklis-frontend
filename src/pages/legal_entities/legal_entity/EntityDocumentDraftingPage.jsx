@@ -8,6 +8,8 @@ import DataProvider from "../../../providers/DataProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
 import useDocumentDraftingStore from "../../../store/useDocumentDraftingStore";
+import moment from "moment";
+import { shortName } from "../../../utils/global";
 
 const EntityDocumentDraftingPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -54,24 +56,32 @@ const EntityDocumentDraftingPage = () => {
     },
     {
       name: "Last Modified",
-      selector: (row) => row.document_name,
+      selector: (row) => null,
       cell: (row) => {
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => navigateToDocumentDrafting(row)}
-          >
-            {row.document_name}
-          </Typography>
+          <div className="flex flex-col">
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-dark"
+              onClick={() => navigateToDocumentDrafting(row)}
+            >
+              {shortName(row.timestamps[0].full_name)}.
+            </Typography>
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-dark"
+              onClick={() => navigateToDocumentDrafting(row)}
+            >
+              {moment(row.timestamps[0].datetime).format("MMMM DD, YYYY")}
+            </Typography>
+          </div>
         );
       },
     },
   ];
 
   const navigateToDocumentDrafting = (row) => {
-    console.log(`${PATH}/view/${row.document_id}`);
-    // navigate(`${PATH}/view/${row.document_id}`);
+    navigate(`${PATH}/view/${row.document_id}`);
   };
 
   return (
@@ -89,7 +99,10 @@ const EntityDocumentDraftingPage = () => {
         ]}
       />
 
-      <DataProvider tableName="/quotes" setData={() => {}}>
+      <DataProvider
+        tableName={`/legal-entities/${entity_id}/document-drafting`}
+        setData={setDocuments}
+      >
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
