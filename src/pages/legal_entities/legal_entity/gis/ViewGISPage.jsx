@@ -13,11 +13,8 @@ import {
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
 import { toast } from "sonner";
-import useQuoteStore from "../../../../store/useQuoteStore";
 import ViewPageComponent from "../../../../components/ViewPageComponent";
 import ButtonComponent from "../../../../components/ButtonComponent";
-import ReviewComponent from "../../../../components/ReviewComponent";
-import { formattedDate } from "../../../../utils/global";
 import DialogComponent from "../../../../components/DialogComponent";
 import TimelineComponent from "../../../../components/TimelineComponent";
 import TextAreaComponent from "../../../../components/TextAreaComponent";
@@ -67,16 +64,15 @@ const ViewGISPage = () => {
 
   const toggleChangeStatus = async () => {
     const formData = {
-      GISDocument,
+      document_data: GISDocument.document_data,
       timestamp: {
         status,
         remarks,
       },
     };
-
     try {
       const response = await axiosInstance.patch(
-        `/GISDocument/${GISDocument.quote_id}`,
+        `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`,
         formData
       );
       if (response.status == 200) {
@@ -107,69 +103,80 @@ const ViewGISPage = () => {
     const customClassName = `bg-transparent text-black border border-black hover:bg-black/80 hover:text-white hover:border-secondary font-sm focus:!border-black py-1`;
 
     const actionComponents = {
-      Drafted: (
+      "Pending for Approval": (
         <>
           <div className="flex flex-row gap-3">
             <ButtonComponent
               className={customClassName}
               onClick={() => {
                 setRemarks("");
-                setStatus("Sent for Signature");
+                setStatus("Approved");
                 setChangeStatusDialog(true);
                 setStatusDialog(false);
               }}
             >
-              Mark as 'Sent for Signature'
+              Mark as 'Approved'
+            </ButtonComponent>
+            <ButtonComponent
+              className={customClassName}
+              onClick={() => {
+                setRemarks("");
+                setStatus("Reverted");
+                setChangeStatusDialog(true);
+                setStatusDialog(false);
+              }}
+            >
+              Mark as 'Reverted'
             </ButtonComponent>
           </div>
         </>
       ),
-      "Sent for Signature": (
+      Approved: (
         <div className="flex flex-row gap-3">
           <ButtonComponent
             className={customClassName}
             onClick={() => {
               setRemarks("");
-              setStatus("Signed");
+              setStatus("Routed for Signature");
               setChangeStatusDialog(true);
               setStatusDialog(false);
             }}
           >
-            Mark as 'Signed'
+            Mark as 'Routed for Signature'
           </ButtonComponent>
         </div>
       ),
-      Signed: (
+      "Routed for Signature": (
         <div className="flex flex-row gap-3">
           <ButtonComponent
             className={customClassName}
             onClick={() => {
               setRemarks("");
-              setStatus("Sent Invoice");
+              setStatus("Notarized");
               setChangeStatusDialog(true);
               setStatusDialog(false);
             }}
           >
-            Mark as 'Sent Invoice'
+            Mark as 'Notarized'
           </ButtonComponent>
         </div>
       ),
-      "Sent Invoice": (
+      Notarized: (
         <div className="flex flex-row gap-3">
           <ButtonComponent
             className={customClassName}
             onClick={() => {
               setRemarks("");
-              setStatus("Paid");
+              setStatus("Filed with SEC");
               setChangeStatusDialog(true);
               setStatusDialog(false);
             }}
           >
-            Mark as 'Paid'
+            Mark as 'Filed with SEC'
           </ButtonComponent>
         </div>
       ),
-      Paid: (
+      "Filed with SEC": (
         <div className="flex flex-row gap-3">
           <ButtonComponent
             className={customClassName}
