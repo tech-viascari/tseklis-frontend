@@ -549,42 +549,112 @@ export const ReviewForm = ({
               {
                 name: "Name",
                 selector: (row) => row.name,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.name}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Current Residential Address",
                 selector: (row) => row.current_residential_address,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.current_residential_address}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Nationality",
                 selector: (row) => row.nationality,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.nationality}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Incorporator",
                 selector: (row) => row.incorporator,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.incorporator}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Board",
                 selector: (row) => row.board,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.board}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Gender",
                 selector: (row) => row.gender,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.gender}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Stockholder",
                 selector: (row) => row.stock_holder,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.stock_holder}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Officer",
                 selector: (row) => row.officer,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.officer}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Executive Committee",
                 selector: (row) => row.executive_committee,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.executive_committee}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Tax Identification",
                 selector: (row) => row.tax_id_number,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.tax_id_number}
+                    </Typography>
+                  );
+                },
               },
             ]}
           />
@@ -598,20 +668,48 @@ export const ReviewForm = ({
               {
                 name: "Type of Shares",
                 selector: (row) => row.type_of_shares,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.type_of_shares}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Number of Shares",
                 selector: (row) =>
                   formatNumberWithCommaOnly(row.number_of_shares),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaOnly(row.number_of_shares)}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Par or Stated Value",
                 selector: (row) =>
                   formatNumberWithCommaAndDecimal(row.par_or_stated_value),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.par_or_stated_value)}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Amount",
                 selector: (row) => formatNumberWithCommaAndDecimal(row.amount),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.amount)}
+                    </Typography>
+                  );
+                },
               },
             ]}
           />
@@ -633,40 +731,105 @@ export const ReviewForm = ({
               {
                 name: "Name",
                 selector: (row) => row.name,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.name}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Nationality",
                 selector: (row) => row.nationality,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.nationality}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Current Residential Address",
                 selector: (row) => row.current_residential_address,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.current_residential_address}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Type",
                 selector: (row) => row.type,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.type}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Number",
                 selector: (row) => formatNumberWithCommaOnly(row.number),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaOnly(row.number)}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Amount",
                 selector: (row) => formatNumberWithCommaAndDecimal(row.amount),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.amount)}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "% of Ownership",
                 selector: (row) =>
                   formatNumberWithCommaAndDecimal(row.percent_of_ownership),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(
+                        row.percent_of_ownership
+                      )}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Amount Paid in PHP",
                 selector: (row) =>
                   formatNumberWithCommaAndDecimal(row.amount_paid),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.amount_paid)}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Tax Identification Number",
                 selector: (row) => row.tax_id_number,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.tax_id_number}
+                    </Typography>
+                  );
+                },
               },
             ]}
           />
@@ -693,34 +856,90 @@ export const ReviewForm = ({
               {
                 name: "Complete Name (Surname, Given Name, Middle Name, Name Extension(i.e. Jr., Sr., III))",
                 selector: (row) => row.complete_name,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.complete_name}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Specific Residential Address",
                 selector: (row) => row.specific_residential_address,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.specific_residential_address}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Nationality",
                 selector: (row) => row.nationality,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.nationality}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Date of Birth",
                 selector: (row) => row.date_of_birth,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.date_of_birth}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Tax Identification Number",
                 selector: (row) => row.tax_id_number,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.tax_id_number}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "% of Ownership / % of Voting Rights",
                 selector: (row) => row.percent_of_ownership,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.percent_of_ownership}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Type of Beneficial Owner [Direct (D) or Indirect (I)]",
                 selector: (row) => row.type_of_beneficial_owner,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.type_of_beneficial_owner}
+                    </Typography>
+                  );
+                },
               },
               {
                 name: "Category of Beneficial Ownership",
                 selector: (row) => row.category_of_beneficial_ownership,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.category_of_beneficial_ownership}
+                    </Typography>
+                  );
+                },
               },
             ]}
           />
