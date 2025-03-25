@@ -102,3 +102,29 @@ export const convertBase64 = (file) => {
     };
   });
 };
+
+export const shortName = (modified_by) => {
+  if (modified_by != null && modified_by != "") {
+    let fullname = modified_by.split(" ");
+
+    if (fullname.length == 1 && fullname[0] != undefined) {
+      modified_by = fullname[0];
+    } else if (
+      fullname.length == 2 &&
+      fullname[0] != undefined &&
+      fullname[1][0] != undefined
+    ) {
+      modified_by = `${fullname[0]} ${fullname[1][0]}`;
+    } else if (fullname.length > 2 && fullname[0] != undefined) {
+      if (fullname[fullname.length - 1][0] != undefined) {
+        modified_by = `${fullname[0]} ${fullname[fullname.length - 1][0]}`;
+      } else if (fullname[fullname.length - 2][0] != undefined) {
+        modified_by = `${fullname[0]} ${fullname[fullname.length - 2][0]}`;
+      } else {
+        modified_by = `${fullname[0]}`;
+      }
+    }
+  }
+
+  return modified_by;
+};

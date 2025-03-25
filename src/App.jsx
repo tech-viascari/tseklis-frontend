@@ -45,7 +45,7 @@ import AddGISPage from "./pages/legal_entities/legal_entity/gis/AddGISPage";
 import AddProjectsPage from "./pages/project_management/AddProjects";
 import ViewGISPage from "./pages/legal_entities/legal_entity/gis/ViewGISPage";
 import UpdateGISPage from "./pages/legal_entities/legal_entity/gis/UpdateGISPage";
-
+import ViewDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/ViewDocumentDraftingPage";
 
 const App = () => {
   return (
@@ -83,7 +83,6 @@ const App = () => {
               path="/legal-entities/update/:entity_id"
               element={<UpdateLegalEntitiesPage />}
             />
-
 
             {/* project management X workflow X task X subtask */}
             <Route path="/workflow" element={<AllWorkflow />} />
@@ -158,6 +157,10 @@ const App = () => {
             <Route
               path="/legal-entities/v/:entity_id/document-drafting/add-new"
               element={<AddDocumentDraftingPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/document-drafting/view/:document_id"
+              element={<ViewDocumentDraftingPage />}
             />
 
             <Route
