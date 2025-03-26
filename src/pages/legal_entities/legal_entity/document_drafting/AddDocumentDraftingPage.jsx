@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import AddPageComponent from "../../../../components/AddPageComponent";
@@ -46,7 +46,7 @@ const AddDocumentDraftingPage = () => {
   const handleSubmit = async () => {
     try {
       setIsFormSubmitting(true);
-      
+
       const toInsert = {
         document_data: formData,
         attachments: {

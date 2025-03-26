@@ -9,7 +9,7 @@ import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
 import useDocumentDraftingStore from "../../../store/useDocumentDraftingStore";
 import moment from "moment";
-import { shortName } from "../../../utils/global";
+import { formattedDate, shortName } from "../../../utils/global";
 
 const EntityDocumentDraftingPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -65,14 +65,14 @@ const EntityDocumentDraftingPage = () => {
               className="font-normal text-sm text-dark"
               onClick={() => navigateToDocumentDrafting(row)}
             >
-              {shortName(row.timestamps[0].full_name)}.
+              {formattedDate(row.timestamps[0].datetime)}
             </Typography>
             <Typography
               variant="small"
-              className="font-normal text-sm text-dark"
+              className="font-normal text-xs text-dark"
               onClick={() => navigateToDocumentDrafting(row)}
             >
-              {moment(row.timestamps[0].datetime).format("MMMM DD, YYYY")}
+              {shortName(row.timestamps[0].full_name)}.
             </Typography>
           </div>
         );

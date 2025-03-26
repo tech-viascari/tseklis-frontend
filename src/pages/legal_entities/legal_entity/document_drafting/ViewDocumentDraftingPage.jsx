@@ -38,6 +38,8 @@ const ViewDocumentDraftingPage = () => {
   const [remarks, setRemarks] = useState("");
   const [status, setStatus] = useState("");
 
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
   const [changeStatusDialog, setChangeStatusDialog] = useState(false);
   const changeStatusHandlerDialog = () => {
     setStatusDialog(true);
@@ -63,9 +65,8 @@ const ViewDocumentDraftingPage = () => {
   const navigate = useNavigate();
 
   const toggleChangeStatus = async () => {
-    return;
     const formData = {
-      document,
+      document_data: document.document_data,
       timestamp: {
         status,
         remarks,
@@ -74,7 +75,7 @@ const ViewDocumentDraftingPage = () => {
 
     try {
       const response = await axiosInstance.patch(
-        `/document/${document.quote_id}`,
+        `/legal-entities/${entity_id}/document-drafting/${document_id}`,
         formData
       );
       if (response.status == 200) {
@@ -112,76 +113,93 @@ const ViewDocumentDraftingPage = () => {
               className={customClassName}
               onClick={() => {
                 setRemarks("");
-                setStatus("Sent for Signature");
+                setStatus("Completed");
                 setChangeStatusDialog(true);
                 setStatusDialog(false);
               }}
             >
-              Mark as 'Sent for Signature'
+              Mark as 'Completed'
             </ButtonComponent>
           </div>
         </>
       ),
-      "Sent for Signature": (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Signed");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Signed'
-          </ButtonComponent>
-        </div>
-      ),
-      Signed: (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Sent Invoice");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Sent Invoice'
-          </ButtonComponent>
-        </div>
-      ),
-      "Sent Invoice": (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Paid");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Paid'
-          </ButtonComponent>
-        </div>
-      ),
-      Paid: (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Completed");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Completed'
-          </ButtonComponent>
-        </div>
-      ),
+      // Drafted: (
+      //   <>
+      //     <div className="flex flex-row gap-3">
+      //       <ButtonComponent
+      //         className={customClassName}
+      //         onClick={() => {
+      //           setRemarks("");
+      //           setStatus("Sent for Signature");
+      //           setChangeStatusDialog(true);
+      //           setStatusDialog(false);
+      //         }}
+      //       >
+      //         Mark as 'Sent for Signature'
+      //       </ButtonComponent>
+      //     </div>
+      //   </>
+      // ),
+      // "Sent for Signature": (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Signed");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Signed'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // Signed: (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Sent Invoice");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Sent Invoice'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // "Sent Invoice": (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Paid");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Paid'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // Paid: (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Completed");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Completed'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
     };
 
     const timeline = timestamps.map((timestamp, index) => {
@@ -196,7 +214,7 @@ const ViewDocumentDraftingPage = () => {
         title: timestamp.status,
         date: timestamp.datetime,
         name: timestamp.full_name,
-        description: timestamp.remarks,
+        description: timestamp.remarks != null ? timestamp.remarks : "",
         action_component: actionComponent,
       };
     });
@@ -350,8 +368,10 @@ const ViewDocumentDraftingPage = () => {
 
             <ButtonComponent
               className="bg-secondary"
+              loading={isFormSubmitting}
               onClick={async () => {
                 try {
+                  setIsFormSubmitting(true);
                   const response = await axiosInstance.delete(
                     `/legal-entities/${entity_id}/document-drafting/${document_id}`
                   );
@@ -364,6 +384,7 @@ const ViewDocumentDraftingPage = () => {
                   toast.error("There was an error deleting the record");
                 } finally {
                   deleteHandlerDialog();
+                  setIsFormSubmitting(false);
                 }
               }}
             >
