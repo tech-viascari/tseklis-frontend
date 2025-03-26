@@ -36,6 +36,7 @@ const ViewQuotePage = () => {
 
   const [remarks, setRemarks] = useState("");
   const [status, setStatus] = useState("");
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [changeStatusDialog, setChangeStatusDialog] = useState(false);
   const changeStatusHandlerDialog = () => {
@@ -477,9 +478,12 @@ const ViewQuotePage = () => {
             </ButtonComponent>
 
             <ButtonComponent
+              loading={isFormSubmitting}
+              disabled={isFormSubmitting}
               className="bg-secondary"
               onClick={async () => {
                 try {
+                  setIsFormSubmitting(true);
                   const response = await axiosInstance.delete(
                     `/quote/${quote.quote_id}`
                   );
@@ -492,6 +496,7 @@ const ViewQuotePage = () => {
                   toast.error("There was an error deleting the record");
                 } finally {
                   deleteHandlerDialog();
+                  setIsFormSubmitting(false);
                 }
               }}
             >

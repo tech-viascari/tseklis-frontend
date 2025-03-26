@@ -89,13 +89,6 @@ export const DocumentTypeForm = ({
     );
   };
 
-  useEffect(() => {
-    // if (formData.corporate_name != "") {
-    //   setUpdateData(formData);
-    // }
-    console.log(formData);
-  }, [formData]);
-
   return (
     <div className="flex flex-col gap-1">
       <Typography variant="small" className="font-normal text-sm">
