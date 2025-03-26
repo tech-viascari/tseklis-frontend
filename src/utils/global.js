@@ -52,7 +52,7 @@ export const formattedDate = (date) => {
   if (!date) {
     return "";
   }
-  return moment(date).format("LL");
+  return moment(date).format("ll");
 };
 
 export const getName = (fullName) => {

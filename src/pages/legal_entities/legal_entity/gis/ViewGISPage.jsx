@@ -37,6 +37,7 @@ const ViewGISPage = () => {
 
   const [remarks, setRemarks] = useState("");
   const [status, setStatus] = useState("");
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [changeStatusDialog, setChangeStatusDialog] = useState(false);
   const changeStatusHandlerDialog = () => {
@@ -359,8 +360,11 @@ const ViewGISPage = () => {
 
             <ButtonComponent
               className="bg-secondary"
+              loading={isFormSubmitting}
+              disabled={isFormSubmitting}
               onClick={async () => {
                 try {
+                  setIsFormSubmitting(true);
                   const response = await axiosInstance.delete(
                     `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`
                   );
@@ -373,6 +377,7 @@ const ViewGISPage = () => {
                   toast.error("There was an error deleting the record");
                 } finally {
                   deleteHandlerDialog();
+                  setIsFormSubmitting(false);
                 }
               }}
             >
