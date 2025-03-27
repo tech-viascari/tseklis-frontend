@@ -12,11 +12,15 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import usePermissionStore from "../../../store/usePermissionStore";
 import ReviewComponent from "../../../components/ReviewComponent";
+import PageDeniedComponent from "../../../components/PageDeniedComponent";
+import useAuthStore from "../../../store/useAuthStore";
 
 const AddPermissionsPage = () => {
   const { states, setPermissions, permissions } = usePermissionStore();
 
   const { isDirty, setIsDirty } = useDirtyContext();
+
+  const { user, hasPermission } = useAuthStore();
 
   const [formData, setFormData] = useState(states.permission);
 
@@ -125,6 +129,14 @@ const AddPermissionsPage = () => {
     setErrors(form_data);
     setPageIsLoading(false);
   };
+
+  if (!hasPermission(user, "Add Permissions")) {
+    return (
+      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
+        <PageDeniedComponent />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -11,12 +11,15 @@ import {
   HiMiniClipboardDocumentCheck,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router";
+import useAuthStore from "../../../store/useAuthStore";
 
 const MainSideBar = () => {
   const { open, setOpen } = useDrawerStore();
 
   const [active, setActive] = useState("/");
   const navigate = useNavigate();
+
+  const { user, hasPermission } = useAuthStore();
 
   const navigation = [
     {
@@ -65,16 +68,19 @@ const MainSideBar = () => {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Users",
               goto: "/users",
+              permission_name: "View Users",
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Roles",
               goto: "/roles",
+              permission_name: "View Roles",
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Permissions",
               goto: "/permissions",
+              permission_name: "View Permissions",
             },
           ],
         },
@@ -249,49 +255,61 @@ const MainSideBar = () => {
                           )}
                         </div>
 
-                        {navigation.submenus.length != 0 && open && (
-                          <div
-                            className={`flex flex-row transition-all duration-300 overflow-hidden ease-in-out ${
-                              navigation.isExpanded
-                                ? "translate-y-5 opacity-100 h-full -mt-5 mb-5"
-                                : "translate-y-0 opacity-0 h-0 "
-                            }`}
-                          >
-                            <div className="w-10 flex items-center justify-center">
-                              <div className="h-full bg-light w-0.5"></div>
-                            </div>
-                            <div className="flex flex-col w-full gap-2 py-3">
-                              {navigation.submenus.map((submenu, index) => {
-                                return (
-                                  <div
-                                    key={`submenu-${index}`}
-                                    className={`flex items-center px-2 py-2 text-sm rounded-md hover:shadow-md hover:bg-white cursor-pointer ${
-                                      active == submenu.goto &&
-                                      "bg-white shadow-md"
-                                    }`}
-                                    onClick={() => {
-                                      handleNavigate({
-                                        title: submenu.title,
-                                        submenus: [],
-                                        isExpanded: false,
-                                        goto: submenu.goto,
-                                      });
-                                    }}
-                                  >
-                                    <p
-                                      className={`${
+                        {navigation.submenus.length != 0 &&
+                          (hasPermission(user, "View Users") ||
+                            hasPermission(user, "View Roles") ||
+                            hasPermission(user, "View Permissions")) &&
+                          open && (
+                            <div
+                              className={`flex flex-row transition-all duration-300 overflow-hidden ease-in-out ${
+                                navigation.isExpanded
+                                  ? "translate-y-5 opacity-100 h-full -mt-5 mb-5"
+                                  : "translate-y-0 opacity-0 h-0 "
+                              }`}
+                            >
+                              <div className="w-10 flex items-center justify-center">
+                                <div className="h-full bg-light w-0.5"></div>
+                              </div>
+                              <div className="flex flex-col w-full gap-2 py-3">
+                                {navigation.submenus.map((submenu, index) => {
+                                  if (
+                                    !hasPermission(
+                                      user,
+                                      submenu.permission_name
+                                    )
+                                  )
+                                    return;
+
+                                  return (
+                                    <div
+                                      key={`submenu-${index}`}
+                                      className={`flex items-center px-2 py-2 text-sm rounded-md hover:shadow-md hover:bg-white cursor-pointer ${
                                         active == submenu.goto &&
-                                        "text-primary text-semibold"
+                                        "bg-white shadow-md"
                                       }`}
+                                      onClick={() => {
+                                        handleNavigate({
+                                          title: submenu.title,
+                                          submenus: [],
+                                          isExpanded: false,
+                                          goto: submenu.goto,
+                                        });
+                                      }}
                                     >
-                                      {submenu.title}
-                                    </p>
-                                  </div>
-                                );
-                              })}
+                                      <p
+                                        className={`${
+                                          active == submenu.goto &&
+                                          "text-primary text-semibold"
+                                        }`}
+                                      >
+                                        {submenu.title}
+                                      </p>
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     );
                   })}

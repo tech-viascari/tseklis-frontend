@@ -7,12 +7,16 @@ import { Typography } from "@material-tailwind/react";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
 import usePermissionStore from "../../../store/usePermissionStore";
+import useAuthStore from "../../../store/useAuthStore";
+import PageDeniedComponent from "../../../components/PageDeniedComponent";
 
 const PermissionsPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
   const { permissions, setPermission, setPermissions } = usePermissionStore();
+
+  const { user, hasPermission } = useAuthStore();
 
   const columns = [
     {
@@ -39,6 +43,14 @@ const PermissionsPage = () => {
     setPermission(row);
   };
 
+  if (!hasPermission(user, "View Permissions")) {
+    return (
+      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
+        <PageDeniedComponent />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full relative">
       <TopBar items={[{ title: "Permissions", goto: "/permissions" }]} />
@@ -58,13 +70,15 @@ const PermissionsPage = () => {
                     </Typography>
                   </div>
                   <div>
-                    <ButtonComponent
-                      onClick={() => {
-                        navigate("/permissions/add-new");
-                      }}
-                    >
-                      Add new
-                    </ButtonComponent>
+                    {hasPermission(user, "Add Permissions") && (
+                      <ButtonComponent
+                        onClick={() => {
+                          navigate("/permissions/add-new");
+                        }}
+                      >
+                        Add new
+                      </ButtonComponent>
+                    )}
                   </div>
                 </div>
                 <div className="flex-1 h-full">

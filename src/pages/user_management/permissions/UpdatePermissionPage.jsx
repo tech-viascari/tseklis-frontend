@@ -17,6 +17,8 @@ import usePermissionStore from "../../../store/usePermissionStore";
 import axiosInstance from "../../../utils/axiosHelper";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import useAuthStore from "../../../store/useAuthStore";
+import PageDeniedComponent from "../../../components/PageDeniedComponent";
 
 const UpdatePermissionPage = () => {
   const { permission_id } = useParams();
@@ -25,6 +27,8 @@ const UpdatePermissionPage = () => {
     usePermissionStore();
 
   const { isDirty, setIsDirty } = useDirtyContext();
+
+  const { user, hasPermission } = useAuthStore();
 
   const [formData, setFormData] = useState(states.permission);
   const [errors, setErrors] = useState({});
@@ -137,6 +141,14 @@ const UpdatePermissionPage = () => {
     fetchData();
     setToDefault();
   }, []);
+
+  if (!hasPermission(user, "Update Permissions")) {
+    return (
+      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
+        <PageDeniedComponent />
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, UseState } from "react";
 import { useNavigate, useParams } from "react-router";
 import useDrawerStore from "../../../store/useDrawerStore";
-import useQuoteStore from "../../../store/useQuoteStore";
 import ViewPageComponent from "../../../components/ViewPageComponent";
 import usePermissionStore from "../../../store/usePermissionStore";
 import ButtonComponent from "../../../components/ButtonComponent";
@@ -18,11 +17,15 @@ import DialogComponent from "../../../components/DialogComponent";
 import ReviewComponent from "../../../components/ReviewComponent";
 import { toast } from "sonner";
 import axiosInstance from "../../../utils/axiosHelper";
+import useAuthStore from "../../../store/useAuthStore";
+import PageDeniedComponent from "../../../components/PageDeniedComponent";
 
 const ViewPermissionPage = () => {
   const { permission_id } = useParams();
 
   const { open, setOpen } = useDrawerStore();
+
+  const { user, hasPermission } = useAuthStore();
 
   const { permission, setPermission } = usePermissionStore();
 
@@ -45,6 +48,14 @@ const ViewPermissionPage = () => {
     fetchData();
   }, []);
 
+  if (!hasPermission(user, "View Permissions")) {
+    return (
+      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
+        <PageDeniedComponent />
+      </div>
+    );
+  }
+  
   return (
     <>
       <ViewPageComponent
@@ -58,32 +69,41 @@ const ViewPermissionPage = () => {
         title={permission.permission_name}
         sideButtonComponent={
           <div className="flex w-max flex-row gap-2">
-            <Menu>
-              <MenuHandler>
-                <Button
-                  variant="outlined"
-                  className="bg-transparent border-light-gray"
-                  size="sm"
-                >
-                  <HiOutlineEllipsisHorizontal />
-                </Button>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem
-                  className="text-dark"
-                  onClick={() => {
-                    setPermission(permission);
-                    navigate(`/permissions/update/${permission_id}`);
-                  }}
-                >
-                  Edit Details
-                </MenuItem>
-                <hr className="my-1 text-light-gray" />
-                <MenuItem onClick={deleteHandlerDialog}>
-                  <span className="text-red-400">Delete</span>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+            {hasPermission(user, "Edit Permissions") ||
+              (hasPermission(user, "Delete Permissions") && (
+                <Menu>
+                  <MenuHandler>
+                    <Button
+                      variant="outlined"
+                      className="bg-transparent border-light-gray"
+                      size="sm"
+                    >
+                      <HiOutlineEllipsisHorizontal />
+                    </Button>
+                  </MenuHandler>
+                  <MenuList>
+                    {hasPermission(user, "Update Permissions") && (
+                      <MenuItem
+                        className="text-dark"
+                        onClick={() => {
+                          setPermission(permission);
+                          navigate(`/permissions/update/${permission_id}`);
+                        }}
+                      >
+                        Edit Details
+                      </MenuItem>
+                    )}
+                    {hasPermission(user, "Delete Permissions") && (
+                      <>
+                        <hr className="my-1 text-light-gray" />
+                        <MenuItem onClick={deleteHandlerDialog}>
+                          <span className="text-red-400">Delete</span>
+                        </MenuItem>
+                      </>
+                    )}
+                  </MenuList>
+                </Menu>
+              ))}
           </div>
         }
       >
