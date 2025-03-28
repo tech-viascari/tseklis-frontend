@@ -5,26 +5,14 @@ import TopBar from "../../layouts/TopBar";
 import DataProvider from "../../../providers/DataProvider";
 import { Typography } from "@material-tailwind/react";
 import ButtonComponent from "../../../components/ButtonComponent";
+import TableComponent from "../../../components/TableComponent";
 import usePermissionStore from "../../../store/usePermissionStore";
-import useAuthStore from "../../../store/useAuthStore";
-import PageDeniedComponent from "../../../components/PageDeniedComponent";
-import TablePaginateComponent from "../../../components/TablePaginateComponent";
 
 const PermissionsPage = () => {
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
-  const {
-    permissions,
-    setPermission,
-    setPermissions,
-    totalRecords,
-    pageSize,
-    loading,
-    fetchPermissions,
-  } = usePermissionStore();
-
-  const { user, hasPermission } = useAuthStore();
+  const { permissions, setPermission, setPermissions } = usePermissionStore();
 
   const columns = [
     {
@@ -51,33 +39,25 @@ const PermissionsPage = () => {
     setPermission(row);
   };
 
-  if (!hasPermission(user, "View Permissions")) {
-    return (
-      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
-        <PageDeniedComponent />
-      </div>
-    );
-  }
-
   return (
     <div className="w-full relative">
       <TopBar items={[{ title: "Permissions", goto: "/permissions" }]} />
 
-      <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
-        <div className="pt-[60px]">
-          <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
-            <div className="flex flex-col gap-5 h-full">
-              <div className="flex flex-row justify-between items-center">
-                <div>
-                  <Typography variant="small" className="font-bold text-xl">
-                    Permissions
-                  </Typography>
-                  <Typography variant="small" className="font-normal text-sm">
-                    Here's the list of permissions.
-                  </Typography>
-                </div>
-                <div>
-                  {hasPermission(user, "Add Permissions") && (
+      <DataProvider tableName="/permissions" setData={setPermissions}>
+        <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
+          <div className="pt-[60px]">
+            <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
+              <div className="flex flex-col gap-5 h-full">
+                <div className="flex flex-row justify-between items-center">
+                  <div>
+                    <Typography variant="small" className="font-bold text-xl">
+                      Permissions
+                    </Typography>
+                    <Typography variant="small" className="font-normal text-sm">
+                      Here's the list of permissions.
+                    </Typography>
+                  </div>
+                  <div>
                     <ButtonComponent
                       onClick={() => {
                         navigate("/permissions/add-new");
@@ -85,26 +65,22 @@ const PermissionsPage = () => {
                     >
                       Add new
                     </ButtonComponent>
-                  )}
+                  </div>
                 </div>
-              </div>
-              <div className="flex-1 h-full">
-                <div>
-                  <TablePaginateComponent
-                    columns={columns}
-                    data={permissions}
-                    onClick={navigateToPermission}
-                    fetch={fetchPermissions}
-                    perPage={pageSize}
-                    totalRecords={totalRecords}
-                    loading={loading}
-                  />
+                <div className="flex-1 h-full">
+                  <div>
+                    <TableComponent
+                      columns={columns}
+                      data={permissions}
+                      onClick={navigateToPermission}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </DataProvider>
     </div>
   );
 };
