@@ -5,6 +5,9 @@ import ButtonComponent from "../../../../../components/ButtonComponent";
 import SelectComponent from "../../../../../components/SelectComponent";
 import useDocumentDraftingStore from "../../../../../store/useDocumentDraftingStore";
 import { formatNumberWithCommaAndDecimal } from "../../../../../utils/global";
+import CGRForm from "../forms/CGRForm";
+import AffidavitOfNonOperationForm from "../forms/AffidavitOfNonOperationForm";
+import { HiMiniExclamationTriangle } from "react-icons/hi2";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -108,264 +111,55 @@ export const DocumentDetailsForm = ({
       setFormData(newFormData);
     };
 
-    const CGRForm = () => {
-      return (
-        <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-3">
-            <InputComponent
-              label="Year"
-              required
-              name="year"
-              value={formData.year}
-              error_message={errors.year}
-              onChange={(e) => {
-                handleOnChange(e, "Year");
-              }}
+    const getDocumentForm = () => {
+      switch (formData.type) {
+        case "Certificate of Gross Sales/Receipts":
+          return (
+            <CGRForm
+              formData={formData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
             />
-            <InputComponent
-              label="Date From"
-              required
-              type="date"
-              name="date_from"
-              value={formData.date_from}
-              onChange={handleOnChange}
+          );
+        case "Affidavit of Non-Operation":
+          return (
+            <AffidavitOfNonOperationForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
             />
-            <InputComponent
-              label="Date To"
-              required
-              type="date"
-              name="date_to"
-              value={formData.date_to}
-              onChange={handleOnChange}
-            />
-          </div>
+          );
 
-          <InputComponent
-            label="Office Address"
-            required
-            name="office_address"
-            value={formData.office_address}
-            onChange={handleOnChange}
-          />
-
-          <Typography variant="small" className={`mt-5 font-medium`}>
-            Revenue Generated
-          </Typography>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-3 w-full ">
-            <InputComponent
-              label={`Q1 ${formData.year}`}
-              required
-              name="revenue_q1"
-              value={formData.revenue_q1}
-              onChange={handleOnChange}
-            />
-            <InputComponent
-              label={`Q2 ${formData.year}`}
-              required
-              name="revenue_q2"
-              value={formData.revenue_q2}
-              onChange={handleOnChange}
-            />
-            <InputComponent
-              label={`Q3 ${formData.year}`}
-              required
-              name="revenue_q3"
-              value={formData.revenue_q3}
-              onChange={handleOnChange}
-            />
-            <InputComponent
-              label={`Q4 ${formData.year}`}
-              required
-              name="revenue_q4"
-              value={formData.revenue_q4}
-              onChange={handleOnChange}
-            />
-          </div>
-          {formData.total_revenue != 0 && (
+        default:
+          return (
             <div>
-              <Typography variant="small" className={`font-medium`}>
-                Total Revenue: PHP{" "}
-                {formatNumberWithCommaAndDecimal(formData.total_revenue)}
+              <Typography
+                variant="small"
+                className="font-medium flex flex-col items-center gap-1"
+              >
+                <HiMiniExclamationTriangle
+                  size={25}
+                  className="text-orange-400"
+                />
+                No document type selected.
+              </Typography>
+              <Typography variant="small" className="text-center">
+                Please go back and choose a valid document type before
+                proceeding.
               </Typography>
             </div>
-          )}
-
-          <Typography variant="small" className={`mt-5 font-medium`}>
-            Signatory
-          </Typography>
-
-          <div className="flex flex-col gap-3">
-            <div>
-              <SelectComponent
-                label="Officer"
-                options={officersOption}
-                value={selectedOfficer}
-                onSelectChange={handleOnChangeAppointees}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <InputComponent
-                label="Officer Name"
-                required
-                name="officer_name"
-                value={formData.officer_name}
-                onChange={handleOnChange}
-              />
-              <InputComponent
-                label="Officer Position"
-                required
-                name="officer_position"
-                value={formData.officer_position}
-                onChange={handleOnChange}
-              />
-            </div>
-          </div>
-        </div>
-      );
+          );
+      }
     };
 
-    const SPABusinessPermitRenewal = () => {
-      return (
-        <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-3">
-            <InputComponent
-              label="Year"
-              required
-              name="year"
-              value={formData.year}
-              onChange={handleOnChange}
-            />
-          </div>
-
-          <div className="flex flex-row justify-between items-center w-full bg-red-500">
-            <Typography variant="small" className="font-medium">
-              Appointees
-            </Typography>
-            <ButtonComponent
-              onClick={() => {
-                // console.log(document_state.appointeeState);
-                console.log(formData);
-              }}
-            >
-              Add row
-            </ButtonComponent>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <table className="w-full overflow-x-auto">
-              <thead>
-                <tr>
-                  <th className="text-start w-[35%]">
-                    <Typography variant="small" className="mb-1 font-normal">
-                      Name
-                    </Typography>
-                  </th>
-                  <th className="text-start w-[35%]">
-                    <Typography variant="small" className="mb-1 font-normal">
-                      ID Number
-                    </Typography>
-                  </th>
-                  <th className="text-start w-[35%]">
-                    <Typography variant="small" className="mb-1 font-normal">
-                      Date and Place Issued
-                    </Typography>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>
-                    <InputComponent
-                      name="officer_name"
-                      value={formData.officer_name}
-                      onChange={onChange}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <Typography variant="small" className={`mt-5 font-medium`}>
-            Signatory
-          </Typography>
-
-          <div className="flex flex-col gap-3">
-            <div>
-              <SelectComponent
-                label="Officer"
-                options={officer}
-                value={selectedOfficer}
-                onSelectChange={onSelectChange}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <InputComponent
-                label="Officer Name"
-                required
-                name="officer_name"
-                value={formData.officer_name}
-                onChange={onChange}
-              />
-              <InputComponent
-                label="Officer Position"
-                required
-                name="officer_position"
-                value={formData.officer_position}
-                onChange={onChange}
-              />
-              <InputComponent
-                label="Officer Nationality"
-                required
-                name="officer_position"
-                value={formData.officer_position}
-                onChange={onChange}
-              />
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    return <div>{CGRForm()}</div>;
+    return <div>{getDocumentForm()}</div>;
   };
 
   return (
