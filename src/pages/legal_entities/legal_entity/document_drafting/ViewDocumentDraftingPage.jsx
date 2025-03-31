@@ -308,11 +308,10 @@ const ViewDocumentDraftingPage = () => {
                 <MenuItem
                   className="text-dark"
                   onClick={() => {
-                    console.log("Edit Details");
-                    // setGISDocument(document);
-                    // navigate(
-                    //   `${PATH}/gis-tracker/update/${document.document_id}`
-                    // );
+                    setDocument(document);
+                    navigate(
+                      `${PATH}/document-drafting/update/${document.document_id}`
+                    );
                   }}
                 >
                   Edit Details
@@ -356,7 +355,7 @@ const ViewDocumentDraftingPage = () => {
       <DialogComponent
         dialogName={deleteDialog}
         handlerDialog={deleteHandlerDialog}
-        title={`Delete ${document.gis_document_name}`}
+        title={`Delete ${document.document_name}`}
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent

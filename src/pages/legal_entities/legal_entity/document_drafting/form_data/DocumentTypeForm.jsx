@@ -13,8 +13,6 @@ export const DocumentTypeForm = ({
   errors,
   onChange,
 }) => {
-  const [updateData, setUpdateData] = useState(formData);
-
   const { document_state } = useGISDocumentStore();
 
   const { states } = useDocumentDraftingStore();
@@ -26,13 +24,13 @@ export const DocumentTypeForm = ({
   });
 
   const handleSave = () => {
-    setFormData(updateData);
+    setFormData(formData);
     setBODDialog(false);
   };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setUpdateData({ ...updateData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleBODOnChange = (e) => {
@@ -101,7 +99,7 @@ export const DocumentTypeForm = ({
 
       <div className="flex flex-col py-5 gap-8">
         {DocumentFormComponent(
-          updateData,
+          formData,
           handleOnChange,
           false,
           false,
@@ -128,7 +126,7 @@ export const DocumentTypeForm = ({
       >
         <div className="w-full grid grid-cols-1 gap-3">
           {DocumentFormComponent(
-            updateData,
+            formData,
             handleOnChange,
             false,
             false,
@@ -155,7 +153,7 @@ export const DocumentTypeForm = ({
               className="bg-secondary"
               onClick={() => {
                 // const updatedData =
-                //   updateData.beneficial_ownership_declaration.map(
+                //   formData.beneficial_ownership_declaration.map(
                 //     (bod, index) => {
                 //       if (index == selectedBODIndex) {
                 //         return BODForm;
@@ -163,8 +161,8 @@ export const DocumentTypeForm = ({
                 //       return bod;
                 //     }
                 //   );
-                // setUpdateData({
-                //   ...updateData,
+                // setFormData({
+                //   ...formData,
                 //   beneficial_ownership_declaration: updatedData,
                 // });
                 // handleAddBODDialog(
