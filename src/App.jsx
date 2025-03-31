@@ -46,6 +46,7 @@ import AddProjectsPage from "./pages/project_management/AddProjects";
 import ViewGISPage from "./pages/legal_entities/legal_entity/gis/ViewGISPage";
 import UpdateGISPage from "./pages/legal_entities/legal_entity/gis/UpdateGISPage";
 import ViewDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/ViewDocumentDraftingPage";
+import UpdateDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/UpdateDocumentDraftingPage";
 
 const App = () => {
   return (
@@ -161,6 +162,10 @@ const App = () => {
             <Route
               path="/legal-entities/v/:entity_id/document-drafting/view/:document_id"
               element={<ViewDocumentDraftingPage />}
+            />
+            <Route
+              path="/legal-entities/v/:entity_id/document-drafting/update/:document_id"
+              element={<UpdateDocumentDraftingPage />}
             />
 
             <Route
