@@ -10,7 +10,7 @@ const DocumentTypes = [
   // "SECCERT - List of Stockholders",
   // "SECCERT - For Authorization",
   // "Affidavit of Loss",
-  // "Affidavit of Non-Operation",
+  "Affidavit of Non-Operation",
   // "Cover Sheet for Audited Financial Statements",
   // "SMR - Statement of Management's Responsibility for Financial Statements",
 ];
@@ -22,7 +22,7 @@ export const appointeeState = {
 };
 
 const DocumentDataState = {
-  type: "Certificate of Gross Sales/Receipts",
+  type: "Affidavit of Non-Operation",
   corporate_name: "",
   corporate_tin: "",
   office_address: "",
@@ -75,7 +75,7 @@ const DocumentDataState = {
     "I am executing this affidavit to attest to the truth of the foregoing in order to secure a certified true copy of the documents required for updating the Corporation’s head office address from {{old_head_office}} to {{new_head_office}}.",
   ],
 
-  appointees: [appointeeState],
+  appointees: [],
 };
 
 const StatusesState = {

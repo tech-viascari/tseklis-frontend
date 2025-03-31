@@ -7,6 +7,8 @@ import {
   formatNumberWithCommaOnly,
 } from "../../../../../utils/global";
 import moment from "moment";
+import TableComponent from "../../../../../components/TableComponent";
+import ButtonComponent from "../../../../../components/ButtonComponent";
 
 export const DocumentReviewForm = ({
   formData,
@@ -15,35 +17,9 @@ export const DocumentReviewForm = ({
   onChange,
   isPreview = false,
 }) => {
-  const ReviewForm = () => {
-    return <></>;
-  };
-  return (
-    <>
-      {!isPreview && (
-        <>
-          <Typography variant="small" className="font-normal text-sm">
-            STEP THREE
-          </Typography>
-          <Typography variant="small" className="font-bold text-md">
-            Review Information
-          </Typography>
-          <Typography variant="small" className="font-normal text-sm">
-            Kindly verify the details before submitting the record.
-          </Typography>
-        </>
-      )}
-
-      <div className={`flex flex-col gap-5 ${!isPreview && "py-10"}`}>
-        <ReviewComponent
-          title=""
-          data={[
-            {
-              name: "Document Type",
-              value: formData.type,
-            },
-          ]}
-        />
+  const CGRComponent = () => {
+    return (
+      <>
         <ReviewComponent
           title="Document Details"
           data={[
@@ -108,6 +84,107 @@ export const DocumentReviewForm = ({
             },
           ]}
         />
+      </>
+    );
+  };
+
+  const AffidavitOfNonOperationComponent = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+    return (
+      <>
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+        <ReviewComponent
+          title="Corporate Secretary"
+          data={[
+            {
+              name: "Name",
+              value: formData.corp_sec,
+            },
+            {
+              name: "Address",
+              value: formData.corp_sec_address,
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  return (
+    <>
+      {!isPreview && (
+        <>
+          <Typography variant="small" className="font-normal text-sm">
+            STEP THREE
+          </Typography>
+          <Typography variant="small" className="font-bold text-md">
+            Review Information
+          </Typography>
+          <Typography variant="small" className="font-normal text-sm">
+            Kindly verify the details before submitting the record.
+          </Typography>
+        </>
+      )}
+
+      <div className={`flex flex-col gap-5 ${!isPreview && "py-10"}`}>
+        <ReviewComponent
+          title=""
+          data={[
+            {
+              name: "Document Type",
+              value: formData.type,
+            },
+          ]}
+        />
+        {formData.type === "Certificate of Gross Sales/Receipts" && (
+          <CGRComponent />
+        )}
+        {formData.type === "Affidavit of Non-Operation" && (
+          <AffidavitOfNonOperationComponent />
+        )}
       </div>
     </>
   );
