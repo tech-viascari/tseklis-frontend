@@ -22,7 +22,7 @@ export const appointeeState = {
 };
 
 const DocumentDataState = {
-  type: "Affidavit of Non-Operation",
+  type: "Certificate of Gross Sales/Receipts",
   corporate_name: "",
   corporate_tin: "",
   office_address: "",
