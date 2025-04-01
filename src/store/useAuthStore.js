@@ -24,7 +24,8 @@ const useAuthStore = create((set) => ({
     set({ user: null });
   }, // Reset user on logout
   hasPermission: (user, permission_name) => {
-    if (user.permissions == undefined || permission_name == "") return false;
+    if (user == null || user.permissions == undefined || permission_name == "")
+      return false;
     return user.permissions.some(
       (permission) => permission.permission_name === permission_name
     );

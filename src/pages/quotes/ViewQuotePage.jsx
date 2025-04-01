@@ -22,6 +22,7 @@ import axiosInstance from "../../utils/axiosHelper";
 import {
   formattedDate,
   formatNumberWithCommaAndDecimal,
+  setDocumentTitle,
 } from "../../utils/global";
 import TimelineComponent from "../../components/TimelineComponent";
 import LoadingComponent from "../../components/LoadingComponent";
@@ -244,6 +245,8 @@ const ViewQuotePage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  setDocumentTitle(`${quote.quote_name} - Quotes`);
 
   return (
     <>

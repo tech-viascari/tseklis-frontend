@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import axiosInstance from "../../../utils/axiosHelper";
 import useUserStore from "../../../store/useUserStore";
 import moment from "moment";
+import { setDocumentTitle } from "../../../utils/global";
 
 const ViewUsersPage = () => {
   const { user_id } = useParams();
@@ -48,6 +49,8 @@ const ViewUsersPage = () => {
 
     fetchData();
   }, []);
+
+  setDocumentTitle(`${user.first_name} ${user.last_name} - Users`);
 
   return (
     <>

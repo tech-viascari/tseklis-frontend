@@ -10,6 +10,7 @@ import { useDirtyContext } from "../../providers/DirtyProvider";
 import axiosInstance from "../../utils/axiosHelper";
 
 import { GetFormComponent } from "./GetFormComponent";
+import { setDocumentTitle } from "../../utils/global";
 
 const AddQuotesPage = () => {
   const { states, setQuotes, quotes } = useQuoteStore();
@@ -125,6 +126,8 @@ const AddQuotesPage = () => {
     setErrors(form_data);
     setPageIsLoading(false);
   };
+
+  setDocumentTitle("Add New - Quotes");
 
   return (
     <>

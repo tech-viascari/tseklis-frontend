@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import ReviewComponent from "../../../components/ReviewComponent";
 import useRoleStore from "../../../store/useRoleStore";
 import SelectMultipleComponent from "../../../components/SelectMultipleComponent";
+import { setDocumentTitle } from "../../../utils/global";
 
 const AddRolesPage = () => {
   const { states, setRoles, roles } = useRoleStore();
@@ -174,6 +175,8 @@ const AddRolesPage = () => {
     }
     setPageIsLoading(false);
   };
+
+  setDocumentTitle(`Add New - Roles`);
 
   return (
     <>

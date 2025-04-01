@@ -12,6 +12,7 @@ import { useNavigate } from "react-router";
 import DataProvider from "../../../providers/DataProvider";
 import useUserStore from "../../../store/useUserStore";
 import moment from "moment";
+import { setDocumentTitle } from "../../../utils/global";
 
 const UsersPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -115,6 +116,8 @@ const UsersPage = () => {
     navigate("/users/view/" + row.user_id);
     setUser(row);
   };
+
+  setDocumentTitle(`Users`);
 
   return (
     <div className="w-full relative">

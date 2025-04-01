@@ -18,7 +18,7 @@ import {
   HiMiniExclamationTriangle,
 } from "react-icons/hi2";
 import TableComponent from "../../components/TableComponent";
-import { convertBase64 } from "../../utils/global";
+import { convertBase64, setDocumentTitle } from "../../utils/global";
 import SelectMultipleComponent from "../../components/SelectMultipleComponent";
 
 const AddLegalEntitiesPage = () => {
@@ -353,8 +353,8 @@ const AddLegalEntitiesPage = () => {
                       }}
                     >
                       {row.officer.map((officer, index) => {
-                      return officer + ", ";
-                    })}
+                        return officer + ", ";
+                      })}
 
                       {/* {row.officer.toString().replace(/,/g, ", ")} */}
                     </Typography>
@@ -976,9 +976,7 @@ const AddLegalEntitiesPage = () => {
     setPageIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   console.log(formData);
-  // }, [formData]);
+  setDocumentTitle(`Add New - Legal Entities`);
 
   return (
     <>
