@@ -14,6 +14,7 @@ import { useDirtyContext } from "../../providers/DirtyProvider";
 import ButtonComponent from "../../components/ButtonComponent";
 import axiosInstance from "../../utils/axiosHelper";
 import { GetFormComponent } from "./GetFormComponent";
+import { setDocumentTitle } from "../../utils/global";
 
 const UpdateQuotesPage = () => {
   const { quote_id } = useParams();
@@ -142,6 +143,8 @@ const UpdateQuotesPage = () => {
     fetchData();
     setToDefault();
   }, []);
+
+  setDocumentTitle(`${quote.quote_name} - Quotes`);
 
   return (
     <div>

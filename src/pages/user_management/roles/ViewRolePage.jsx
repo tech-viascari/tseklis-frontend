@@ -17,6 +17,7 @@ import ReviewComponent from "../../../components/ReviewComponent";
 import { toast } from "sonner";
 import axiosInstance from "../../../utils/axiosHelper";
 import useRoleStore from "../../../store/useRoleStore";
+import { setDocumentTitle } from "../../../utils/global";
 
 const ViewRolePage = () => {
   const { role_id } = useParams();
@@ -47,6 +48,8 @@ const ViewRolePage = () => {
 
     fetchData();
   }, []);
+
+  setDocumentTitle(`${role.role_name} - Roles`);
 
   return (
     <>

@@ -9,6 +9,7 @@ import TableComponent from "../../components/TableComponent";
 import { PiToggleRight } from "react-icons/pi";
 import { HiPencilSquare } from "react-icons/hi2";
 import useLegalEntities from "../../store/useLegalEntities";
+import { setDocumentTitle } from "../../utils/global";
 
 const LegalEntitiesPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -116,6 +117,7 @@ const LegalEntitiesPage = () => {
     },
   ];
 
+  setDocumentTitle(`Legal Entities`);
 
   return (
     <div className="w-full relative">

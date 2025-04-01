@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReviewComponent from "../../../components/ReviewComponent";
-import { handleOnChange } from "../../../utils/global";
+import { handleOnChange, setDocumentTitle } from "../../../utils/global";
 import { useDirtyContext } from "../../../providers/DirtyProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import InputComponent from "../../../components/InputComponent";
@@ -330,12 +330,15 @@ const UpdateUsersPage = () => {
             value: role.role_id,
           };
         });
+        setUser(response.data.user);
         setDefaultOptions(defaultRole);
       }
     };
     fetchData();
     setToDefault();
   }, []);
+
+  setDocumentTitle(`${user.first_name} ${user.last_name} - Users`);
 
   return (
     <div>

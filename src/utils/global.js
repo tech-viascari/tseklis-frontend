@@ -1,4 +1,5 @@
 import moment from "moment";
+import { useEffect } from "react";
 
 // Function Definitions
 export const formatIntegerWithComma = (integerPart) => {
@@ -127,4 +128,8 @@ export const shortName = (modified_by) => {
   }
 
   return modified_by;
+};
+
+export const setDocumentTitle = (title) => {
+  document.title = `${title} - tseklis`;
 };

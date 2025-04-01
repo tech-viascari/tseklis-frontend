@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import ReviewComponent from "../../../components/ReviewComponent";
 import useRoleStore from "../../../store/useRoleStore";
 import SelectMultipleComponent from "../../../components/SelectMultipleComponent";
-import { handleOnChange } from "../../../utils/global";
+import { handleOnChange, setDocumentTitle } from "../../../utils/global";
 import useUserStore from "../../../store/useUserStore";
 import SelectComponent from "../../../components/SelectComponent";
 
@@ -311,6 +311,8 @@ const AddUsersPage = () => {
     }
     setPageIsLoading(false);
   };
+
+  setDocumentTitle(`Add New - Users`);
 
   return (
     <>
