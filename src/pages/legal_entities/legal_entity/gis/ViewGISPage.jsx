@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
+  HiLink,
   HiMiniExclamationCircle,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
@@ -249,7 +250,6 @@ const ViewGISPage = () => {
         const timeline = formattedTimeline(gis_document.timestamps);
 
         setTimelines(timeline);
-
         setGISDocument(gis_document);
       }
     } catch (error) {
@@ -342,6 +342,23 @@ const ViewGISPage = () => {
       >
         <div className="p-5">
           <TimelineComponent timelines={timelines}></TimelineComponent>
+
+          {GISDocument.attachments.google_sheets != "" && (
+            <div className="flex flex-row gap-2 items-center text-sm poppins-normal text-gray-500 mt-2">
+              <div>
+                <HiLink size={17} />
+              </div>
+              <Typography
+                variant="small"
+                className="text-sm line-clamp-1 underline text-blue-400 cursor-pointer"
+                onClick={() => {
+                  window.open(GISDocument.attachments.google_sheets, "_blank");
+                }}
+              >
+                {GISDocument.attachments.google_sheets}
+              </Typography>
+            </div>
+          )}
         </div>
       </DialogComponent>
 
