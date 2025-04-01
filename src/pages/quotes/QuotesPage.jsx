@@ -88,10 +88,6 @@ const QuotesPage = () => {
     setQuote(row);
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   if (!hasPermission(user, "Add Quotes")) {
     return (
       <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
