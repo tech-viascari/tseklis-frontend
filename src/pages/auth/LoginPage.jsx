@@ -10,6 +10,7 @@ import { googleIconSVG } from "../../components/GetIcons.jsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import LoadingComponent from "../../components/LoadingComponent.jsx";
+import { setDocumentTitle } from "../../utils/global.js";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -186,6 +187,8 @@ const LoginPage = () => {
       </div>
     </div>
   );
+
+  setDocumentTitle("Login");
 
   return (
     <>

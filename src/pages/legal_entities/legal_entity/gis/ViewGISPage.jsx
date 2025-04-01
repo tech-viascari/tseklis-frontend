@@ -341,7 +341,13 @@ const ViewGISPage = () => {
         size="md"
       >
         <div className="p-5">
-          <TimelineComponent timelines={timelines}></TimelineComponent>
+          <TimelineComponent
+            timelines={timelines}
+            goto={() => {
+              navigate(`${PATH}/gis-tracker/view/${gis_document_id}`);
+            }}
+            showUpdate={true}
+          ></TimelineComponent>
 
           {GISDocument.attachments.google_sheets != "" && (
             <div className="flex flex-row gap-2 items-center text-sm poppins-normal text-gray-500 mt-2">

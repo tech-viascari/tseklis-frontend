@@ -9,6 +9,7 @@ import ButtonComponent from "../../components/ButtonComponent";
 import TableComponent from "../../components/TableComponent";
 import useAuthStore from "../../store/useAuthStore";
 import PageDeniedComponent from "../../components/PageDeniedComponent";
+import { setDocumentTitle } from "../../utils/global";
 
 const QuotesPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -95,6 +96,8 @@ const QuotesPage = () => {
       </div>
     );
   }
+
+  setDocumentTitle("Quotes");
 
   return (
     <div className="w-full relative">

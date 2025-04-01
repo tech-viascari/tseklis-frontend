@@ -7,6 +7,7 @@ import { Typography } from "@material-tailwind/react";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
 import useRoleStore from "../../../store/useRoleStore";
+import { setDocumentTitle } from "../../../utils/global";
 
 const RolesPage = () => {
   const { open, setOpen } = useDrawerStore();
@@ -88,6 +89,8 @@ const RolesPage = () => {
     navigate("/roles/view/" + row.role_id);
     setRole(row);
   };
+
+  setDocumentTitle(`Roles`);
 
   return (
     <div className="w-full relative">
