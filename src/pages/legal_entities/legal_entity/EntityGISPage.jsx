@@ -8,7 +8,7 @@ import DataProvider from "../../../providers/DataProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
 import useGISDocumentStore from "../../../store/useGISDocumentStore";
-import { formattedDate } from "../../../utils/global";
+import { formattedDate, shortName } from "../../../utils/global";
 
 const EntityGISPage = () => {
   const { entity_id } = useParams();
@@ -51,7 +51,7 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.date_received}
+            {formattedDate(row.date_received)}
           </Typography>
         );
       },
@@ -92,13 +92,22 @@ const EntityGISPage = () => {
       selector: (row) => row.timestamps[0].datetime,
       cell: (row) => {
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => navigateToGISPage(row)}
-          >
-            {formattedDate(row.timestamps[0].datetime)}
-          </Typography>
+          <div className="flex flex-col">
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-dark"
+              onClick={() => navigateToGISPage(row)}
+            >
+              {formattedDate(row.timestamps[0].datetime)}
+            </Typography>
+            <Typography
+              variant="small"
+              className="font-normal text-xs text-dark"
+              onClick={() => navigateToGISPage(row)}
+            >
+              {shortName(row.timestamps[0].full_name)}.
+            </Typography>
+          </div>
         );
       },
     },

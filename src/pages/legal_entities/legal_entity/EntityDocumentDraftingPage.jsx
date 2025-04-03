@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TopBar from "../../layouts/TopBar";
 import { Typography } from "@material-tailwind/react";
 import useDrawerStore from "../../../store/useDrawerStore";
@@ -7,65 +7,81 @@ import useLegalEntities from "../../../store/useLegalEntities";
 import DataProvider from "../../../providers/DataProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import TableComponent from "../../../components/TableComponent";
+import useDocumentDraftingStore from "../../../store/useDocumentDraftingStore";
+import moment from "moment";
+import { formattedDate, shortName } from "../../../utils/global";
 
 const EntityDocumentDraftingPage = () => {
   const { open, setOpen } = useDrawerStore();
   const { entity_id } = useParams();
-  const { states, entity } = useLegalEntities();
+  const { entity } = useLegalEntities();
+
+  const PATH = `/legal-entities/v/${entity_id}/document-drafting`;
+
+  const { documents, setDocuments, states } = useDocumentDraftingStore();
 
   const navigate = useNavigate();
 
   const columns = [
     {
       name: "Document Name",
-      selector: (row) => row.quote_number,
+      selector: (row) => row.document_name,
       cell: (row) => {
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
+            onClick={() => navigateToDocumentDrafting(row)}
           >
-            {row.quote_number}
+            {row.document_name}
           </Typography>
         );
       },
     },
     {
       name: "Status",
-      selector: (row) => row.form_data.recipient_company,
+      selector: (row) => null,
       cell: (row) => {
+        if (row.timestamps.length == 0) return;
         return (
           <Typography
             variant="small"
             className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
+            onClick={() => navigateToDocumentDrafting(row)}
           >
-            {row.form_data.recipient_company}
+            {row.timestamps[0].status}
           </Typography>
         );
       },
     },
     {
       name: "Last Modified",
-      selector: (row) => row.quote_name,
+      selector: (row) => null,
       cell: (row) => {
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => navigateToQuote(row)}
-          >
-            {row.quote_name}
-          </Typography>
+          <div className="flex flex-col">
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-dark"
+              onClick={() => navigateToDocumentDrafting(row)}
+            >
+              {formattedDate(row.timestamps[0].datetime)}
+            </Typography>
+            <Typography
+              variant="small"
+              className="font-normal text-xs text-dark"
+              onClick={() => navigateToDocumentDrafting(row)}
+            >
+              {shortName(row.timestamps[0].full_name)}.
+            </Typography>
+          </div>
         );
       },
     },
   ];
 
   const navigateToDocumentDrafting = (row) => {
-    navigate("/quotes/view/" + row.quote_id);
-    setQuote(row);
+    navigate(`${PATH}/view/${row.document_id}`);
   };
 
   return (
@@ -83,7 +99,10 @@ const EntityDocumentDraftingPage = () => {
         ]}
       />
 
-      <DataProvider tableName="/quotes" setData={() => {}}>
+      <DataProvider
+        tableName={`/legal-entities/${entity_id}/document-drafting`}
+        setData={setDocuments}
+      >
         <div className={`${open ? "pl-64" : "pl-20"} z-0`}>
           <div className="pt-[60px]">
             <div className="h-full p-5 md:px-12 grid grid-cols-1 gap-3">
@@ -111,11 +130,7 @@ const EntityDocumentDraftingPage = () => {
                 </div>
                 <div className="flex-1 h-full">
                   <div>
-                    <TableComponent
-                      columns={columns}
-                      data={[]}
-                      onClick={navigateToDocumentDrafting}
-                    />
+                    <TableComponent columns={columns} data={documents} />
                   </div>
                 </div>
               </div>

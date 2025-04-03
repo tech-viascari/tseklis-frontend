@@ -1,5 +1,6 @@
 import { Button } from "@material-tailwind/react";
 import React from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const ButtonComponent = ({
   children,
@@ -15,7 +16,6 @@ const ButtonComponent = ({
       <Button
         variant={variant}
         size="sm"
-        loading={loading}
         className={` shadow-none hover:shadow-sm normal-case font-medium text-sm border-light-gray focus:!border-light-gray ${
           className || "bg-primary text-secondary"
         } `}
@@ -23,7 +23,10 @@ const ButtonComponent = ({
         disabled={disabled}
         type={type}
       >
-        {children}
+        <div className="flex flex-row gap-2 items-center">
+          {loading && <AiOutlineLoading3Quarters className="animate-spin" />}
+          {children}
+        </div>
       </Button>
     </>
   );

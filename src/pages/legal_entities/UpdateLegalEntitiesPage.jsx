@@ -20,7 +20,7 @@ import SelectMultipleComponent from "../../components/SelectMultipleComponent";
 import ReviewComponent from "../../components/ReviewComponent";
 import axiosInstance from "../../utils/axiosHelper";
 import TableComponent from "../../components/TableComponent";
-import { convertBase64 } from "../../utils/global";
+import { convertBase64, setDocumentTitle } from "../../utils/global";
 import { toast } from "sonner";
 
 export const UpdateLegalEntitiesPage = () => {
@@ -993,6 +993,7 @@ export const UpdateLegalEntitiesPage = () => {
     setToDefault();
   }, []);
 
+  setDocumentTitle(`${entity.entity_details.company_name} - Legal Entities`);
 
   return (
     <div>

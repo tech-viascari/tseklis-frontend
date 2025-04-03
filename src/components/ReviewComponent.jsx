@@ -11,13 +11,13 @@ const ReviewComponent = ({ title, data }) => {
       <div className="flex flex-col gap-2">
         {data.map((row, index) => {
           return (
-            <div key={`${row.name}-${index}`} className="flex flex-row">
+            <div key={`${row.name}-${index}`} className="flex flex-row py-1">
               <div className="w-80">
                 <Typography variant="small" className="font-normal text-sm">
                   {row.name}
                 </Typography>
               </div>
-             
+
               <div className="w-full pl-20">
                 <Typography variant="small" className="font-normal text-sm">
                   {row.value}

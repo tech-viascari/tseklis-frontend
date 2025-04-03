@@ -1,4 +1,4 @@
-import React, { useEffect, useState, UseState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
   Button,
@@ -9,38 +9,35 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
-  HiLink,
   HiMiniExclamationCircle,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
 import { toast } from "sonner";
+import useDocumentDraftingStore from "../../../../store/useDocumentDraftingStore";
+import useLegalEntities from "../../../../store/useLegalEntities";
 import ViewPageComponent from "../../../../components/ViewPageComponent";
 import ButtonComponent from "../../../../components/ButtonComponent";
+import { DocumentReviewForm } from "./form_data/DocumentReviewForm";
 import DialogComponent from "../../../../components/DialogComponent";
 import TimelineComponent from "../../../../components/TimelineComponent";
 import TextAreaComponent from "../../../../components/TextAreaComponent";
 import LoadingComponent from "../../../../components/LoadingComponent";
 import axiosInstance from "../../../../utils/axiosHelper";
-import useLegalEntities from "../../../../store/useLegalEntities";
-import useGISDocumentStore from "../../../../store/useGISDocumentStore";
-import { ReviewForm } from "./form_data/ReviewForm";
-import InputComponent from "../../../../components/InputComponent";
 
-const ViewGISPage = () => {
-  const { entity_id, gis_document_id } = useParams();
+const ViewDocumentDraftingPage = () => {
+  const { entity_id, document_id } = useParams();
 
   const PATH = `/legal-entities/v/${entity_id}`;
 
   const { entity } = useLegalEntities();
 
-  const { GISDocument, setGISDocument } = useGISDocumentStore();
+  const { document, setDocument } = useDocumentDraftingStore();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const [remarks, setRemarks] = useState("");
-  const [dateReceived, setDateReceived] = useState("");
-
   const [status, setStatus] = useState("");
+
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [changeStatusDialog, setChangeStatusDialog] = useState(false);
@@ -69,17 +66,16 @@ const ViewGISPage = () => {
 
   const toggleChangeStatus = async () => {
     const formData = {
-      document_data: GISDocument.document_data,
+      document_data: document.document_data,
       timestamp: {
         status,
         remarks,
       },
-      date_received: dateReceived,
     };
 
     try {
       const response = await axiosInstance.patch(
-        `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`,
+        `/legal-entities/${entity_id}/document-drafting/${document_id}`,
         formData
       );
       if (response.status == 200) {
@@ -87,7 +83,7 @@ const ViewGISPage = () => {
         fetchData();
       }
     } catch (error) {
-      toast.error("An error occurred while updating the record's status.");
+      toast.error("There was an error deleting the record");
     } finally {
       setChangeStatusDialog(false);
       setStatusDialog(true);
@@ -110,94 +106,100 @@ const ViewGISPage = () => {
     const customClassName = `bg-transparent text-black border border-black hover:bg-black/80 hover:text-white hover:border-secondary font-sm focus:!border-black py-1`;
 
     const actionComponents = {
-      "Pending for Approval": (
+      Drafted: (
         <>
           <div className="flex flex-row gap-3">
             <ButtonComponent
               className={customClassName}
               onClick={() => {
                 setRemarks("");
-                setStatus("Approved");
+                setStatus("Completed");
                 setChangeStatusDialog(true);
                 setStatusDialog(false);
               }}
             >
-              Mark as 'Approved'
-            </ButtonComponent>
-            <ButtonComponent
-              className={customClassName}
-              onClick={() => {
-                setRemarks("");
-                setStatus("Reverted");
-                setChangeStatusDialog(true);
-                setStatusDialog(false);
-              }}
-            >
-              Mark as 'Reverted'
+              Mark as 'Completed'
             </ButtonComponent>
           </div>
         </>
       ),
-      Approved: (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Routed for Signature");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Routed for Signature'
-          </ButtonComponent>
-        </div>
-      ),
-      "Routed for Signature": (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Notarized");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Notarized'
-          </ButtonComponent>
-        </div>
-      ),
-      Notarized: (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Filed with SEC");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Filed with SEC'
-          </ButtonComponent>
-        </div>
-      ),
-      "Filed with SEC": (
-        <div className="flex flex-row gap-3">
-          <ButtonComponent
-            className={customClassName}
-            onClick={() => {
-              setRemarks("");
-              setStatus("Completed");
-              setChangeStatusDialog(true);
-              setStatusDialog(false);
-            }}
-          >
-            Mark as 'Completed'
-          </ButtonComponent>
-        </div>
-      ),
+      // Drafted: (
+      //   <>
+      //     <div className="flex flex-row gap-3">
+      //       <ButtonComponent
+      //         className={customClassName}
+      //         onClick={() => {
+      //           setRemarks("");
+      //           setStatus("Sent for Signature");
+      //           setChangeStatusDialog(true);
+      //           setStatusDialog(false);
+      //         }}
+      //       >
+      //         Mark as 'Sent for Signature'
+      //       </ButtonComponent>
+      //     </div>
+      //   </>
+      // ),
+      // "Sent for Signature": (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Signed");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Signed'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // Signed: (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Sent Invoice");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Sent Invoice'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // "Sent Invoice": (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Paid");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Paid'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
+      // Paid: (
+      //   <div className="flex flex-row gap-3">
+      //     <ButtonComponent
+      //       className={customClassName}
+      //       onClick={() => {
+      //         setRemarks("");
+      //         setStatus("Completed");
+      //         setChangeStatusDialog(true);
+      //         setStatusDialog(false);
+      //       }}
+      //     >
+      //       Mark as 'Completed'
+      //     </ButtonComponent>
+      //   </div>
+      // ),
     };
 
     const timeline = timestamps.map((timestamp, index) => {
@@ -212,7 +214,7 @@ const ViewGISPage = () => {
         title: timestamp.status,
         date: timestamp.datetime,
         name: timestamp.full_name,
-        description: timestamp.remarks,
+        description: timestamp.remarks != null ? timestamp.remarks : "",
         action_component: actionComponent,
       };
     });
@@ -224,7 +226,7 @@ const ViewGISPage = () => {
     try {
       setLoadingDialog(true);
       let response = await axiosInstance.post(
-        `/generate-gis/${gis_document_id}`
+        `/generate-document/${document_id}`
       );
 
       if (response.status === 200) {
@@ -247,15 +249,14 @@ const ViewGISPage = () => {
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get(
-        `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`
+        `/legal-entities/${entity_id}/document-drafting/${document_id}`
       );
       if (response.status == 200) {
-        const { gis_document } = response.data;
+        const { document } = response.data;
 
-        const timeline = formattedTimeline(gis_document.timestamps);
-
+        const timeline = formattedTimeline(document.timestamps);
         setTimelines(timeline);
-        setGISDocument(gis_document);
+        setDocument(document);
       }
     } catch (error) {
       console.log(error);
@@ -275,16 +276,15 @@ const ViewGISPage = () => {
             goto: PATH,
           },
           {
-            title: "GIS Tracker",
-            goto: `${PATH}/gis-tracker`,
+            title: "Document Drafting",
+            goto: `${PATH}/document-drafting`,
           },
           {
-            title: GISDocument.gis_document_name,
-            goto: `${PATH}/gis-tracker/${GISDocument.gis_document_id}`,
+            title: document.document_name,
+            goto: `${PATH}/gis-tracker/${document.document_id}`,
           },
         ]}
-        title={GISDocument.gis_document_name}
-        subtitle={GISDocument.quote_number}
+        title={document.document_name}
         sideButtonComponent={
           <div className="flex w-max flex-row gap-2">
             <ButtonComponent
@@ -292,8 +292,7 @@ const ViewGISPage = () => {
               className="py-1 px-4 text-secondary text-sm"
               onClick={statusHandlerDialog}
             >
-              {GISDocument.timestamps.length != 0 &&
-                GISDocument.timestamps[0].status}
+              {document.timestamps.length != 0 && document.timestamps[0].status}
             </ButtonComponent>
             <Menu>
               <MenuHandler>
@@ -309,9 +308,9 @@ const ViewGISPage = () => {
                 <MenuItem
                   className="text-dark"
                   onClick={() => {
-                    setGISDocument(GISDocument);
+                    setDocument(document);
                     navigate(
-                      `${PATH}/gis-tracker/update/${GISDocument.gis_document_id}`
+                      `${PATH}/document-drafting/update/${document.document_id}`
                     );
                   }}
                 >
@@ -333,7 +332,10 @@ const ViewGISPage = () => {
         }
       >
         <div className="flex flex-col gap-3 mb-10">
-          <ReviewForm formData={GISDocument.document_data} isPreview={true} />
+          <DocumentReviewForm
+            formData={document.document_data}
+            isPreview={true}
+          />
         </div>
       </ViewPageComponent>
 
@@ -346,40 +348,14 @@ const ViewGISPage = () => {
         size="md"
       >
         <div className="p-5">
-          <TimelineComponent
-            timelines={timelines}
-            goto={() => {
-              navigate(`${PATH}/gis-tracker/update/${gis_document_id}`);
-            }}
-            showUpdate={true}
-          ></TimelineComponent>
-
-          {GISDocument.attachments.google_sheets != "" && (
-            <div className="flex flex-row gap-2 items-center text-sm poppins-normal text-gray-500 mt-2">
-              <div>
-                <HiLink size={17} />
-              </div>
-              <Typography
-                variant="small"
-                className="text-sm line-clamp-1 underline text-blue-400 cursor-pointer"
-                onClick={() => {
-                  window.open(
-                    `https://docs.google.com/spreadsheets/d/${GISDocument.attachments.google_sheets}/`,
-                    "_blank"
-                  );
-                }}
-              >
-                {`https://docs.google.com/spreadsheets/d/${GISDocument.attachments.google_sheets}/`}
-              </Typography>
-            </div>
-          )}
+          <TimelineComponent timelines={timelines}></TimelineComponent>
         </div>
       </DialogComponent>
 
       <DialogComponent
         dialogName={deleteDialog}
         handlerDialog={deleteHandlerDialog}
-        title={`Delete ${GISDocument.gis_document_name}`}
+        title={`Delete ${document.document_name}`}
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
@@ -392,16 +368,15 @@ const ViewGISPage = () => {
             <ButtonComponent
               className="bg-secondary"
               loading={isFormSubmitting}
-              disabled={isFormSubmitting}
               onClick={async () => {
                 try {
                   setIsFormSubmitting(true);
                   const response = await axiosInstance.delete(
-                    `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`
+                    `/legal-entities/${entity_id}/document-drafting/${document_id}`
                   );
                   if (response.status == 200) {
                     toast.success("The record was deleted successfully.");
-                    navigate(`${PATH}/gis-tracker`);
+                    navigate(`${PATH}/document-drafting`);
                   }
                 } catch (error) {
                   console.log(error);
@@ -464,20 +439,6 @@ const ViewGISPage = () => {
             </Typography>
           </div>
 
-          {GISDocument.timestamps.length != 0 &&
-            GISDocument.timestamps[0].status == "Filed with SEC" && (
-              <InputComponent
-                required
-                name="date_received"
-                label="Date Received"
-                value={dateReceived}
-                onChange={(e) => {
-                  setDateReceived(e.target.value);
-                }}
-                type="date"
-              />
-            )}
-
           <TextAreaComponent
             label={"Remarks"}
             error_message=""
@@ -499,4 +460,4 @@ const ViewGISPage = () => {
   );
 };
 
-export default ViewGISPage;
+export default ViewDocumentDraftingPage;

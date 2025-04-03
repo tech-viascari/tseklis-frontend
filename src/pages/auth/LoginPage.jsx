@@ -10,6 +10,7 @@ import { googleIconSVG } from "../../components/GetIcons.jsx";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import LoadingComponent from "../../components/LoadingComponent.jsx";
+import { setDocumentTitle } from "../../utils/global.js";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -151,7 +152,7 @@ const LoginPage = () => {
       <ButtonComponent
         variant="filled"
         type="submit"
-        className="font-semibold text-secondary bg-primary"
+        className="font-semibold text-secondary bg-primary text-center flex flex-col items-center"
       >
         Login
       </ButtonComponent>
@@ -168,7 +169,7 @@ const LoginPage = () => {
           googleLogin();
         }}
       >
-        <div className="flex flex-row gap-1 items-center justify-center">
+        <div className="flex flex-row items-center justify-center w-full gap-3">
           {googleIconSVG}
           <p className="font-semibold text-[12px]">Continue with Google</p>
         </div>
@@ -186,6 +187,8 @@ const LoginPage = () => {
       </div>
     </div>
   );
+
+  setDocumentTitle("Login");
 
   return (
     <>

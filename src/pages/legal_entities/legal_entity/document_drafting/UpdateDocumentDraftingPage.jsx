@@ -1,71 +1,69 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-tailwind/react";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
+} from "@material-tailwind/react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
-import AddPageComponent from "../../../../components/AddPageComponent";
-import DialogComponent from "../../../../components/DialogComponent";
-import ButtonComponent from "../../../../components/ButtonComponent";
-import { useDirtyContext } from "../../../../providers/DirtyProvider";
 import useLegalEntities from "../../../../store/useLegalEntities";
 import useDocumentDraftingStore from "../../../../store/useDocumentDraftingStore";
+import { useDirtyContext } from "../../../../providers/DirtyProvider";
 import { DocumentTypeForm } from "./form_data/DocumentTypeForm";
 import { DocumentDetailsForm } from "./form_data/DocumentDetailsForm";
 import { DocumentReviewForm } from "./form_data/DocumentReviewForm";
+import UpdatePageComponent from "../../../../components/UpdatePageComponent";
+import ButtonComponent from "../../../../components/ButtonComponent";
 import axiosInstance from "../../../../utils/axiosHelper";
 
-const AddDocumentDraftingPage = () => {
-  const { entity_id } = useParams();
-
-  const { states } = useDocumentDraftingStore();
+const UpdateDocumentDraftingPage = () => {
+  const { entity_id, document_id } = useParams();
+  const navigate = useNavigate();
 
   const { entity } = useLegalEntities();
 
-  const PATH = `/legal-entities/v/${entity_id}/document-drafting`;
+  const { states, document, setDocument } = useDocumentDraftingStore();
 
-  const { isDirty, setIsDirty } = useDirtyContext();
+  const PATH = `/legal-entities/v/${entity_id}`;
 
-  const [formData, setFormData] = useState(states.DocumentState.document_data);
-  const [selectedOfficer, setSelectedOfficer] = useState("");
+  const { setIsDirty } = useDirtyContext();
+
+  const [formData, setFormData] = useState(document.document_data);
   const [officers, setOfficers] = useState([]);
-
-  const [officer, setOfficer] = useState([]);
+  const [selectedOfficer, setSelectedOfficer] = useState("");
 
   const [errors, setErrors] = useState({});
 
-  const [pageIsLoading, setPageIsLoading] = useState(true);
-
   const [submitDialog, setSubmitDialog] = useState(false);
-  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleSubmitDialog = () => {
+  const handleSubmitDialog = (e) => {
     setSubmitDialog(!submitDialog);
   };
 
-  const handleSubmit = async () => {
+  const [pageIsLoading, setPageIsLoading] = useState(false);
+
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+
+  const handleSubmit = async (e, status = "Drafted") => {
     try {
       setIsFormSubmitting(true);
 
-      const toInsert = {
+      const payload = {
         document_data: formData,
-        attachments: {
-          google_doc_id: "",
-          final_doc: "",
-        },
         timestamp: {
-          status: "Drafted",
+          status: status,
+          remarks: "",
         },
       };
 
-      const response = await axiosInstance.post(
-        `/legal-entities/${entity_id}/document-drafting`,
-        toInsert
+      const response = await axiosInstance.patch(
+        `/legal-entities/${entity_id}/document-drafting/${document_id}`,
+        payload
       );
-
       if (response.status == 200) {
-        toast.success("Record has been successfully added!");
-        navigate(`${PATH}`);
+        toast.success("Record has been successfully updated!");
+        navigate(`${PATH}/document-drafting/view/${document_id}`);
       }
     } catch (error) {
       console.log(error);
@@ -77,7 +75,7 @@ const AddDocumentDraftingPage = () => {
   };
 
   const setToDefault = async () => {
-    let form_data = { ...states.DocumentState.document_data };
+    let form_data = { ...document.document_data };
     // Loop through each key and set its value to an empty string
     for (let key in form_data) {
       if (form_data.hasOwnProperty(key)) {
@@ -212,40 +210,75 @@ const AddDocumentDraftingPage = () => {
   };
 
   useEffect(() => {
-    formDefault();
+    const fetchData = async () => {
+      setPageIsLoading(true);
+      try {
+        const response = await axiosInstance.get(
+          `/legal-entities/${entity_id}/document-drafting/${document_id}`
+        );
+        if (response.status == 200) {
+          const { document } = response.data;
+          setFormData(document.document_data);
+          setDocument(document);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setPageIsLoading(false);
+      }
+    };
+
+    if (entity.entity_id != "") {
+      formDefault();
+      fetchData();
+      setToDefault();
+    }
   }, [entity]);
 
   return (
-    <>
-      <AddPageComponent
+    <div>
+      <UpdatePageComponent
         items={[
           {
             title: entity.entity_details.company_name,
-            goto: `/legal-entities/v/${entity_id}/`,
+            goto: PATH,
           },
           {
             title: "Document Drafting",
-            goto: `${PATH}`,
+            goto: `${PATH}/document-drafting`,
           },
           {
-            title: "Add New Document",
-            goto: `${PATH}/add-new`,
+            title: document.document_name,
+            goto: `${PATH}/document-drafting/view/${document.document_id}`,
+          },
+          {
+            title: "Update",
+            goto: `${PATH}/document-drafting/update/${document.gis_document_id}`,
           },
         ]}
-        title="Add New Document"
-        subtitle="Please fill in the necessary details below."
-        handleSubmit={handleSubmitDialog}
-        goBackTo={`${PATH}`}
+        goBackTo={`${PATH}/document-drafting`}
+        title={"Document"}
+        handleSubmitDialog={handleSubmitDialog}
         formComponent={formComponent}
         setToDefault={setToDefault}
         pageIsLoading={pageIsLoading}
-      />
+      ></UpdatePageComponent>
 
-      <DialogComponent
-        dialogName={submitDialog}
-        handlerDialog={handleSubmitDialog}
-        title="Add New Document"
-        footerContent={
+      <Dialog open={submitDialog} handler={handleSubmitDialog} size="sm">
+        <DialogHeader>
+          <Typography variant="small" className="font-bold text-base">
+            Update GIS
+          </Typography>
+        </DialogHeader>
+        <hr className="border-light-gray" />
+        <DialogBody className="text-dark">
+          <div className="flex flex-col gap-2">
+            <Typography variant="small" className="font-normal text-sm">
+              Are you sure you want to update this record?
+            </Typography>
+          </div>
+        </DialogBody>
+        <DialogFooter>
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent
               className="bg-red-400"
@@ -258,19 +291,17 @@ const AddDocumentDraftingPage = () => {
               loading={isFormSubmitting}
               disabled={isFormSubmitting}
               className="bg-secondary"
-              onClick={handleSubmit}
+              onClick={(e) => {
+                handleSubmit(e, "Drafted");
+              }}
             >
               Yes
             </ButtonComponent>
           </div>
-        }
-      >
-        <Typography variant="small" className="font-normal text-sm">
-          Are you sure you want to add this record?
-        </Typography>
-      </DialogComponent>
-    </>
+        </DialogFooter>
+      </Dialog>
+    </div>
   );
 };
 
-export default AddDocumentDraftingPage;
+export default UpdateDocumentDraftingPage;

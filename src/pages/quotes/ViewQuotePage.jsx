@@ -22,6 +22,7 @@ import axiosInstance from "../../utils/axiosHelper";
 import {
   formattedDate,
   formatNumberWithCommaAndDecimal,
+  setDocumentTitle,
 } from "../../utils/global";
 import TimelineComponent from "../../components/TimelineComponent";
 import LoadingComponent from "../../components/LoadingComponent";
@@ -36,6 +37,7 @@ const ViewQuotePage = () => {
 
   const [remarks, setRemarks] = useState("");
   const [status, setStatus] = useState("");
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [changeStatusDialog, setChangeStatusDialog] = useState(false);
   const changeStatusHandlerDialog = () => {
@@ -243,6 +245,8 @@ const ViewQuotePage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  setDocumentTitle(`${quote.quote_name} - Quotes`);
 
   return (
     <>
@@ -477,9 +481,12 @@ const ViewQuotePage = () => {
             </ButtonComponent>
 
             <ButtonComponent
+              loading={isFormSubmitting}
+              disabled={isFormSubmitting}
               className="bg-secondary"
               onClick={async () => {
                 try {
+                  setIsFormSubmitting(true);
                   const response = await axiosInstance.delete(
                     `/quote/${quote.quote_id}`
                   );
@@ -492,6 +499,7 @@ const ViewQuotePage = () => {
                   toast.error("There was an error deleting the record");
                 } finally {
                   deleteHandlerDialog();
+                  setIsFormSubmitting(false);
                 }
               }}
             >

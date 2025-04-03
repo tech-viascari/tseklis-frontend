@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ReviewComponent from "../../../components/ReviewComponent";
-import { handleOnChange } from "../../../utils/global";
+import { handleOnChange, setDocumentTitle } from "../../../utils/global";
 import { useDirtyContext } from "../../../providers/DirtyProvider";
 import ButtonComponent from "../../../components/ButtonComponent";
 import InputComponent from "../../../components/InputComponent";
@@ -195,12 +195,15 @@ const UpdateRolePage = () => {
             };
           }
         );
+        setRole(response.data.role);
         setDefaultOptions(defaultPermissions);
       }
     };
     fetchData();
     setToDefault();
   }, []);
+
+  setDocumentTitle(`${role.role_name} - Roles`);
 
   return (
     <div>
