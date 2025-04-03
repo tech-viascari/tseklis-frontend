@@ -69,7 +69,7 @@ const TimelineComponent = ({
                   </Typography>
                 </div>
 
-                {timeline.title == "Reverted" && (
+                {timeline.title == "Reverted" && index == 0 && (
                   <div>
                     <Typography
                       variant="small"

@@ -24,6 +24,7 @@ import axiosInstance from "../../../../utils/axiosHelper";
 import useLegalEntities from "../../../../store/useLegalEntities";
 import useGISDocumentStore from "../../../../store/useGISDocumentStore";
 import { ReviewForm } from "./form_data/ReviewForm";
+import InputComponent from "../../../../components/InputComponent";
 
 const ViewGISPage = () => {
   const { entity_id, gis_document_id } = useParams();
@@ -37,6 +38,8 @@ const ViewGISPage = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   const [remarks, setRemarks] = useState("");
+  const [dateReceived, setDateReceived] = useState("");
+
   const [status, setStatus] = useState("");
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
@@ -71,7 +74,9 @@ const ViewGISPage = () => {
         status,
         remarks,
       },
+      date_received: dateReceived,
     };
+
     try {
       const response = await axiosInstance.patch(
         `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`,
@@ -82,7 +87,7 @@ const ViewGISPage = () => {
         fetchData();
       }
     } catch (error) {
-      toast.error("There was an error deleting the record");
+      toast.error("An error occurred while updating the record's status.");
     } finally {
       setChangeStatusDialog(false);
       setStatusDialog(true);
@@ -344,7 +349,7 @@ const ViewGISPage = () => {
           <TimelineComponent
             timelines={timelines}
             goto={() => {
-              navigate(`${PATH}/gis-tracker/view/${gis_document_id}`);
+              navigate(`${PATH}/gis-tracker/update/${gis_document_id}`);
             }}
             showUpdate={true}
           ></TimelineComponent>
@@ -358,10 +363,13 @@ const ViewGISPage = () => {
                 variant="small"
                 className="text-sm line-clamp-1 underline text-blue-400 cursor-pointer"
                 onClick={() => {
-                  window.open(GISDocument.attachments.google_sheets, "_blank");
+                  window.open(
+                    `https://docs.google.com/spreadsheets/d/${GISDocument.attachments.google_sheets}/`,
+                    "_blank"
+                  );
                 }}
               >
-                {GISDocument.attachments.google_sheets}
+                {`https://docs.google.com/spreadsheets/d/${GISDocument.attachments.google_sheets}/`}
               </Typography>
             </div>
           )}
@@ -455,6 +463,20 @@ const ViewGISPage = () => {
               You want to proceed to the next step?
             </Typography>
           </div>
+
+          {GISDocument.timestamps.length != 0 &&
+            GISDocument.timestamps[0].status == "Filed with SEC" && (
+              <InputComponent
+                required
+                name="date_received"
+                label="Date Received"
+                value={dateReceived}
+                onChange={(e) => {
+                  setDateReceived(e.target.value);
+                }}
+                type="date"
+              />
+            )}
 
           <TextAreaComponent
             label={"Remarks"}
