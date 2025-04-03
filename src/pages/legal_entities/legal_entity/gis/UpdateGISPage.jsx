@@ -20,6 +20,7 @@ import { GeneralInformationForm } from "./form_data/GeneralInformationForm";
 import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
 import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
 import { ReviewForm } from "./form_data/ReviewForm";
+import { HiExclamationCircle } from "react-icons/hi2";
 
 const UpdateGISPage = () => {
   const { entity_id, gis_document_id } = useParams();
@@ -133,6 +134,32 @@ const UpdateGISPage = () => {
     };
   };
 
+  const WarningMessage = () => {
+    if (
+      GISDocument.timestamps.length == 0 ||
+      GISDocument.timestamps[0].status != "Reverted" ||
+      GISDocument.timestamps[0].remarks == ""
+    )
+      return <></>;
+
+    return (
+      <div className="flex flex-col w-full bg-orange-200 px-5 py-2 rounded-xl mb-5">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-col items-center justify-center">
+              <HiExclamationCircle className="text-orange-900" size={25} />
+            </div>
+            <div className="flex flex-row items-center justify-center">
+              <Typography variant="small" className="font-sm text-sm">
+                {GISDocument.timestamps[0].remarks}
+              </Typography>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const formComponent = [
     getFormState(
       "General Information",
@@ -140,6 +167,7 @@ const UpdateGISPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
+        WarningMessage={WarningMessage}
       />
     ),
     getFormState(
@@ -148,6 +176,7 @@ const UpdateGISPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
+        WarningMessage={WarningMessage}
       />
     ),
     getFormState(
@@ -156,6 +185,7 @@ const UpdateGISPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
+        WarningMessage={WarningMessage}
       />
     ),
     getFormState(

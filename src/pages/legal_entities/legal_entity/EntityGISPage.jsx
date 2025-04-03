@@ -51,7 +51,7 @@ const EntityGISPage = () => {
             className="font-normal text-sm text-dark"
             onClick={() => navigateToGISPage(row)}
           >
-            {row.date_received}
+            {formattedDate(row.date_received)}
           </Typography>
         );
       },
