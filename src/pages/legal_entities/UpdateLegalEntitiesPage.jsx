@@ -415,6 +415,13 @@ export const UpdateLegalEntitiesPage = () => {
     );
   };
 
+  const getOfficerOptions = officerFormData.officer.map((officer) => {
+    return {
+      label: officer,
+      value: officer
+    }
+  });
+
   //#endregion
 
   const formComponent = [
@@ -578,9 +585,8 @@ export const UpdateLegalEntitiesPage = () => {
             </Typography>
 
             <div
-              className={`w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer ${
-                fakePath != "" && "hidden"
-              }`}
+              className={`w-80 border border-dashed border-light-gray rounded-lg p-5 flex flex-col items-center gap-1 cursor-pointer ${fakePath != "" && "hidden"
+                }`}
               onClick={triggerFileInput}
             >
               <HiArrowDownTray size={25} className="text-black/60" />
@@ -649,9 +655,8 @@ export const UpdateLegalEntitiesPage = () => {
                 size="lg"
                 dialogName={officersDialog}
                 handlerDialog={handleOfficersDialog}
-                title={`${
-                  officerIndex !== -1 ? "Update Officer" : "Add Officer"
-                }`}
+                title={`${officerIndex !== -1 ? "Update Officer" : "Add Officer"
+                  }`}
                 footerContent={
                   <div className="flex flex-row w-full justify-between gap-3 pb-3">
                     {officerIndex != -1 ? (
@@ -731,7 +736,7 @@ export const UpdateLegalEntitiesPage = () => {
                     label="Incorporator"
                     name="incorporator"
                     value={officerFormData.incorporator}
-                    error_message={officerErrors.incorporator}
+                    //error_message={officerErrors.incorporator}
                     onSelectChange={(value) => {
                       handleOfficerOnSelectChange(
                         "incorporator",
@@ -750,7 +755,7 @@ export const UpdateLegalEntitiesPage = () => {
                     label="Board"
                     name="board"
                     value={officerFormData.board}
-                    error_message={officerErrors.board}
+                    //error_message={officerErrors.board}
                     onSelectChange={(value) => {
                       handleOfficerOnSelectChange(
                         "board",
@@ -777,7 +782,7 @@ export const UpdateLegalEntitiesPage = () => {
                     label="Gender"
                     name="gender"
                     value={officerFormData.gender}
-                    error_message={officerErrors.gender}
+                    //error_message={officerErrors.gender}
                     onSelectChange={(value) => {
                       handleOfficerOnSelectChange(
                         "gender",
@@ -796,7 +801,7 @@ export const UpdateLegalEntitiesPage = () => {
                     label="Stockholder"
                     name="stockholder"
                     value={officerFormData.stockholder}
-                    error_message={officerErrors.stockholder}
+                    //error_message={officerErrors.stockholder}
                     onSelectChange={(value) => {
                       handleOfficerOnSelectChange(
                         "stockholder",
@@ -816,16 +821,11 @@ export const UpdateLegalEntitiesPage = () => {
                     name="officer"
                     options={officerOptions}
                     isMulti={true}
+                    value={getOfficerOptions}
                     onSelectChange={(values) => {
-                      let selected = Object.entries(
-                        values.map((value) => {
-                          return {
-                            value: value.value,
-                            label: value.label,
-                          };
-                        })
-                      );
-
+                      let selected = values.map((value) => {
+                        return value.value
+                      })
                       setOfficerFormData({
                         ...officerFormData,
                         officer: selected,
@@ -837,7 +837,7 @@ export const UpdateLegalEntitiesPage = () => {
                     label="Executive Committee"
                     name="executive_committee"
                     value={officerFormData.executive_committee}
-                    error_message={officerErrors.executive_committee}
+                    //error_message={officerErrors.executive_committee}
                     onSelectChange={(value) => {
                       handleOfficerOnSelectChange(
                         "executive_committee",
@@ -992,6 +992,7 @@ export const UpdateLegalEntitiesPage = () => {
     fetchData();
     setToDefault();
   }, []);
+
 
   return (
     <div>
