@@ -20,7 +20,7 @@ const OfficerInformationState = {
   board: "N/A",
   gender: "M",
   stockholder: "Y",
-  officer: OfficerTypes,
+  officer: [],
   executive_committee: "N/A",
   tax_identification_number: "",
 };
