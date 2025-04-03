@@ -18,6 +18,7 @@ export const CapitalStructureForm = ({
   setFormData,
   errors,
   onChange,
+  WarningMessage = () => <></>,
 }) => {
   const [updateData, setUpdateData] = useState(formData);
 
@@ -1175,6 +1176,7 @@ export const CapitalStructureForm = ({
 
   return (
     <div className="flex flex-col gap-1">
+      {WarningMessage()}
       <Typography variant="small" className="font-normal text-sm">
         STEP TWO
       </Typography>
