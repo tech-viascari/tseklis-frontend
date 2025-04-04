@@ -12,16 +12,18 @@ import {
 import { useNavigate, useParams } from "react-router";
 import {
   Avatar,
+  Input,
   Menu,
   MenuHandler,
+  MenuItem,
   MenuList,
   Typography,
 } from "@material-tailwind/react";
 import { RiProfileFill } from "react-icons/ri";
 import { PiFilesFill } from "react-icons/pi";
-import InputComponent from "../../../components/InputComponent";
 import useLegalEntities from "../../../store/useLegalEntities";
 import axiosInstance from "../../../utils/axiosHelper";
+import ButtonComponent from "../../../components/ButtonComponent";
 
 const LegalEntitySideBar = () => {
   const { entity_id } = useParams();
@@ -31,9 +33,12 @@ const LegalEntitySideBar = () => {
   const navigate = useNavigate();
 
   const [openMenu, setOpenMenu] = useState(false);
+  const [isEntityProfile, setIsEntityProfile] = useState(true);
 
   const { states, entity, setEntity, entities, setEntities } =
     useLegalEntities();
+
+  const [listOfEntities, setListOfEntities] = useState([]);
 
   const navigation = [
     {
@@ -99,24 +104,6 @@ const LegalEntitySideBar = () => {
             },
           ],
         },
-        // {
-        //   icon: <PiListChecksFill className="text-xl" />,
-        //   title: "Projects",
-        //   goto: null,
-        //   isExpanded: true,
-        //   submenus: [
-        //     {
-        //       icon: <HiMiniUserGroup className="text-xl" />,
-        //       title: "Tasks",
-        //       goto: `legal-entities/v/${entity_id}/tasks`,
-        //     },
-        //     {
-        //       icon: <HiMiniUserGroup className="text-xl" />,
-        //       title: "Workflows",
-        //       goto: `legal-entities/v/${entity_id}/workflows`,
-        //     },
-        //   ],
-        // },
       ],
     },
   ];
@@ -152,6 +139,98 @@ const LegalEntitySideBar = () => {
 
   const handleOnChangeSearch = (e) => {
     setSearchEntity(e.target.value);
+  };
+
+  const fetchListOfEntities = () => {
+    const filteredEntities = entities.filter(
+      (_entity) => _entity.entity_id != entity_id
+    );
+    setListOfEntities(filteredEntities);
+  };
+
+  const DisplayEntityList = listOfEntities
+    .filter((_entity) => {
+      if (!_entity.status) return false;
+      if (searchEntity == "") {
+        return _entity;
+      } else if (
+        _entity.entity_details.company_name
+          .toLocaleLowerCase()
+          .includes(searchEntity.toLocaleLowerCase()) ||
+        _entity.entity_details.sec_registration_number
+          .toLocaleLowerCase()
+          .includes(searchEntity.toLocaleLowerCase())
+      ) {
+        return _entity;
+      }
+    })
+    .map((_entity, index) => {
+      if (!_entity.status) return;
+      return (
+        <div
+          key={_entity.entity_id}
+          className="flex flex-row items-center gap-3 border-light-gray border hover:bg-light-gray p-2 rounded-xl cursor-pointer"
+          onClick={() => {
+            window.location.href = `/legal-entities/v/${_entity.entity_id}/`;
+            setEntity(_entity);
+          }}
+        >
+          <div className="w-16 aspect-square flex flex-col items-center justify-center">
+            <Avatar
+              src={_entity.entity_logo}
+              alt="avatar"
+              className="object-contain"
+            />
+          </div>
+          <Typography
+            variant="small"
+            className="font-medium text-sm text-black w-full"
+          >
+            {_entity.entity_details.company_name}
+          </Typography>
+        </div>
+      );
+    });
+
+  const ChangeCompanyComponent = () => {
+    return (
+      <>
+        <Input
+          label="Search Entity"
+          variant="standard"
+          value={searchEntity}
+          onChange={handleOnChangeSearch}
+        />
+        <div className="max-h-40 flex flex-col gap-3 overflow-y-auto ">
+          {DisplayEntityList.length > 0 ? (
+            DisplayEntityList
+          ) : (
+            <span>No records found.</span>
+          )}
+        </div>
+      </>
+    );
+  };
+
+  const EntityProfileComponent = () => {
+    return (
+      <>
+        <div className="flex flex-col gap-5 items-center w-full">
+          <Avatar
+            className="h-20 w-20 object-contain border-light-gray border p-3"
+            src={entity.entity_logo}
+          ></Avatar>
+          <div className="flex flex-col gap-1 text-center">
+            <Typography variant="small" className="text-md font-bold">
+              {entity.entity_details.company_name}
+            </Typography>
+            <Typography variant="small" className="text-sm font-medium">
+              {entity.entity_details.sec_registration_number}
+            </Typography>
+          </div>
+        </div>
+      </>
+    );
   };
 
   useEffect(() => {
@@ -238,6 +317,10 @@ const LegalEntitySideBar = () => {
     fetchEntities();
   }, []);
 
+  useEffect(() => {
+    fetchListOfEntities();
+  }, [entities]);
+
   return (
     <div
       className={`bg-[#F5F7F9] ${
@@ -283,48 +366,24 @@ const LegalEntitySideBar = () => {
                   </div>
                 </div>
               </MenuHandler>
-              <MenuList className="w-60 p-3 gap-3 flex flex-col border border-light-gray shadow-2xl">
-                <InputComponent
-                  value={searchEntity}
-                  onChange={handleOnChangeSearch}
-                  placeholder="Search entity"
-                />
-                {entities.length == 0 ? (
-                  <>No records found.</>
-                ) : (
-                  <div className="max-h-40 flex flex-col gap-1 overflow-y-auto">
-                    {entities.map((entity, index) => {
-                      return (
-                        <div
-                          key={entity.entity_id}
-                          className="flex flex-row items-center gap-2 hover:bg-light-gray p-2 rounded cursor-pointer"
-                          onClick={() => {
-                            window.location.href = `/legal-entities/v/${entity.entity_id}/`;
-                          }}
-                        >
-                          <div className="w-10 aspect-square flex flex-col items-center justify-center">
-                            <Avatar
-                              src={entity.entity_logo}
-                              alt="avatar"
-                              className="object-contain"
-                            />
-                          </div>
-                          {/* <img
-                            src={entity.entity_logo}
-                            alt="avatar"
-                            className="relative inline-block h-8 w-8 !rounded-full  object-cover object-center"
-                          /> */}
-                          <Typography
-                            variant="small"
-                            className="font-medium text-sm text-black"
-                          >
-                            {entity.entity_details.company_name}
-                          </Typography>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+              <MenuList className="ml-14 w-[25%] gap-3 p-5 flex flex-col border border-light-gray shadow-2xl">
+                <div
+                  className="text-end flex flex-row items-end justify-end"
+                  tabIndex={0}
+                >
+                  <Typography
+                    variant="small"
+                    className="font-normal text-sm underline cursor-pointer"
+                    onClick={() => {
+                      setIsEntityProfile(!isEntityProfile);
+                    }}
+                  >
+                    {isEntityProfile ? "Change" : "Cancel"}
+                  </Typography>
+                </div>
+                {isEntityProfile
+                  ? EntityProfileComponent()
+                  : ChangeCompanyComponent()}
               </MenuList>
             </Menu>
           </div>
