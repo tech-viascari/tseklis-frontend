@@ -53,7 +53,7 @@ export const formattedDate = (date, full = false) => {
   if (!date) {
     return "";
   }
-  if(full) return moment(date).format("LL");
+  if (full) return moment(date).format("LL");
   return moment(date).format("ll");
 };
 
@@ -134,3 +134,6 @@ export const shortName = (modified_by) => {
 export const setDocumentTitle = (title) => {
   document.title = `${title} - tseklis`;
 };
+
+export const limitText = (text, maxLength = 20) =>
+  text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
