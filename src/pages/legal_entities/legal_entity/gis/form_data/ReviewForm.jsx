@@ -5,6 +5,7 @@ import GISTableComponent from "../../../../../components/GISTableComponent";
 import {
   formatNumberWithCommaAndDecimal,
   formatNumberWithCommaOnly,
+  formattedDate,
 } from "../../../../../utils/global";
 
 export const ReviewForm = ({
@@ -30,7 +31,7 @@ export const ReviewForm = ({
       },
       {
         name: "Date Registered",
-        value: formData.date_registered,
+        value: formattedDate(formData.date_registered, true),
       },
       {
         name: "Corporate Name",
@@ -69,8 +70,10 @@ export const ReviewForm = ({
         value: formData.date_of_annual_meeting,
       },
       {
-        name: "Actual Date of Special Meeting",
-        value: formData.actual_date_of_annual_meeting,
+        name: `Actual Date of ${
+          formData.is_special_meeting ? "Special" : "Annual"
+        } Meeting `,
+        value: formattedDate(formData.actual_date_of_annual_meeting, true),
       },
       {
         name: "Telephone Number",

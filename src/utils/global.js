@@ -49,10 +49,11 @@ export const formatNumberWithCommaOnly = (number) => {
   return formatIntegerWithComma(integerPart);
 };
 
-export const formattedDate = (date) => {
+export const formattedDate = (date, full = false) => {
   if (!date) {
     return "";
   }
+  if(full) return moment(date).format("LL");
   return moment(date).format("ll");
 };
 
