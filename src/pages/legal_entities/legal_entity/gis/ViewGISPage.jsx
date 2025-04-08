@@ -60,6 +60,7 @@ const ViewGISPage = () => {
     setLoadingDialog(!loadingDialog);
   };
 
+  const [isChangingStatus, setIsChangingStatus] = useState(false);
   const [statusDialog, setStatusDialog] = useState(false);
   const statusHandlerDialog = () => {
     setStatusDialog(!statusDialog);
@@ -80,6 +81,7 @@ const ViewGISPage = () => {
     };
 
     try {
+      setIsChangingStatus(true);
       const response = await axiosInstance.patch(
         `/legal-entities/${entity_id}/gis-tracker/${gis_document_id}`,
         formData
@@ -93,6 +95,7 @@ const ViewGISPage = () => {
     } finally {
       setChangeStatusDialog(false);
       setStatusDialog(true);
+      setIsChangingStatus(false);
     }
   };
 
@@ -444,6 +447,8 @@ const ViewGISPage = () => {
               onClick={() => {
                 toggleChangeStatus();
               }}
+              loading={isChangingStatus}
+              disabled={isChangingStatus}
             >
               Yes, proceed!
             </ButtonComponent>
