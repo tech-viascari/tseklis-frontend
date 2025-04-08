@@ -11,7 +11,7 @@ const DocumentTypes = [
   // "SECCERT - For Authorization",
   // "Affidavit of Loss",
   "Affidavit of Non-Operation",
-  // "Cover Sheet for Audited Financial Statements",
+  "Cover Sheet for Audited Financial Statements",
   // "SMR - Statement of Management's Responsibility for Financial Statements",
 ];
 
@@ -74,8 +74,28 @@ const DocumentDataState = {
     "That the said loss was discovered on or about {{last_dicovered_date}} and despite diligent efforts, we are unable to locate or recover the said {{missing_items}};",
     "I am executing this affidavit to attest to the truth of the foregoing in order to secure a certified true copy of the documents required for updating the Corporation’s head office address from {{old_head_office}} to {{new_head_office}}.",
   ],
-
   appointees: [],
+
+  //Cover Sheet
+  sec_registration_number: "",
+  form_type: "AAFS",
+  department: "",
+  secondary_license: "",
+
+  //Cover Sheet - Company Info
+  official_email_address: "",
+  telephone_number: "",
+  official_mobile_number: "",
+  number_of_shareholders: "",
+  date_of_annual_meeting: "",
+  fiscal_year_end: "",
+
+  //Cover Sheet - Contact Person
+  contact_person_name: "",
+  contact_person_email: "",
+  contact_person_telephone_number: "",
+  contact_person_mobile_number: "",
+  contact_person_address: "",
 };
 
 const StatusesState = {

@@ -153,6 +153,98 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const CoverSheetforAFSComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "SEC Registration Number",
+              value: formData.sec_registration_number,
+            },
+            {
+              name: "Company Name",
+              value: formData.corporate_name,
+            },
+            {
+              name: "Principal Office",
+              value: formData.office_address,
+            },
+            {
+              name: "Form Type",
+              value: formData.form_type,
+            },
+            {
+              name: "Department Requiring the Report",
+              value: formData.department,
+            },
+            {
+              name: "Secondary License",
+              value: formData.secondary_license,
+            },
+          ]}
+        />
+
+        <ReviewComponent
+          title="Company Information"
+          data={[
+            {
+              name: "Email Address",
+              value: formData.official_email_address,
+            },
+            {
+              name: "Telephone Number",
+              value: formData.telephone_number,
+            },
+            {
+              name: "Mobile Number",
+              value: formData.official_mobile_number,
+            },
+            {
+              name: "Number of Shareholders",
+              value: formData.number_of_shareholders,
+            },
+            {
+              name: "Date of Annual Meeting",
+              value: formData.date_of_annual_meeting,
+            },
+            {
+              name: "Fiscal Year End",
+              value: formData.fiscal_year_end,
+            },
+          ]}
+        />
+
+        <ReviewComponent
+          title="Contact Person"
+          data={[
+            {
+              name: "Name",
+              value: formData.contact_person_name,
+            },
+            {
+              name: "Email Address",
+              value: formData.contact_person_email,
+            },
+            {
+              name: "Telephone Number",
+              value: formData.contact_person_telephone_number,
+            },
+            {
+              name: "Mobile Number",
+              value: formData.contact_person_mobile_number,
+            },
+            {
+              name: "Address",
+              value: formData.contact_person_address,
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   return (
     <>
       {!isPreview && (
@@ -184,6 +276,9 @@ export const DocumentReviewForm = ({
         )}
         {formData.type === "Affidavit of Non-Operation" && (
           <AffidavitOfNonOperationComponent />
+        )}
+        {formData.type === "Cover Sheet for Audited Financial Statements" && (
+          <CoverSheetforAFSComponent />
         )}
       </div>
     </>
