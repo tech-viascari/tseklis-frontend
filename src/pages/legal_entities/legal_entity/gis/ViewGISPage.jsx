@@ -25,6 +25,7 @@ import useLegalEntities from "../../../../store/useLegalEntities";
 import useGISDocumentStore from "../../../../store/useGISDocumentStore";
 import { ReviewForm } from "./form_data/ReviewForm";
 import InputComponent from "../../../../components/InputComponent";
+import useAuthStore from "../../../../store/useAuthStore";
 
 const ViewGISPage = () => {
   const { entity_id, gis_document_id } = useParams();
@@ -34,6 +35,7 @@ const ViewGISPage = () => {
   const { entity } = useLegalEntities();
 
   const { GISDocument, setGISDocument } = useGISDocumentStore();
+  const { user, hasPermission } = useAuthStore();
 
   const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -112,30 +114,32 @@ const ViewGISPage = () => {
     const actionComponents = {
       "Pending for Approval": (
         <>
-          <div className="flex flex-row gap-3">
-            <ButtonComponent
-              className={customClassName}
-              onClick={() => {
-                setRemarks("");
-                setStatus("Approved");
-                setChangeStatusDialog(true);
-                setStatusDialog(false);
-              }}
-            >
-              Mark as 'Approved'
-            </ButtonComponent>
-            <ButtonComponent
-              className={customClassName}
-              onClick={() => {
-                setRemarks("");
-                setStatus("Reverted");
-                setChangeStatusDialog(true);
-                setStatusDialog(false);
-              }}
-            >
-              Mark as 'Reverted'
-            </ButtonComponent>
-          </div>
+          {hasPermission(user, "Approve/Revert GIS") && (
+            <div className="flex flex-row gap-3">
+              <ButtonComponent
+                className={customClassName}
+                onClick={() => {
+                  setRemarks("");
+                  setStatus("Approved");
+                  setChangeStatusDialog(true);
+                  setStatusDialog(false);
+                }}
+              >
+                Mark as 'Approved'
+              </ButtonComponent>
+              <ButtonComponent
+                className={customClassName}
+                onClick={() => {
+                  setRemarks("");
+                  setStatus("Reverted");
+                  setChangeStatusDialog(true);
+                  setStatusDialog(false);
+                }}
+              >
+                Mark as 'Reverted'
+              </ButtonComponent>
+            </div>
+          )}
         </>
       ),
       Approved: (

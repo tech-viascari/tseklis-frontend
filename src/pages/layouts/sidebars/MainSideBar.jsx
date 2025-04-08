@@ -24,6 +24,7 @@ const MainSideBar = () => {
   const navigation = [
     {
       title: "General",
+      show: true,
       navigation: [
         {
           icon: <HiSquares2X2 className="text-xl" />,
@@ -31,6 +32,7 @@ const MainSideBar = () => {
           goto: "/",
           submenus: [],
           isExpanded: false,
+          show: true,
         },
         {
           icon: <HiDocumentText className="text-xl" />,
@@ -38,6 +40,7 @@ const MainSideBar = () => {
           goto: "/quotes",
           submenus: [],
           isExpanded: false,
+          show: true,
         },
         {
           icon: <HiBuildingOffice2 className="text-xl" />,
@@ -45,6 +48,7 @@ const MainSideBar = () => {
           goto: "/legal-entities",
           submenus: [],
           isExpanded: false,
+          show: true,
         },
         {
           icon: <HiMiniClipboardDocumentCheck className="text-xl" />,
@@ -52,35 +56,38 @@ const MainSideBar = () => {
           goto: "/workflow",
           submenus: [],
           isExpanded: false,
+          show: false,
         },
       ],
     },
     {
       title: "Settings",
+      show: true,
       navigation: [
         {
           icon: <HiMiniUserGroup className="text-xl" />,
           title: "User Management",
           goto: null,
           isExpanded: true,
+          show: true,
           submenus: [
             {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Users",
               goto: "/users",
-              permission_name: "View Users",
+              show: true,
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Roles",
               goto: "/roles",
-              permission_name: "View Roles",
+              show: true,
             },
             {
               icon: <HiMiniUserGroup className="text-xl" />,
               title: "Permissions",
               goto: "/permissions",
-              permission_name: "View Permissions",
+              show: true,
             },
           ],
         },
@@ -195,17 +202,21 @@ const MainSideBar = () => {
       <div className={`${open ? "px-5" : "px-2"} `}>
         <div className={`flex flex-col ${!open && "items-center"} `}>
           {navigationList.map((nav, index) => {
+            if (nav.show == false) return;
             return (
               <div key={`nav-${index}`} className="flex flex-col mt-5">
                 <div className="flex flex-col gap-2">
-                  <p
-                    className={`${
-                      open ? "text-[12px]" : "text-[10px]"
-                    } font-medium`}
-                  >
-                    {nav.title}
-                  </p>
+                  {navigation.show == false && (
+                    <p
+                      className={`${
+                        open ? "text-[12px]" : "text-[10px]"
+                      } font-medium`}
+                    >
+                      {nav.title}
+                    </p>
+                  )}
                   {nav.navigation.map((navigation) => {
+                    if (navigation.show == false) return;
                     return (
                       <div key={`nav-${navigation.title}`}>
                         <div
@@ -255,61 +266,51 @@ const MainSideBar = () => {
                           )}
                         </div>
 
-                        {navigation.submenus.length != 0 &&
-                          (hasPermission(user, "View Users") ||
-                            hasPermission(user, "View Roles") ||
-                            hasPermission(user, "View Permissions")) &&
-                          open && (
-                            <div
-                              className={`flex flex-row transition-all duration-300 overflow-hidden ease-in-out ${
-                                navigation.isExpanded
-                                  ? "translate-y-5 opacity-100 h-full -mt-5 mb-5"
-                                  : "translate-y-0 opacity-0 h-0 "
-                              }`}
-                            >
-                              <div className="w-10 flex items-center justify-center">
-                                <div className="h-full bg-light w-0.5"></div>
-                              </div>
-                              <div className="flex flex-col w-full gap-2 py-3">
-                                {navigation.submenus.map((submenu, index) => {
-                                  if (
-                                    !hasPermission(
-                                      user,
-                                      submenu.permission_name
-                                    )
-                                  )
-                                    return;
-
-                                  return (
-                                    <div
-                                      key={`submenu-${index}`}
-                                      className={`flex items-center px-2 py-2 text-sm rounded-md hover:shadow-md hover:bg-white cursor-pointer ${
-                                        active == submenu.goto &&
-                                        "bg-white shadow-md"
-                                      }`}
-                                      onClick={() => {
-                                        handleNavigate({
-                                          title: submenu.title,
-                                          submenus: [],
-                                          isExpanded: false,
-                                          goto: submenu.goto,
-                                        });
-                                      }}
-                                    >
-                                      <p
-                                        className={`${
-                                          active == submenu.goto &&
-                                          "text-primary text-semibold"
-                                        }`}
-                                      >
-                                        {submenu.title}
-                                      </p>
-                                    </div>
-                                  );
-                                })}
-                              </div>
+                        {navigation.submenus.length != 0 && open && (
+                          <div
+                            className={`flex flex-row transition-all duration-300 overflow-hidden ease-in-out ${
+                              navigation.isExpanded
+                                ? "translate-y-5 opacity-100 h-full -mt-5 mb-5"
+                                : "translate-y-0 opacity-0 h-0 "
+                            }`}
+                          >
+                            <div className="w-10 flex items-center justify-center">
+                              <div className="h-full bg-light w-0.5"></div>
                             </div>
-                          )}
+                            <div className="flex flex-col w-full gap-2 py-3">
+                              {navigation.submenus.map((submenu, index) => {
+                                if (submenu.show == false) return;
+
+                                return (
+                                  <div
+                                    key={`submenu-${index}`}
+                                    className={`flex items-center px-2 py-2 text-sm rounded-md hover:shadow-md hover:bg-white cursor-pointer ${
+                                      active == submenu.goto &&
+                                      "bg-white shadow-md"
+                                    }`}
+                                    onClick={() => {
+                                      handleNavigate({
+                                        title: submenu.title,
+                                        submenus: [],
+                                        isExpanded: false,
+                                        goto: submenu.goto,
+                                      });
+                                    }}
+                                  >
+                                    <p
+                                      className={`${
+                                        active == submenu.goto &&
+                                        "text-primary text-semibold"
+                                      }`}
+                                    >
+                                      {submenu.title}
+                                    </p>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}

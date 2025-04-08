@@ -1,12 +1,14 @@
 import React from "react";
 import { HiChevronRight } from "react-icons/hi2";
 import { useNavigate } from "react-router";
+import { limitText } from "../utils/global";
 
 const BreadCrumbsComponent = ({ items }) => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-row items-center gap-2">
       {items.map((item, index) => {
+        const title = limitText(item.title, 20);
         return (
           <div
             key={`breadcrumbs-${index}`}
@@ -19,12 +21,10 @@ const BreadCrumbsComponent = ({ items }) => {
                   navigate(item.goto);
                 }}
               >
-                {item.title}
+                {title}
               </span>
             ) : (
-              <span className="text-dark text-[12px] font-normal">
-                {item.title}
-              </span>
+              <span className="text-dark text-[12px] font-normal">{title}</span>
             )}
 
             {index != items.length - 1 && <HiChevronRight size={10} />}
