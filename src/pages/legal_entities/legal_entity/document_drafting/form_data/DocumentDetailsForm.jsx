@@ -8,6 +8,7 @@ import { formatNumberWithCommaAndDecimal } from "../../../../../utils/global";
 import CGRForm from "../forms/CGRForm";
 import AffidavitOfNonOperationForm from "../forms/AffidavitOfNonOperationForm";
 import { HiMiniExclamationTriangle } from "react-icons/hi2";
+import { CoverSheetforAFSForm } from "../forms/CoverSheetforAFSForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -128,6 +129,18 @@ export const DocumentDetailsForm = ({
           return (
             <AffidavitOfNonOperationForm
               formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
+            />
+          );
+        case   "Cover Sheet for Audited Financial Statements":
+          return (
+            <CoverSheetforAFSForm
+            formData={formData}
               setFormData={setFormData}
               errors={errors}
               handleOnChange={handleOnChange}
