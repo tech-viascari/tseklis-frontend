@@ -142,24 +142,23 @@ const AddDocumentDraftingPage = () => {
       new_form_data.corporate_name = entity.entity_details.company_name;
       new_form_data.corporate_tin = entity.entity_details.corporate_tin;
       new_form_data.office_address = entity.entity_details.company_address;
-      new_form_data.sec_registration_number =
-        entity.entity_details.sec_registration_number;
+      new_form_data.sec_registration_number = entity.entity_details.sec_registration_number;
 
-      // //for cover sheet
-      // new_form_data.department = "CRMD";
-      // new_form_data.secondary_license = "N/A";
-      // new_form_data.official_email_address =
-      //   selectedCompany.latestGIS.official_email_address;
+      //for cover sheet
+      new_form_data.department = "CRMD";
+      new_form_data.secondary_license = "N/A";
+      new_form_data.official_email_address = entity.entity_details.official_email;
+      new_form_data.contact_person_email = entity.entity_details.official_email;
 
-      // //for cover sheet - company info
-      // new_form_data.telephone_number =
-      //   selectedCompany.latestGIS.telephone_number;
-      // new_form_data.official_mobile_number =
-      //   selectedCompany.latestGIS.official_mobile_number;
+      //for cover sheet - company info
+      new_form_data.telephone_number = entity.entity_details.official_contact_number;
+       // selectedCompany.latestGIS.telephone_number;
+      new_form_data.official_mobile_number = entity.entity_details.official_contact_number;
+        //selectedCompany.latestGIS.official_mobile_number;
       // new_form_data.number_of_shareholders =
-      //   selectedCompany.latestGIS.number_of_shareholders;
+      //  // selectedCompany.latestGIS.number_of_shareholders;
       // new_form_data.date_of_annual_meeting =
-      //   selectedCompany.latestGIS.date_of_annual_meeting;
+      //   //selectedCompany.latestGIS.date_of_annual_meeting;
       // new_form_data.fiscal_year_end = selectedCompany.latestGIS.fiscal_year_end;
 
       if (entity.entity_details.officer_information.length != 0) {
@@ -213,7 +212,9 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
+    console.log("Data ni Anthony: ", formData);
   }, [entity]);
+
 
   return (
     <>
