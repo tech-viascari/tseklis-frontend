@@ -12,6 +12,7 @@ import {
   formatNumberWithCommaAndDecimal,
   formatNumberWithCommaOnly,
 } from "../../../../../utils/global";
+import { toast } from "sonner";
 
 export const CapitalStructureForm = ({
   formData,
@@ -761,7 +762,13 @@ export const CapitalStructureForm = ({
             <ButtonComponent
               className="py-1 text-gray"
               variant="outlined"
-              onClick={handleStockholdersInformationDialog}
+              onClick={() => {
+                if (formData.auth_capital_stock.capital_stocks.length == 0) {
+                  toast.error("Please update Authorized Capital Stock first.");
+                  return;
+                }
+                handleStockholdersInformationDialog();
+              }}
             >
               Update Details
             </ButtonComponent>
@@ -770,14 +777,34 @@ export const CapitalStructureForm = ({
         <div className="pt-3 flex flex-col gap-3">
           <div className="grid grid-cols-4">
             <div className="col-span-4 md:col-span-2">
-              <InputComponent
-                label="Total Assets Based on Latest Audited Financial Statements"
-                name="total_assets_based_on_latest_audited"
-                required
-                value={formData.total_assets_based_on_latest_audited}
-                onChange={handleOnChange}
-                disabled={disabled}
-              />
+              {purpose == "update" ? (
+                <InputComponent
+                  label="Total Assets Based on Latest Audited Financial Statements"
+                  name="total_assets_based_on_latest_audited"
+                  required
+                  value={formData.total_assets_based_on_latest_audited}
+                  onChange={handleOnChange}
+                  disabled={disabled}
+                  type="number"
+                />
+              ) : (
+                <>
+                  <Typography variant="small" className="font-normal text-sm">
+                    Total Assets Based on Latest Audited Financial Statements{" "}
+                    <span className="text-red-500">*</span>
+                  </Typography>
+                  <div className="bg-light-gray/40 rounded-lg px-3 py-2 mt-2">
+                    <Typography variant="small" className="font-normal text-sm">
+                      {formData.total_assets_based_on_latest_audited == "" ||
+                      formData.total_assets_based_on_latest_audited == 0
+                        ? "N/A"
+                        : formatNumberWithCommaAndDecimal(
+                            formData.total_assets_based_on_latest_audited
+                          )}
+                    </Typography>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="flex flex-col items-end">
