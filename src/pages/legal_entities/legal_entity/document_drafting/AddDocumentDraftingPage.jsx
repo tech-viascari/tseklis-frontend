@@ -175,13 +175,13 @@ const AddDocumentDraftingPage = () => {
             new_form_data.corp_sec = officer.officer_name;
             new_form_data.corp_sec_address = officer.current_residence;
           }
-          // //for smr officers
-          // if (officer.officer.toLowerCase().includes("president")) {
-          //   new_form_data.president_name = officer.name;
-          // }
-          // if (officer.officer.toLowerCase().includes("treasurer")) {
-          //   new_form_data.treasurer_name = officer.name;
-          // }
+          //for smr officers
+          if (officer.officer.toLowerCase().includes("president")) {
+            new_form_data.president_name = officer.officer_name;
+          }
+          if (officer.officer.toLowerCase().includes("treasurer")) {
+            new_form_data.treasurer_name = officer.officer_name;
+          }
           return officer.officer != "N/A";
         }
       );
@@ -212,7 +212,7 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
-    console.log("Data ni Anthony: ", formData);
+    //console.log("Anthony Add Data: ", formData);
   }, [entity]);
 
 

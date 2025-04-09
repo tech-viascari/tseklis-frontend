@@ -3,15 +3,7 @@ import React from "react";
 import InputComponent from "../../../../../components/InputComponent";
 import SelectComponent from "../../../../../components/SelectComponent";
 
-export const CoverSheetforAFSForm = ({
-  formData,
-  setFormData,
-  errors,
-  handleOnChange,
-  officersOption,
-  selectedOfficer,
-  handleOnChangeAppointees,
-}) => {
+export const CoverSheetforAFSForm = ({ formData, handleOnChange }) => {
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -128,35 +120,35 @@ export const CoverSheetforAFSForm = ({
         />
 
         <InputComponent
-            label="Email Address"
-            required
-            name="contact_person_email"
-            value={formData.contact_person_email}
-            onChange={handleOnChange}
+          label="Email Address"
+          required
+          name="contact_person_email"
+          value={formData.contact_person_email}
+          onChange={handleOnChange}
         />
 
         <InputComponent
-            label="Telephone Number"
-            required
-            name="contact_person_telephone_number"
-            value={formData.contact_person_telephone_number}
-            onChange={handleOnChange}
+          label="Telephone Number"
+          required
+          name="contact_person_telephone_number"
+          value={formData.contact_person_telephone_number}
+          onChange={handleOnChange}
         />
 
         <InputComponent
-            label="Mobile Number"
-            required
-            name="contact_person_mobile_number"
-            value={formData.contact_person_mobile_number}
-            onChange={handleOnChange}
+          label="Mobile Number"
+          required
+          name="contact_person_mobile_number"
+          value={formData.contact_person_mobile_number}
+          onChange={handleOnChange}
         />
 
         <InputComponent
-            label="Address"
-            required
-            name="contact_person_address"
-            value={formData.contact_person_address}
-            onChange={handleOnChange}
+          label="Address"
+          required
+          name="contact_person_address"
+          value={formData.contact_person_address}
+          onChange={handleOnChange}
         />
       </div>
     </>
