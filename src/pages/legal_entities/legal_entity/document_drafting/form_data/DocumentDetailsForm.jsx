@@ -9,6 +9,8 @@ import CGRForm from "../forms/CGRForm";
 import AffidavitOfNonOperationForm from "../forms/AffidavitOfNonOperationForm";
 import { HiMiniExclamationTriangle } from "react-icons/hi2";
 import { CoverSheetforAFSForm } from "../forms/CoverSheetforAFSForm";
+import { SMRForm } from "../forms/SMRForm";
+import { rdoData } from "../forms/rdoData";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -88,6 +90,21 @@ export const DocumentDetailsForm = ({
     };
   });
 
+  const rdoAddressOption = rdoData.map((rdo) => {
+    if(rdo.rdo_address.split(", ").length > 1) {
+      return {
+        name: `${rdo.rdo_city} / ${rdo.rdo_address.split(", ")[1]}`,
+        value: rdo.rdo_code,
+      };
+    } else {
+      return {
+        name: `${rdo.rdo_city} / ${rdo.rdo_address.split(", ")[0]}`,
+        value: rdo.rdo_code,
+      };
+    }
+  });
+
+
   const DocumentFormComponent = (
     formData,
     officers,
@@ -111,6 +128,17 @@ export const DocumentDetailsForm = ({
 
       setFormData(newFormData);
     };
+
+    //for SMR
+    const handleRDOChange = (e) => {
+      const selectedRDO = rdoData.find((rdo) => rdo.rdo_code === e);
+      setFormData({
+        ...formData,
+        rdo_number: selectedRDO.rdo_code,
+        rdo_address: selectedRDO.rdo_address,
+        rdo_city: selectedRDO.rdo_city,
+      });
+  };
 
     const getDocumentForm = () => {
       switch (formData.type) {
@@ -137,16 +165,20 @@ export const DocumentDetailsForm = ({
               handleOnChangeAppointees={handleOnChangeAppointees}
             />
           );
-        case   "Cover Sheet for Audited Financial Statements":
+        case "Cover Sheet for Audited Financial Statements":
           return (
             <CoverSheetforAFSForm
-            formData={formData}
-              setFormData={setFormData}
-              errors={errors}
+              formData={formData}
               handleOnChange={handleOnChange}
-              officersOption={officersOption}
-              selectedOfficer={selectedOfficer}
-              handleOnChangeAppointees={handleOnChangeAppointees}
+            />
+          );
+        case "SMR - Statement of Management's Responsibility for Financial Statements":
+          return (
+            <SMRForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+              rdoAddressOption={rdoAddressOption}
+              handleRDOChange={handleRDOChange}
             />
           );
 
