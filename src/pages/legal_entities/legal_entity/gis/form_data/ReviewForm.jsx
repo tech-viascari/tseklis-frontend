@@ -724,7 +724,9 @@ export const ReviewForm = ({
             data={[
               {
                 name: "Total Assets Based on Latest Audited Financial Statements",
-                value: formData.total_assets_based_on_latest_audited,
+                value: formatNumberWithCommaAndDecimal(
+                  formData.total_assets_based_on_latest_audited
+                ),
               },
             ]}
           />
