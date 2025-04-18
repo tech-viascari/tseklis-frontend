@@ -1,8 +1,6 @@
 import React from "react";
 import InputComponent from "../../../../../components/InputComponent";
-import { Typography } from "@material-tailwind/react";
 import SelectComponent from "../../../../../components/SelectComponent";
-import { rdoData } from "./rdoData";
 
 export const SMRForm = ({ formData, handleOnChange, rdoAddressOption, handleRDOChange }) => {
   return (

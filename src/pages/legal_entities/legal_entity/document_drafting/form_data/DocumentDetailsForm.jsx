@@ -11,6 +11,7 @@ import { HiMiniExclamationTriangle } from "react-icons/hi2";
 import { CoverSheetforAFSForm } from "../forms/CoverSheetforAFSForm";
 import { SMRForm } from "../forms/SMRForm";
 import { rdoData } from "../forms/rdoData";
+import { WaiverOfNoticeForm } from "../forms/WaiverOfNoticeForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -91,7 +92,7 @@ export const DocumentDetailsForm = ({
   });
 
   const rdoAddressOption = rdoData.map((rdo) => {
-    if(rdo.rdo_address.split(", ").length > 1) {
+    if (rdo.rdo_address.split(", ").length > 1) {
       return {
         name: `${rdo.rdo_city} / ${rdo.rdo_address.split(", ")[1]}`,
         value: rdo.rdo_code,
@@ -103,7 +104,6 @@ export const DocumentDetailsForm = ({
       };
     }
   });
-
 
   const DocumentFormComponent = (
     formData,
@@ -138,7 +138,7 @@ export const DocumentDetailsForm = ({
         rdo_address: selectedRDO.rdo_address,
         rdo_city: selectedRDO.rdo_city,
       });
-  };
+    };
 
     const getDocumentForm = () => {
       switch (formData.type) {
@@ -181,6 +181,13 @@ export const DocumentDetailsForm = ({
               handleRDOChange={handleRDOChange}
             />
           );
+        case "Waiver of Notice":
+          return (
+            <WaiverOfNoticeForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+            />
+          );
 
         default:
           return (
@@ -206,6 +213,10 @@ export const DocumentDetailsForm = ({
 
     return <div>{getDocumentForm()}</div>;
   };
+
+// useEffect(() => {
+//   console.log("Document Details anthony: ", formData);
+// }, [formData]);
 
   return (
     <div className="flex flex-col gap-1">
