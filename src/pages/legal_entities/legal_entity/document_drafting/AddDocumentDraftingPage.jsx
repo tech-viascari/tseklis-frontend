@@ -224,6 +224,7 @@ const AddDocumentDraftingPage = () => {
     if (GISDocument.entity_id == entity_id) {
       let stockholders_name = GISDocument.document_data.stock_holders_information.information.map((stockholder) => ({
         name: stockholder.name,
+        position: "Stockholder",
       }));
 
       setFormData((prevState) => ({
