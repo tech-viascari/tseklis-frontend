@@ -12,6 +12,7 @@ import { DocumentTypeForm } from "./form_data/DocumentTypeForm";
 import { DocumentDetailsForm } from "./form_data/DocumentDetailsForm";
 import { DocumentReviewForm } from "./form_data/DocumentReviewForm";
 import axiosInstance from "../../../../utils/axiosHelper";
+import useGISDocumentStore from "../../../../store/useGISDocumentStore";
 
 const AddDocumentDraftingPage = () => {
   const { entity_id } = useParams();
@@ -19,6 +20,8 @@ const AddDocumentDraftingPage = () => {
   const { states } = useDocumentDraftingStore();
 
   const { entity } = useLegalEntities();
+
+  const { GISDocument } = useGISDocumentStore();
 
   const PATH = `/legal-entities/v/${entity_id}/document-drafting`;
 
@@ -204,6 +207,8 @@ const AddDocumentDraftingPage = () => {
       //     }
       //   );
       // new_form_data.stockholders_data = stockholder;
+
+
       setOfficers(officers);
 
       setFormData(new_form_data);
@@ -212,8 +217,28 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
-    //console.log("Anthony Add Data: ", formData);
+   // console.log("Anthony Add Data: ", formData);
   }, [entity]);
+
+  useEffect(() => {
+    if (GISDocument.entity_id == entity_id) {
+      let stockholders_name = GISDocument.document_data.stock_holders_information.information.map((stockholder) => ({
+        name: stockholder.name,
+      }));
+
+      setFormData((prevState) => ({
+        ...prevState,
+        stockholders: stockholders_name.map((stockholder) => ({
+          name: stockholder.name,
+        })),
+      }));
+        
+      // console.log("GISDocument hakdog: ", GISDocument.document_data.stock_holders_information.information.map((stockholder) => ({
+      //     name: stockholder.name
+      //   })));
+    }
+  }
+  , [GISDocument]);
 
 
   return (

@@ -13,6 +13,7 @@ const DocumentTypes = [
   "Affidavit of Non-Operation",
   "Cover Sheet for Audited Financial Statements",
   "SMR - Statement of Management's Responsibility for Financial Statements",
+  "Waiver of Notice",
 ];
 
 export const appointeeState = {
@@ -104,6 +105,13 @@ const DocumentDataState = {
   rdo_number: "",
   rdo_address: "",
   rdo_city: "",
+
+  //Waiver of Notice
+  scheduled_date: "",
+  scheduled_time: "",
+  venue: "",
+  stockholders: [],
+
 };
 
 const StatusesState = {
