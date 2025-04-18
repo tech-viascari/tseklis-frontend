@@ -230,6 +230,7 @@ const AddDocumentDraftingPage = () => {
         ...prevState,
         stockholders: stockholders_name.map((stockholder) => ({
           name: stockholder.name,
+          position: "Stockholder",
         })),
       }));
         
