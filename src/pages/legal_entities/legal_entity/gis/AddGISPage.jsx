@@ -136,7 +136,6 @@ const AddGISPage = () => {
       );
 
       newFormData.directors_or_officers = directors;
-
       setFormData(newFormData);
     }
   }, [entity]);

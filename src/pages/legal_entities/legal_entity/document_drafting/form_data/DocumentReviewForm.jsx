@@ -283,7 +283,42 @@ export const DocumentReviewForm = ({
           ]}
         />
       </>
-    )
+    );
+  };
+
+  const WaiverOfNoticeComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name,
+            },
+            {
+              name: "Scheduled Date of Meeting",
+              value: moment(formData.scheduled_date).format("MMMM DD, YYYY"),
+            },
+            {
+              name: "Scheduled Time of Meeting",
+              value: formData.scheduled_time,
+            },
+            {
+              name: "Venue",
+              value: formData.venue,
+            },
+          ]}
+        />
+        <ReviewComponent
+          title="Stockholders"
+          data={formData.stockholders.map((stockholder, index) => ({
+            name: `Stockholder ${index + 1}`,
+            value: stockholder.name,
+          }))}
+        />
+      </>
+    );
   };
 
   // useEffect(() => {
@@ -325,9 +360,11 @@ export const DocumentReviewForm = ({
         {formData.type === "Cover Sheet for Audited Financial Statements" && (
           <CoverSheetforAFSComponent />
         )}
-        {formData.type === "SMR - Statement of Management's Responsibility for Financial Statements" && (
+        {formData.type ===
+          "SMR - Statement of Management's Responsibility for Financial Statements" && (
           <SMRComponent />
         )}
+        {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
       </div>
     </>
   );
