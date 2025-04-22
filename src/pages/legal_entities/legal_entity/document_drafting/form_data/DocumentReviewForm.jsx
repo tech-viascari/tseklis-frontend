@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReviewComponent from "../../../../../components/ReviewComponent";
 import GISTableComponent from "../../../../../components/GISTableComponent";
 import {
@@ -9,6 +9,7 @@ import {
 import moment from "moment";
 import TableComponent from "../../../../../components/TableComponent";
 import ButtonComponent from "../../../../../components/ButtonComponent";
+import { use } from "react";
 
 export const DocumentReviewForm = ({
   formData,
@@ -245,6 +246,85 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const SMRComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name,
+            },
+            {
+              name: "Audited Years in Question",
+              value: formData.audited_years_in_question,
+            },
+            {
+              name: "President Name",
+              value: formData.president_name,
+            },
+            {
+              name: "Treasurer's Name",
+              value: formData.treasurer_name,
+            },
+            {
+              name: "RDO Number",
+              value: formData.rdo_number,
+            },
+            {
+              name: "RDO Address",
+              value: formData.rdo_address,
+            },
+            {
+              name: "RDO City",
+              value: formData.rdo_city,
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  const WaiverOfNoticeComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name,
+            },
+            {
+              name: "Scheduled Date of Meeting",
+              value: moment(formData.scheduled_date).format("MMMM DD, YYYY"),
+            },
+            {
+              name: "Scheduled Time of Meeting",
+              value: formData.scheduled_time,
+            },
+            {
+              name: "Venue",
+              value: formData.venue,
+            },
+          ]}
+        />
+        <ReviewComponent
+          title="Stockholders"
+          data={formData.stockholders.map((stockholder, index) => ({
+            name: `Stockholder ${index + 1}`,
+            value: stockholder.name,
+          }))}
+        />
+      </>
+    );
+  };
+
+  // useEffect(() => {
+  //   console.log("Anthony Review Data: ", formData);
+  // }, [formData]);
+
   return (
     <>
       {!isPreview && (
@@ -280,6 +360,11 @@ export const DocumentReviewForm = ({
         {formData.type === "Cover Sheet for Audited Financial Statements" && (
           <CoverSheetforAFSComponent />
         )}
+        {formData.type ===
+          "SMR - Statement of Management's Responsibility for Financial Statements" && (
+          <SMRComponent />
+        )}
+        {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
       </div>
     </>
   );

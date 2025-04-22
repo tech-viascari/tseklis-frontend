@@ -116,7 +116,7 @@ const AddGISPage = () => {
       //alternative_contact_number
       newFormData.alternate_phone_number =
         entity.entity_details.alternative_contact_number;
-
+      
       // //directors_officers
       // const directors = entity.entity_details.officer_information.map(
       //   (director) => {
@@ -137,7 +137,7 @@ const AddGISPage = () => {
       // );
 
       // newFormData.directors_or_officers = directors;
-
+      
       setFormData(newFormData);
     }
   }, [entity]);

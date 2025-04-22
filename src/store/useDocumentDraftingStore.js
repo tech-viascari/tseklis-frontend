@@ -12,7 +12,8 @@ const DocumentTypes = [
   // "Affidavit of Loss",
   "Affidavit of Non-Operation",
   "Cover Sheet for Audited Financial Statements",
-  // "SMR - Statement of Management's Responsibility for Financial Statements",
+  "SMR - Statement of Management's Responsibility for Financial Statements",
+  "Waiver of Notice",
 ];
 
 export const appointeeState = {
@@ -96,6 +97,21 @@ const DocumentDataState = {
   contact_person_telephone_number: "",
   contact_person_mobile_number: "",
   contact_person_address: "",
+
+  //SMR
+  audited_years_in_question: "",
+  president_name: "",
+  treasurer_name: "",
+  rdo_number: "",
+  rdo_address: "",
+  rdo_city: "",
+
+  //Waiver of Notice
+  scheduled_date: "",
+  scheduled_time: "",
+  venue: "",
+  stockholders: [],
+
 };
 
 const StatusesState = {
