@@ -1212,7 +1212,7 @@ export const CapitalStructureForm = ({
       </Typography>
       <div className="flex flex-col py-5 gap-8">
         {authCapitalStock(formData, handleOnChange, true, true, "preview")}
-        {stockholdersInformation(
+        {/* {stockholdersInformation(
           formData,
           handleOnChange,
           true,
@@ -1236,7 +1236,7 @@ export const CapitalStructureForm = ({
           "preview",
           formData.paid_up_capital,
           "Paid Up Capital"
-        )}
+        )} */}
       </div>
 
       <DialogComponent
