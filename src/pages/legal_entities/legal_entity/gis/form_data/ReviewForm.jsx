@@ -724,9 +724,12 @@ export const ReviewForm = ({
             data={[
               {
                 name: "Total Assets Based on Latest Audited Financial Statements",
-                value: formatNumberWithCommaAndDecimal(
-                  formData.total_assets_based_on_latest_audited
-                ),
+                value:
+                  formData.total_assets_based_on_latest_audited == ""
+                    ? "N/A"
+                    : formatNumberWithCommaAndDecimal(
+                        formData.total_assets_based_on_latest_audited
+                      ),
               },
             ]}
           />
@@ -809,6 +812,7 @@ export const ReviewForm = ({
                       {formatNumberWithCommaAndDecimal(
                         row.percent_of_ownership
                       )}
+                      %
                     </Typography>
                   );
                 },

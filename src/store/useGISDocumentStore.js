@@ -123,6 +123,40 @@ const affiliationsState = {
   address: "N/A",
 };
 
+const individualState = {
+  is_officer: false,
+  is_stockholder: false,
+  is_beneficial_ownership_declaration: false,
+
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+  nationality: "",
+  current_residential_address: "",
+  tax_id_number: "",
+
+  //officers
+  incorporator: "",
+  board: "",
+  gender: "",
+  stock_holder: "",
+  officer: "",
+  executive_committee: "",
+
+  //stockholders information
+  type: "COMMON",
+  number: "",
+  amount: "",
+  percent_of_ownership: "",
+  amount_paid: "",
+
+  //beneficial ownership declaration
+  date_of_birth: "",
+  // percent_of_ownership: "",
+  type_of_beneficial_owner: "",
+  category_of_beneficial_ownership: "",
+};
+
 const GISDocumentDataState = {
   is_amended: false,
   is_special_meeting: false,
@@ -173,6 +207,7 @@ const GISDocumentDataState = {
     parent: affiliationsState,
     subsidiary_affiliate: [affiliationsState],
   },
+  list_of_individuals: [],
 };
 
 const GISStatusesState = {
@@ -236,6 +271,7 @@ const useGISDocumentStore = create((set) => ({
     foreignSubscribeCapital: foreignSubscribeCapitalState,
     filipinoSubscribeCapital: filipinoSubscribeCapitalState,
     authCapitalStock: authCapitalStockState,
+    individualState: individualState,
   },
   setGISDocuments: (payload) => set({ GISDocuments: payload }),
   setGISDocument: (payload) => set({ GISDocument: payload }),
