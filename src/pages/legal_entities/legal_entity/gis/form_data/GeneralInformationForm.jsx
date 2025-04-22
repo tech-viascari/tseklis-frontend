@@ -7,6 +7,7 @@ import DialogComponent from "../../../../../components/DialogComponent";
 import TableComponent from "../../../../../components/TableComponent";
 import useGISDocumentStore from "../../../../../store/useGISDocumentStore";
 import { HiMinusCircle } from "react-icons/hi2";
+import { formatNumberWithCommaAndDecimal } from "../../../../../utils/global";
 
 export const GeneralInformationForm = ({
   formData,
@@ -46,6 +47,11 @@ export const GeneralInformationForm = ({
     setDirectorsDialog(!directorsDialog);
   };
 
+  const [totalAssetsAFSDialog, setTotalAssetsAFSDialog] = useState(false);
+  const handleTotalAssetsAFSDialog = () => {
+    setTotalAssetsAFSDialog(!totalAssetsAFSDialog);
+  };
+
   const handleSubmit = async () => {
     console.log("submit");
   };
@@ -62,6 +68,7 @@ export const GeneralInformationForm = ({
     setAffiliationsDialog(false);
     setDescribeNatureDialog(false);
     setDirectorsDialog(false);
+    setTotalAssetsAFSDialog(false);
   };
 
   const CompanyDetails = (
@@ -842,6 +849,62 @@ export const GeneralInformationForm = ({
     );
   };
 
+  const totalAssetsBasedOnAFS = (
+    formData,
+    onChange = () => {},
+    disabled = false,
+    showOpen = false,
+    purpose
+  ) => {
+    return (
+      <div className="pb-10">
+        <div className="flex flex-row justify-end items-center">
+          {showOpen && (
+            <ButtonComponent
+              className="py-1 text-gray"
+              variant="outlined"
+              onClick={handleTotalAssetsAFSDialog}
+            >
+              Update Details
+            </ButtonComponent>
+          )}
+        </div>
+        <div className="grid grid-cols-4">
+          <div className="col-span-4 md:col-span-2">
+            {purpose == "update" ? (
+              <InputComponent
+                label="Total Assets Based on Latest Audited Financial Statements"
+                name="total_assets_based_on_latest_audited"
+                required
+                value={formData.total_assets_based_on_latest_audited}
+                onChange={handleOnChange}
+                disabled={disabled}
+                type="number"
+              />
+            ) : (
+              <>
+                <Typography variant="small" className="font-normal text-sm">
+                  Total Assets Based on Latest Audited Financial Statements{" "}
+                  <span className="text-red-500">*</span>
+                </Typography>
+                <div className="bg-light-gray/40 rounded-lg px-3 py-2 mt-2">
+                  <Typography variant="small" className="font-normal text-sm">
+                    {formData.total_assets_based_on_latest_audited == "" ||
+                    formData.total_assets_based_on_latest_audited == 0
+                      ? "N/A"
+                      : formatNumberWithCommaAndDecimal(
+                          formData.total_assets_based_on_latest_audited
+                        )}
+                  </Typography>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (formData.corporate_name != "") {
       setUpdateData(formData);
@@ -865,7 +928,8 @@ export const GeneralInformationForm = ({
         <hr className="text-gray" />
         {describeNature(formData, () => {}, true, true, "preview")}
         <hr className="text-gray" />
-        {directors(formData, () => {}, true, true, "preview")}
+        {/* {directors(formData, () => {}, true, true, "preview")} */}
+        {totalAssetsBasedOnAFS(formData, () => {}, true, true, "preview")}
       </div>
 
       <DialogComponent
@@ -946,6 +1010,37 @@ export const GeneralInformationForm = ({
       >
         <div className="w-full">
           {describeNature(updateData, handleOnChange, false, false, "update")}
+        </div>
+      </DialogComponent>
+
+      <DialogComponent
+        size="lg"
+        dialogName={totalAssetsAFSDialog}
+        handlerDialog={handleTotalAssetsAFSDialog}
+        title="Update Details"
+        footerContent={
+          <div className="flex flex-row items-center justify-end gap-3 w-full">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={handleTotalAssetsAFSDialog}
+            >
+              Cancel
+            </ButtonComponent>
+
+            <ButtonComponent className="bg-secondary" onClick={handleFormSave}>
+              Save
+            </ButtonComponent>
+          </div>
+        }
+      >
+        <div className="w-full">
+          {totalAssetsBasedOnAFS(
+            updateData,
+            handleOnChange,
+            false,
+            false,
+            "update"
+          )}
         </div>
       </DialogComponent>
 

@@ -13,6 +13,7 @@ import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
 import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
 import { ReviewForm } from "./form_data/ReviewForm";
 import axiosInstance from "../../../../utils/axiosHelper";
+import { ListOfIndividualsForm } from "./form_data/ListOfIndividualsForm";
 
 const AddGISPage = () => {
   const { entity_id } = useParams();
@@ -115,27 +116,28 @@ const AddGISPage = () => {
       //alternative_contact_number
       newFormData.alternate_phone_number =
         entity.entity_details.alternative_contact_number;
+      
+      // //directors_officers
+      // const directors = entity.entity_details.officer_information.map(
+      //   (director) => {
+      //     return {
+      //       ...document_state.directorsOrOfficers,
+      //       name: director.officer_name,
+      //       current_residential_address: director.current_residence,
+      //       nationality: director.nationality,
+      //       incorporator: director.incorporator,
+      //       board: director.board,
+      //       gender: director.gender,
+      //       stock_holder: director.stockholder,
+      //       officer: director.officer,
+      //       executive_committee: director.executive_committee,
+      //       tax_id_number: director.tax_identification_number,
+      //     };
+      //   }
+      // );
 
-      //directors_officers
-      const directors = entity.entity_details.officer_information.map(
-        (director) => {
-          return {
-            ...document_state.directorsOrOfficers,
-            name: director.officer_name,
-            current_residential_address: director.current_residence,
-            nationality: director.nationality,
-            incorporator: director.incorporator,
-            board: director.board,
-            gender: director.gender,
-            stock_holder: director.stockholder,
-            officer: director.officer,
-            executive_committee: director.executive_committee,
-            tax_id_number: director.tax_identification_number,
-          };
-        }
-      );
-
-      newFormData.directors_or_officers = directors;
+      // newFormData.directors_or_officers = directors;
+      
       setFormData(newFormData);
     }
   }, [entity]);
@@ -171,8 +173,8 @@ const AddGISPage = () => {
       />
     ),
     getFormState(
-      "Beneficial Ownership Declaration",
-      <BeneficialOwnershipForm
+      "List of Individuals",
+      <ListOfIndividualsForm
         formData={formData}
         setFormData={setFormData}
         errors={errors}

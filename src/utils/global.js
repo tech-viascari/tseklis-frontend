@@ -137,3 +137,38 @@ export const setDocumentTitle = (title) => {
 
 export const limitText = (text, maxLength = 20) =>
   text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+
+export const formatTIN = (input) => {
+
+  //Removes the format function for a while.
+  return input;
+
+  // Allow digits and dashes only
+  const cleaned = input.replace(/[^0-9-]/g, "");
+
+  // Remove all dashes for processing
+  const digits = cleaned.replace(/-/g, "");
+
+  // If only 9 digits, append '000'
+  const padded = digits.length === 9 ? digits + "000" : digits;
+
+  // Slice and format if there are at least 12 digits
+  const match = padded.match(/^(\d{3})(\d{3})(\d{3})(\d{3})$/);
+  if (match) {
+    return `${match[1]}-${match[2]}-${match[3]}-${match[4]}`;
+  }
+
+  // Return cleaned raw input (with manually typed dashes) if not fully formatted
+  return cleaned;
+};
+
+export const formatFullName = (firstName, middleName, lastName) => {
+  if (firstName == "" || lastName == "") {
+    return "";
+  }
+  const formattedMiddleName =
+    middleName == "" ? "" : `${middleName.toUpperCase()}`;
+  const fullName =
+    `${lastName.toUpperCase()}, ${firstName.toUpperCase()} ${formattedMiddleName}`.trim();
+  return fullName;
+};

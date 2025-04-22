@@ -21,6 +21,7 @@ import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
 import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
 import { ReviewForm } from "./form_data/ReviewForm";
 import { HiExclamationCircle } from "react-icons/hi2";
+import { ListOfIndividualsForm } from "./form_data/ListOfIndividualsForm";
 
 const UpdateGISPage = () => {
   const { entity_id, gis_document_id } = useParams();
@@ -180,14 +181,22 @@ const UpdateGISPage = () => {
       />
     ),
     getFormState(
-      "Beneficial Ownership Declaration",
-      <BeneficialOwnershipForm
+      "List of Individuals",
+      <ListOfIndividualsForm
         formData={formData}
         setFormData={setFormData}
         errors={errors}
-        WarningMessage={WarningMessage}
       />
     ),
+    // getFormState(
+    //   "Beneficial Ownership Declaration",
+    //   <BeneficialOwnershipForm
+    //     formData={formData}
+    //     setFormData={setFormData}
+    //     errors={errors}
+    //     WarningMessage={WarningMessage}
+    //   />
+    // ),
     getFormState(
       "Review Information",
       <ReviewForm
@@ -207,7 +216,9 @@ const UpdateGISPage = () => {
         );
         if (response.status == 200) {
           const { gis_document } = response.data;
-
+          if (gis_document.document_data.list_of_individuals == undefined) {
+            gis_document.document_data.list_of_individuals = [];
+          }
           setFormData(gis_document.document_data);
           setGISDocument(gis_document);
         }
