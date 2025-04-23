@@ -1,5 +1,7 @@
 import React from "react";
 import InputComponent from "../../../../../components/InputComponent";
+import { Typography } from "@material-tailwind/react";
+import { ListComponent } from "../../../../../components/ListComponent";
 
 export const WaiverOfNoticeForm = ({ formData, handleOnChange }) => {
   return (
@@ -38,6 +40,14 @@ export const WaiverOfNoticeForm = ({ formData, handleOnChange }) => {
           onChange={handleOnChange}
         />
 
+        <ListComponent data={formData.stockholders} title={"Stockholders/Directors Information"} />
+
+        {/* {formData.stockholders.length > 0 && (
+          <Typography variant="small" className="mt-5 font-medium">
+            Stockholders/Directors Information
+          </Typography>
+        )}
+
         {formData.stockholders.map((stockholder, index) => (
           <InputComponent
             key={index}
@@ -55,8 +65,7 @@ export const WaiverOfNoticeForm = ({ formData, handleOnChange }) => {
             //   });
             // }}
           />
-        ))}
-        
+        ))} */}
       </div>
     </>
   );

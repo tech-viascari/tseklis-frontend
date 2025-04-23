@@ -321,9 +321,56 @@ export const DocumentReviewForm = ({
     );
   };
 
-  // useEffect(() => {
-  //   console.log("Anthony Review Data: ", formData);
-  // }, [formData]);
+  const NoticeOfMeetingComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "With Proxy",
+              value: formData.with_proxy ? "Yes" : "No",
+            },
+            {
+              name: "Company Name",
+              value: formData.corporate_name,
+            },
+            {
+              name: "Event Name",
+              value: formData.nom_event_name,
+            },
+            {
+              name: "Event Date",
+              value: moment(formData.nom_event_date).format("MMMM DD, YYYY"),
+            },
+            {
+              name: "Event Time",
+              value: formData.nom_event_time,
+            },
+            {
+              name: "Event Venue",
+              value: formData.nom_event_venue,
+            },
+            {
+              name: "Corporate Secretary Name",
+              value: formData.nom_corpsec_name,
+            },
+          ]}
+        />
+        <ReviewComponent
+          title="Stockholders"
+          data={formData.stockholders.map((stockholder, index) => ({
+            name: `Stockholder ${index + 1}`,
+            value: stockholder.name,
+          }))}
+        />
+      </>
+    );
+  };
+
+  useEffect(() => {
+    console.log("Anthony Review Data: ", formData);
+  }, [formData]);
 
   return (
     <>
@@ -365,6 +412,7 @@ export const DocumentReviewForm = ({
           <SMRComponent />
         )}
         {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
+        {formData.type === "Notice of Meeting" && (<NoticeOfMeetingComponent />)}
       </div>
     </>
   );

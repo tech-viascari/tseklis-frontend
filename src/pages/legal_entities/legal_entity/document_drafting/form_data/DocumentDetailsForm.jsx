@@ -12,6 +12,7 @@ import { CoverSheetforAFSForm } from "../forms/CoverSheetforAFSForm";
 import { SMRForm } from "../forms/SMRForm";
 import { rdoData } from "../forms/rdoData";
 import { WaiverOfNoticeForm } from "../forms/WaiverOfNoticeForm";
+import { NoticeOfMeeting } from "../forms/NoticeOfMeeting";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -188,6 +189,13 @@ export const DocumentDetailsForm = ({
               handleOnChange={handleOnChange}
             />
           );
+        case "Notice of Meeting":
+          return (
+            <NoticeOfMeeting
+              formData={formData}
+              handleOnChange={handleOnChange}
+            />
+          )
 
         default:
           return (
@@ -214,9 +222,9 @@ export const DocumentDetailsForm = ({
     return <div>{getDocumentForm()}</div>;
   };
 
-// useEffect(() => {
-//   console.log("Document Details anthony: ", formData);
-// }, [formData]);
+useEffect(() => {
+  console.log("Document Details anthony: ", formData);
+}, [formData]);
 
   return (
     <div className="flex flex-col gap-1">
