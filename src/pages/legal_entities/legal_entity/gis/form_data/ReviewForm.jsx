@@ -901,7 +901,7 @@ export const ReviewForm = ({
                 cell: (row) => {
                   return (
                     <Typography className="font-normal text-sm">
-                      {row.date_of_birth}
+                      {formattedDate(row.date_of_birth, true)}
                     </Typography>
                   );
                 },
@@ -921,9 +921,15 @@ export const ReviewForm = ({
                 name: "% of Ownership / % of Voting Rights",
                 selector: (row) => row.percent_of_ownership,
                 cell: (row) => {
+                  if (row.percent_of_ownership == "") {
+                    return;
+                  }
+                  const formattedPercentage = `${formatNumberWithCommaAndDecimal(
+                    Number(row.percent_of_ownership).toFixed(4)
+                  )}%`;
                   return (
                     <Typography className="font-normal text-sm">
-                      {row.percent_of_ownership}
+                      {formattedPercentage}
                     </Typography>
                   );
                 },
