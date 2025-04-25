@@ -74,7 +74,7 @@ export function ListWithIcon({
     setFormData({
       ...formData,
       [targetKey]: formData[targetKey].map((item, i) =>
-        i === index ? { ...item, name: value } : item
+        i === index ? { ...item, name: value, position: "Stockholder" } : item
       ),
     });
   };
