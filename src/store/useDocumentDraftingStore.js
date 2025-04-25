@@ -123,6 +123,7 @@ const DocumentDataState = {
   nom_event_venue: "",
   nom_event_agendas: [],
   nom_corpsec_name: "",
+  nom_proxy_name: "",
   nom_investor: "",
   nom_investor_date_signed: "",
 };
