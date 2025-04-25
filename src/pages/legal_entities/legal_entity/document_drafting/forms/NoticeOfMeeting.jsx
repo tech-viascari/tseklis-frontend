@@ -3,22 +3,7 @@ import InputComponent from "../../../../../components/InputComponent";
 import { radio, Radio, Typography } from "@material-tailwind/react";
 import { ListComponent } from "../../../../../components/ListComponent";
 
-const data = [
-  // {
-  //   name: "Anthony 123",
-  // },
-  // {
-  //   name: "Anthony 345",
-  // },
-  // {
-  //   name: "Anthony 567",
-  // },
-  // {
-  //   name: "Anthony 789",
-  // },
-];
-
-export const NoticeOfMeeting = ({ formData, handleOnChange }) => {
+export const NoticeOfMeeting = ({ formData, setFormData, handleOnChange }) => {
   const [radioChange, setRadioChange] = useState("without_proxy");
 
   return (
@@ -30,14 +15,16 @@ export const NoticeOfMeeting = ({ formData, handleOnChange }) => {
         <div className="flex  justify-between">
           <Radio
             name="proxy"
-            value={radioChange}
-            defaultChecked
+            value={formData.with_proxy}
             label={
               <Typography variant="small" className={`font-normal`}>
                 Without Proxy
               </Typography>
             }
-            onChange={() => setRadioChange("without_proxy")}
+            onChange={() => {
+              setRadioChange("without_proxy");
+              handleOnChange({ target: { name: "with_proxy", value: "without_proxy" } });
+            }}
           />
 
           <Radio
@@ -48,7 +35,10 @@ export const NoticeOfMeeting = ({ formData, handleOnChange }) => {
                 With Proxy
               </Typography>
             }
-            onChange={() => setRadioChange("with_proxy")}
+            onChange={() => {
+              setRadioChange("with_proxy");
+              handleOnChange({ target: { name: "with_proxy", value: "with_proxy" } });
+            }}
           />
         </div>
 
@@ -101,7 +91,23 @@ export const NoticeOfMeeting = ({ formData, handleOnChange }) => {
           onChange={handleOnChange}
         />
 
-        <ListComponent data={formData.stockholders} title={"Stockholders/Directors Information"} />
+        <ListComponent
+          formData={formData}
+          data={formData.stockholders}
+          title={"Stockholders/Directors"}
+          setData={handleOnChange}
+          setFormData={setFormData}
+          targetKey={"stockholders"}
+        />
+
+        <ListComponent
+          formData={formData}
+          data={formData.nom_event_agendas}
+          title={"Event Agendas"}
+          setData={handleOnChange}
+          setFormData={setFormData}
+          targetKey={"nom_event_agendas"}
+        />
 
         {radioChange === "with_proxy" && (
           <>

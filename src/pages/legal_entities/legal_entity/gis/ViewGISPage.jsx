@@ -280,6 +280,7 @@ const ViewGISPage = () => {
 
   useEffect(() => {
     fetchData();
+    //console.log("Anthony GIS Document Stockholders Name: ", GISDocument);
   }, []);
 
   return (

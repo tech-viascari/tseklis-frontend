@@ -162,27 +162,30 @@ export const DocumentReviewForm = ({
           data={[
             {
               name: "SEC Registration Number",
-              value: formData.sec_registration_number,
+              value:
+                formData.sec_registration_number ||
+                "No SEC Registration Number Provided",
             },
             {
               name: "Company Name",
-              value: formData.corporate_name,
+              value: formData.corporate_name || "No Company Name Provided",
             },
             {
               name: "Principal Office",
-              value: formData.office_address,
+              value: formData.office_address || "No Principal Office Provided",
             },
             {
               name: "Form Type",
-              value: formData.form_type,
+              value: formData.form_type || "No Form Type Provided",
             },
             {
               name: "Department Requiring the Report",
-              value: formData.department,
+              value: formData.department || "No Department Provided",
             },
             {
               name: "Secondary License",
-              value: formData.secondary_license,
+              value:
+                formData.secondary_license || "No Secondary License Provided",
             },
           ]}
         />
@@ -254,31 +257,31 @@ export const DocumentReviewForm = ({
           data={[
             {
               name: "Company Name",
-              value: formData.corporate_name,
+              value: formData.corporate_name || "No Company Name Provided",
             },
             {
               name: "Audited Years in Question",
-              value: formData.audited_years_in_question,
+              value: formData.audited_years_in_question || "No Year Provided",
             },
             {
               name: "President Name",
-              value: formData.president_name,
+              value: formData.president_name || "No President Name Provided",
             },
             {
               name: "Treasurer's Name",
-              value: formData.treasurer_name,
+              value: formData.treasurer_name || "No Treasurer Name Provided",
             },
             {
               name: "RDO Number",
-              value: formData.rdo_number,
+              value: formData.rdo_number || "No RDO Number Provided",
             },
             {
               name: "RDO Address",
-              value: formData.rdo_address,
+              value: formData.rdo_address || "No RDO Address Provided",
             },
             {
               name: "RDO City",
-              value: formData.rdo_city,
+              value: formData.rdo_city || "No RDO City Provided",
             },
           ]}
         />
@@ -294,29 +297,44 @@ export const DocumentReviewForm = ({
           data={[
             {
               name: "Company Name",
-              value: formData.corporate_name,
+              value: formData.corporate_name || "No Company Name Provided",
             },
             {
               name: "Scheduled Date of Meeting",
-              value: moment(formData.scheduled_date).format("MMMM DD, YYYY"),
+              value:
+                moment(formData.scheduled_date).format("MMMM DD, YYYY") ||
+                "No Date Provided",
             },
             {
               name: "Scheduled Time of Meeting",
-              value: formData.scheduled_time,
+              value: formData.scheduled_time || "No Time Provided",
             },
             {
               name: "Venue",
-              value: formData.venue,
+              value: formData.venue || "No Venue Provided",
             },
           ]}
         />
-        <ReviewComponent
-          title="Stockholders"
-          data={formData.stockholders.map((stockholder, index) => ({
-            name: `Stockholder ${index + 1}`,
-            value: stockholder.name,
-          }))}
-        />
+
+        {formData.stockholders.length > 0 ? (
+          <ReviewComponent
+            title="Stockholders"
+            data={formData.stockholders.map((stockholder, index) => ({
+              name: `Stockholder ${index + 1}`,
+              value: stockholder.name,
+            }))}
+          />
+        ) : (
+          <ReviewComponent
+            title="Stockholders"
+            data={[
+              {
+                name: "Stockholders",
+                value: "No Stockholder. Please add one.",
+              },
+            ]}
+          />
+        )}
       </>
     );
   };
@@ -333,37 +351,92 @@ export const DocumentReviewForm = ({
             },
             {
               name: "Company Name",
-              value: formData.corporate_name,
+              value: formData.corporate_name || "No Company Name Provided",
             },
             {
               name: "Event Name",
-              value: formData.nom_event_name,
+              value: formData.nom_event_name || "No Event Name Provided",
             },
             {
               name: "Event Date",
-              value: moment(formData.nom_event_date).format("MMMM DD, YYYY"),
+              value:
+                moment(formData.nom_event_date).format("MMMM DD, YYYY") ||
+                "No Event Date Provided",
             },
             {
               name: "Event Time",
-              value: formData.nom_event_time,
+              value: formData.nom_event_time || "No Event Time Provided",
             },
             {
               name: "Event Venue",
-              value: formData.nom_event_venue,
+              value: formData.nom_event_venue || "No Event Venue Provided",
             },
             {
               name: "Corporate Secretary Name",
-              value: formData.nom_corpsec_name,
+              value:
+                formData.nom_corpsec_name ||
+                "No Corporate Secretary Name Provided",
             },
           ]}
         />
-        <ReviewComponent
-          title="Stockholders"
-          data={formData.stockholders.map((stockholder, index) => ({
-            name: `Stockholder ${index + 1}`,
-            value: stockholder.name,
-          }))}
-        />
+
+        {formData.stockholders.length > 0 ? (
+          <ReviewComponent
+            title="Stockholders"
+            data={formData.stockholders.map((stockholder, index) => ({
+              name: `Stockholder ${index + 1}`,
+              value: stockholder.name,
+            }))}
+          />
+        ) : (
+          <ReviewComponent
+            title="Stockholders"
+            data={[
+              {
+                name: "Stockholders",
+                value: "No Stockholder. Please add one.",
+              },
+            ]}
+          />
+        )}
+
+        {formData.nom_event_agendas.length > 0 ? (
+          <ReviewComponent
+            title="Event Agendas"
+            data={formData.nom_event_agendas.map((agenda, index) => ({
+              name: `Event Agenda ${index + 1}`,
+              value: agenda.name,
+            }))}
+          />
+        ) : (
+          <ReviewComponent
+            title="Event Agendas"
+            data={[
+              {
+                name: "Event Agendas",
+                value: "No Event Agenda. Please add one.",
+              },
+            ]}
+          />
+        )}
+
+        {formData.with_proxy === "with_proxy" && (
+          <ReviewComponent
+            title="Investor"
+            data={[
+              {
+                name: "Investor Name",
+                value: formData.nom_investor || "No Investor Name Provided",
+              },
+              {
+                name: "Date Signed",
+                value: moment(formData.nom_investor_date_signed).format(
+                  "MMMM DD, YYYY"
+                ) || "No Date Signed Provided",
+              },
+            ]}
+          />
+        )}
       </>
     );
   };
@@ -412,7 +485,7 @@ export const DocumentReviewForm = ({
           <SMRComponent />
         )}
         {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
-        {formData.type === "Notice of Meeting" && (<NoticeOfMeetingComponent />)}
+        {formData.type === "Notice of Meeting" && <NoticeOfMeetingComponent />}
       </div>
     </>
   );

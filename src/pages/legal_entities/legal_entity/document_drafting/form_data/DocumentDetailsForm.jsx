@@ -186,6 +186,7 @@ export const DocumentDetailsForm = ({
           return (
             <WaiverOfNoticeForm
               formData={formData}
+              setFormData={setFormData}
               handleOnChange={handleOnChange}
             />
           );
@@ -193,6 +194,7 @@ export const DocumentDetailsForm = ({
           return (
             <NoticeOfMeeting
               formData={formData}
+              setFormData={setFormData}
               handleOnChange={handleOnChange}
             />
           )
@@ -222,9 +224,9 @@ export const DocumentDetailsForm = ({
     return <div>{getDocumentForm()}</div>;
   };
 
-useEffect(() => {
-  console.log("Document Details anthony: ", formData);
-}, [formData]);
+// useEffect(() => {
+//   console.log("Document Details anthony: ", formData);
+// }, [formData]);
 
   return (
     <div className="flex flex-col gap-1">
