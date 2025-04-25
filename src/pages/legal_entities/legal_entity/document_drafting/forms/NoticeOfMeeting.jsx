@@ -23,7 +23,9 @@ export const NoticeOfMeeting = ({ formData, setFormData, handleOnChange }) => {
             }
             onChange={() => {
               setRadioChange("without_proxy");
-              handleOnChange({ target: { name: "with_proxy", value: "without_proxy" } });
+              handleOnChange({
+                target: { name: "with_proxy", value: "without_proxy" },
+              });
             }}
           />
 
@@ -37,7 +39,9 @@ export const NoticeOfMeeting = ({ formData, setFormData, handleOnChange }) => {
             }
             onChange={() => {
               setRadioChange("with_proxy");
-              handleOnChange({ target: { name: "with_proxy", value: "with_proxy" } });
+              handleOnChange({
+                target: { name: "with_proxy", value: "with_proxy" },
+              });
             }}
           />
         </div>
@@ -111,6 +115,14 @@ export const NoticeOfMeeting = ({ formData, setFormData, handleOnChange }) => {
 
         {radioChange === "with_proxy" && (
           <>
+            <InputComponent
+              label="Proxy Name"
+              required
+              name="nom_proxy_name"
+              value={formData.nom_proxy_name}
+              onChange={handleOnChange}
+            />
+
             <Typography variant="small" className="mt-5 font-medium">
               Investor Information
             </Typography>
