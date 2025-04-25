@@ -12,6 +12,7 @@ import { CoverSheetforAFSForm } from "../forms/CoverSheetforAFSForm";
 import { SMRForm } from "../forms/SMRForm";
 import { rdoData } from "../forms/rdoData";
 import { WaiverOfNoticeForm } from "../forms/WaiverOfNoticeForm";
+import { NoticeOfMeeting } from "../forms/NoticeOfMeeting";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -185,9 +186,18 @@ export const DocumentDetailsForm = ({
           return (
             <WaiverOfNoticeForm
               formData={formData}
+              setFormData={setFormData}
               handleOnChange={handleOnChange}
             />
           );
+        case "Notice of Meeting":
+          return (
+            <NoticeOfMeeting
+              formData={formData}
+              setFormData={setFormData}
+              handleOnChange={handleOnChange}
+            />
+          )
 
         default:
           return (

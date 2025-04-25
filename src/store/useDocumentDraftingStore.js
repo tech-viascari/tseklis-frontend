@@ -14,6 +14,7 @@ const DocumentTypes = [
   "Cover Sheet for Audited Financial Statements",
   "SMR - Statement of Management's Responsibility for Financial Statements",
   "Waiver of Notice",
+  "Notice of Meeting",
 ];
 
 export const appointeeState = {
@@ -110,8 +111,20 @@ const DocumentDataState = {
   scheduled_date: "",
   scheduled_time: "",
   venue: "",
+
+  //This stockholders is also use for waiver of notice and notice of meeting
   stockholders: [],
 
+  //Notice of Meeting
+  with_proxy: "without_proxy",
+  nom_event_name: "",
+  nom_event_date: "",
+  nom_event_time: "",
+  nom_event_venue: "",
+  nom_event_agendas: [],
+  nom_corpsec_name: "",
+  nom_investor: "",
+  nom_investor_date_signed: "",
 };
 
 const StatusesState = {
