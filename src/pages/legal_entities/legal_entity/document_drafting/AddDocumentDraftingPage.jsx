@@ -111,7 +111,7 @@ const AddDocumentDraftingPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
-        onChange={() => {}}
+        onChange={() => { }}
       />
     ),
     getFormState(
@@ -120,7 +120,7 @@ const AddDocumentDraftingPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
-        onChange={() => {}}
+        onChange={() => { }}
         officers={officers}
         setOfficers={setOfficers}
         selectedOfficer={selectedOfficer}
@@ -132,7 +132,7 @@ const AddDocumentDraftingPage = () => {
         formData={formData}
         setFormData={setFormData}
         errors={errors}
-        onChange={() => {}}
+        onChange={() => { }}
         isPreview={false}
       />
     ),
@@ -145,19 +145,23 @@ const AddDocumentDraftingPage = () => {
       new_form_data.corporate_name = entity.entity_details.company_name;
       new_form_data.corporate_tin = entity.entity_details.corporate_tin;
       new_form_data.office_address = entity.entity_details.company_address;
-      new_form_data.sec_registration_number = entity.entity_details.sec_registration_number;
+      new_form_data.sec_registration_number =
+        entity.entity_details.sec_registration_number;
 
       //for cover sheet
       new_form_data.department = "CRMD";
       new_form_data.secondary_license = "N/A";
-      new_form_data.official_email_address = entity.entity_details.official_email;
+      new_form_data.official_email_address =
+        entity.entity_details.official_email;
       new_form_data.contact_person_email = entity.entity_details.official_email;
 
       //for cover sheet - company info
-      new_form_data.telephone_number = entity.entity_details.official_contact_number;
-       // selectedCompany.latestGIS.telephone_number;
-      new_form_data.official_mobile_number = entity.entity_details.official_contact_number;
-        //selectedCompany.latestGIS.official_mobile_number;
+      new_form_data.telephone_number =
+        entity.entity_details.official_contact_number;
+      // selectedCompany.latestGIS.telephone_number;
+      new_form_data.official_mobile_number =
+        entity.entity_details.official_contact_number;
+      //selectedCompany.latestGIS.official_mobile_number;
       // new_form_data.number_of_shareholders =
       //  // selectedCompany.latestGIS.number_of_shareholders;
       // new_form_data.date_of_annual_meeting =
@@ -189,6 +193,31 @@ const AddDocumentDraftingPage = () => {
         }
       );
 
+      //for Waiver of Notice and Notice of Meeting
+      if (entity.latest_GIS.length != 0) {
+        let stockholders_name =
+          entity.latest_GIS[0].document_data.stock_holders_information.information.map(
+            (stockholder) => ({
+              name: stockholder.name,
+              position: "Stockholder",
+            })
+          );
+
+        let mapped_stockholders_name = stockholders_name.map((stockholder) => ({
+          name: stockholder.name,
+          position: "Stockholder",
+        }));
+
+      new_form_data.stockholders = mapped_stockholders_name;
+
+
+      //for Waiver of Notice - Corporate Secretary
+      let corp_sec_name = entity.latest_GIS[0].document_data.corporate_secretary;
+      new_form_data.nom_corpsec_name = corp_sec_name;
+      } else {
+        new_form_data.stockholders = [];
+      }
+
       //stockholder information
       // const stockholder =
       //   selectedCompany.latestGIS.stock_holders_information.information.map(
@@ -208,7 +237,6 @@ const AddDocumentDraftingPage = () => {
       //   );
       // new_form_data.stockholders_data = stockholder;
 
-
       setOfficers(officers);
 
       setFormData(new_form_data);
@@ -217,28 +245,8 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
-   // console.log("Anthony Add Data: ", formData);
+   // console.log("Anthony Add Data Entity: ", entity);
   }, [entity]);
-
-  // useEffect(() => {
-    
-  //   if (GISDocument.entity_id == entity_id) {
-  //     let stockholders_name = GISDocument.document_data.stock_holders_information.information.map((stockholder) => ({
-  //       name: stockholder.name,
-  //       position: "Stockholder",
-  //     }));
-
-  //     // setFormData((prevState) => ({
-  //     //   ...prevState,
-  //     //   stockholders: stockholders_name.map((stockholder) => ({
-  //     //     name: stockholder.name,
-  //     //     position: "Stockholder",
-  //     //   })),
-  //     // }));
-  //   }
-  // }
-  // , []);
-
 
   return (
     <>

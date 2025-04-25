@@ -111,10 +111,12 @@ const DocumentDataState = {
   scheduled_date: "",
   scheduled_time: "",
   venue: "",
+
+  //This stockholders is also use for waiver of notice and notice of meeting
   stockholders: [],
 
   //Notice of Meeting
-  nom_stockholders_directors: [],
+  with_proxy: "without_proxy",
   nom_event_name: "",
   nom_event_date: "",
   nom_event_time: "",
@@ -123,7 +125,6 @@ const DocumentDataState = {
   nom_corpsec_name: "",
   nom_investor: "",
   nom_investor_date_signed: "",
-
 };
 
 const StatusesState = {

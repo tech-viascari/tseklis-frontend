@@ -7,7 +7,10 @@ import {
   IconButton,
   Input,
   Typography,
+  ListItemPrefix,
+  Button,
 } from "@material-tailwind/react";
+import ButtonComponent from "./ButtonComponent";
 
 function TrashIcon() {
   return (
@@ -26,13 +29,68 @@ function TrashIcon() {
   );
 }
 
-export function ListWithIcon({ data, title }) {
+function WarningIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        fillRule="evenodd"
+        d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+        clipRule="evenodd"
+        className="text-red-300"
+      />
+    </svg>
+  );
+}
+
+export function ListWithIcon({
+  formData,
+  data,
+  title,
+  setData,
+  setFormData,
+  targetKey,
+}) {
+  const handleAddRow = () => {
+    let appendName = formData[targetKey];
+    appendName.push({ name: "" });
+    setFormData({ ...formData, [targetKey]: appendName });
+  };
+
+  const handleDeleteRow = (index) => {
+    let appendName = formData[targetKey];
+    appendName.splice(index, 1);
+    setFormData({ ...formData, [targetKey]: appendName });
+  };
+
+  const handleOnChange = (e, index) => {
+    const { value, name } = e.target;
+    let appendName = formData[targetKey][index];
+    appendName.name = value;
+    setFormData({
+      ...formData,
+      [targetKey]: formData[targetKey].map((item, i) =>
+        i === index ? { ...item, name: value } : item
+      ),
+    });
+  };
+
   return (
     <>
       <List className="w-full gap-3 p-0">
-        <Typography variant="small" className="mt-5 font-medium">
+        <div className="flex flex-row justify-between items-center mt-5">
+          <Typography variant="small" className="font-medium">
             {title}
-        </Typography>
+          </Typography>
+
+          <ButtonComponent className="bg-secondary" onClick={handleAddRow}>
+            Add row
+          </ButtonComponent>
+        </div>
         {data.length > 0 && (
           <>
             {data.map((item, index) => (
@@ -42,25 +100,15 @@ export function ListWithIcon({ data, title }) {
                 key={index}
               >
                 <Input
-                  label={`Stockholder/Director ${index + 1}`}
+                  label={`${title} ${index + 1}`}
                   required
                   name={`name_${index}`}
                   value={item.name}
                   onChange={(e) => {
-                    const updatedData = [...data];
-                    updatedData[index].name = e.target.value;
-                    //setData(updatedData);
+                    handleOnChange(e, index);
                   }}
                 />
-                <ListItemSuffix
-                  onClick={
-                    () => {
-                      const updatedData = [...data];
-                      updatedData.splice(index, 1);
-                    }
-                    //setData(updatedData);
-                  }
-                >
+                <ListItemSuffix onClick={() => handleDeleteRow(index)}>
                   <IconButton variant="text" color="blue-gray">
                     <TrashIcon />
                   </IconButton>
@@ -71,34 +119,40 @@ export function ListWithIcon({ data, title }) {
         )}
       </List>
       {data.length === 0 && (
-        <div className="flex flex-1 w-full justify-center items-center gap-3">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-              clipRule="evenodd"
-              className="text-red-300"
-            />
-          </svg>
+        <>
+          <ListItem ripple={true} className="w-full flex justify-center">
+            <ListItemPrefix>
+              <WarningIcon />
+            </ListItemPrefix>
 
-          <Typography variant="small" className="font-medium">
-            No stockholders/directors . Please add stockholders.
-          </Typography>
-        </div>
+            <Typography variant="small" className="font-medium">
+              No {title.toLowerCase()} available.
+            </Typography>
+          </ListItem>
+        </>
       )}
     </>
   );
 }
 
-export const ListComponent = ({ data, title }) => {
+export const ListComponent = ({
+  formData,
+  data,
+  title,
+  setData,
+  setFormData,
+  targetKey,
+}) => {
   return (
     <>
-      <ListWithIcon data={data} title={title} />
+      <ListWithIcon
+        formData={formData}
+        data={data}
+        title={title}
+        setData={setData}
+        setFormData={setFormData}
+        targetKey={targetKey}
+      />
     </>
   );
 };

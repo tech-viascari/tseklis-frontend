@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import InputComponent from "../../../../../components/InputComponent";
 import { Typography } from "@material-tailwind/react";
 import { ListComponent } from "../../../../../components/ListComponent";
 
-export const WaiverOfNoticeForm = ({ formData, handleOnChange }) => {
+export const WaiverOfNoticeForm = ({ formData, handleOnChange, setFormData }) => {
+
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -40,32 +41,7 @@ export const WaiverOfNoticeForm = ({ formData, handleOnChange }) => {
           onChange={handleOnChange}
         />
 
-        <ListComponent data={formData.stockholders} title={"Stockholders/Directors Information"} />
-
-        {/* {formData.stockholders.length > 0 && (
-          <Typography variant="small" className="mt-5 font-medium">
-            Stockholders/Directors Information
-          </Typography>
-        )}
-
-        {formData.stockholders.map((stockholder, index) => (
-          <InputComponent
-            key={index}
-            label={`Stockholder ${index + 1}`}
-            required
-            name={`stockholder_${index}`}
-            value={stockholder.name}
-            onChange={handleOnChange}
-            // value={stockholder}
-            // onChange={(e) => {
-            //   const updatedStockholders = [...formData.stockholders];
-            //   updatedStockholders[index] = e.target.value;
-            //   handleOnChange({
-            //     target: { name: "stockholders", value: updatedStockholders },
-            //   });
-            // }}
-          />
-        ))} */}
+        <ListComponent formData={formData} data={formData.stockholders} title={"Stockholders/Directors"} setData={handleOnChange} setFormData={setFormData} targetKey={"stockholders"} />
       </div>
     </>
   );
