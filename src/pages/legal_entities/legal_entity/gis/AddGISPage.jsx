@@ -13,6 +13,7 @@ import { CapitalStructureForm } from "./form_data/CapitalStructureForm";
 import { BeneficialOwnershipForm } from "./form_data/BeneficialOwnershipForm";
 import { ReviewForm } from "./form_data/ReviewForm";
 import axiosInstance from "../../../../utils/axiosHelper";
+import { ListOfIndividualsForm } from "./form_data/ListOfIndividualsForm";
 
 const AddGISPage = () => {
   const { entity_id } = useParams();
@@ -83,59 +84,74 @@ const AddGISPage = () => {
     setPageIsLoading(false);
   };
 
+  const updateFromEntityDetails = () => {
+    let newFormData = { ...formData };
+
+    //company_name
+    newFormData.corporate_name = entity.entity_details.company_name;
+
+    //corporate_tin
+    newFormData.corporate_tin = entity.entity_details.corporate_tin;
+
+    //sec_registration_number
+    newFormData.sec_registration_number =
+      entity.entity_details.sec_registration_number;
+
+    //company_address
+    newFormData.complete_principal_office_address =
+      entity.entity_details.company_address;
+
+    //official_email
+    newFormData.official_email_address = entity.entity_details.official_email;
+
+    //alternative_email
+    newFormData.alternate_email_address =
+      entity.entity_details.alternative_email;
+
+    //official_contact_number
+    newFormData.official_mobile_number =
+      entity.entity_details.official_contact_number;
+
+    //alternative_contact_number
+    newFormData.alternate_phone_number =
+      entity.entity_details.alternative_contact_number;
+
+    // //directors_officers
+    // const directors = entity.entity_details.officer_information.map(
+    //   (director) => {
+    //     return {
+    //       ...document_state.directorsOrOfficers,
+    //       name: director.officer_name,
+    //       current_residential_address: director.current_residence,
+    //       nationality: director.nationality,
+    //       incorporator: director.incorporator,
+    //       board: director.board,
+    //       gender: director.gender,
+    //       stock_holder: director.stockholder,
+    //       officer: director.officer,
+    //       executive_committee: director.executive_committee,
+    //       tax_id_number: director.tax_identification_number,
+    //     };
+    //   }
+    // );
+
+    // newFormData.directors_or_officers = directors;
+
+    return newFormData;
+  };
+
   useEffect(() => {
     if (entity.entity_id != "") {
       let newFormData = { ...formData };
-
-      //company_name
-      newFormData.corporate_name = entity.entity_details.company_name;
-
-      //corporate_tin
-      newFormData.corporate_tin = entity.entity_details.corporate_tin;
-
-      //sec_registration_number
-      newFormData.sec_registration_number =
-        entity.entity_details.sec_registration_number;
-
-      //company_address
-      newFormData.complete_principal_office_address =
-        entity.entity_details.company_address;
-
-      //official_email
-      newFormData.official_email_address = entity.entity_details.official_email;
-
-      //alternative_email
-      newFormData.alternate_email_address =
-        entity.entity_details.alternative_email;
-
-      //official_contact_number
-      newFormData.official_mobile_number =
-        entity.entity_details.official_contact_number;
-
-      //alternative_contact_number
-      newFormData.alternate_phone_number =
-        entity.entity_details.alternative_contact_number;
-
-      //directors_officers
-      const directors = entity.entity_details.officer_information.map(
-        (director) => {
-          return {
-            ...document_state.directorsOrOfficers,
-            name: director.officer_name,
-            current_residential_address: director.current_residence,
-            nationality: director.nationality,
-            incorporator: director.incorporator,
-            board: director.board,
-            gender: director.gender,
-            stock_holder: director.stockholder,
-            officer: director.officer,
-            executive_committee: director.executive_committee,
-            tax_id_number: director.tax_identification_number,
-          };
+      if (entity.latest_GIS.length != 0) {
+        const latestGIS = entity.latest_GIS[0].document_data;
+        if (latestGIS.list_of_individuals == undefined) {
+          latestGIS.list_of_individuals = [];
         }
-      );
-
-      newFormData.directors_or_officers = directors;
+        newFormData = latestGIS;
+      } else {
+        newFormData = updateFromEntityDetails();
+      }
       setFormData(newFormData);
     }
   }, [entity]);
@@ -171,8 +187,8 @@ const AddGISPage = () => {
       />
     ),
     getFormState(
-      "Beneficial Ownership Declaration",
-      <BeneficialOwnershipForm
+      "List of Individuals",
+      <ListOfIndividualsForm
         formData={formData}
         setFormData={setFormData}
         errors={errors}

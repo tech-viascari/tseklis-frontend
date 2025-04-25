@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
 const OfficerTypes = [
- {label: "Chairman", value: "Chairman"},
- {label: "Director", value: "Director"},
- {label: "President", value: "President"},
- {label: "Vice President", value: "Vice President"},
- {label: "Corporate Secretary", value: "Corporate Secretary"},
- {label: "Treasurer", value: "Treasurer"},
- {label: "Compliance Officer", value: "Compliance Officer"},
- {label: "Associated Person", value: "Associated Person"},
- {label: "Not Applicable", value: "N/A"},
+  { label: "Chairman", value: "Chairman" },
+  { label: "Director", value: "Director" },
+  { label: "President", value: "President" },
+  { label: "Vice President", value: "Vice President" },
+  { label: "Corporate Secretary", value: "Corporate Secretary" },
+  { label: "Treasurer", value: "Treasurer" },
+  { label: "Compliance Officer", value: "Compliance Officer" },
+  { label: "Associated Person", value: "Associated Person" },
+  { label: "Not Applicable", value: "N/A" },
 ];
 
 const OfficerInformationState = {
@@ -42,7 +42,6 @@ const CompanyTypes = [
 ];
 
 const LegalEntityDetailsState = {
-
   //corporation muna ito
   business_type: "Corporation",
   client_type: "Viascari Group of Companies",
@@ -66,15 +65,15 @@ const GdriveFolderState = {
   by_laws: "",
   bir_cor: "",
   lgu_business_permit: "",
-}
-
+};
 
 const LegalEntityState = {
   entity_id: "",
   entity_details: LegalEntityDetailsState,
   entity_logo: "",
   status: "Active",
-  gdrive_folder: GdriveFolderState, 
+  gdrive_folder: GdriveFolderState,
+  latest_GIS: [],
   created_at: "",
   updated_at: "",
 };
@@ -99,7 +98,8 @@ const useLegalEntities = create((set) => ({
   setEntity: (payload) => set({ entity: payload }),
   filterEntities: (payload) => {
     let viascari_group_of_companies = payload.filter(
-      (entity) => entity.entity_details.client_type === "Viascari Group of Companies"
+      (entity) =>
+        entity.entity_details.client_type === "Viascari Group of Companies"
     );
 
     let computershare_clients = payload.filter(

@@ -41,6 +41,7 @@ const ViewGISPage = () => {
 
   const [remarks, setRemarks] = useState("");
   const [dateReceived, setDateReceived] = useState("");
+  const [errors, setErrors] = useState({ date_received: "" });
 
   const [status, setStatus] = useState("");
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
@@ -71,6 +72,14 @@ const ViewGISPage = () => {
   const navigate = useNavigate();
 
   const toggleChangeStatus = async () => {
+    if (dateReceived == "" && status == "Completed") {
+      setErrors({
+        ...errors,
+        date_received: "Date Received is required.",
+      });
+      return;
+    }
+
     const formData = {
       document_data: GISDocument.document_data,
       timestamp: {
@@ -271,7 +280,7 @@ const ViewGISPage = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("Anthony GIS Document Stockholders Name: ", GISDocument);
+    //console.log("Anthony GIS Document Stockholders Name: ", GISDocument);
   }, []);
 
   return (
@@ -483,8 +492,20 @@ const ViewGISPage = () => {
                 value={dateReceived}
                 onChange={(e) => {
                   setDateReceived(e.target.value);
+                  if (e.target.value == "") {
+                    setErrors({
+                      ...errors,
+                      date_received: "Date Received is required.",
+                    });
+                  } else {
+                    setErrors({
+                      ...errors,
+                      date_received: "",
+                    });
+                  }
                 }}
                 type="date"
+                error_message={errors.date_received}
               />
             )}
 
