@@ -71,39 +71,39 @@ const LegalEntitySideBar = () => {
           submenus: [],
           isExpanded: false,
         },
-        {
-          icon: <HiMiniChatBubbleLeftRight className="text-xl" />,
-          title: "Board Meetings",
-          goto: null,
-          isExpanded: true,
-          submenus: [
-            {
-              icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Notice of Meeting",
-              goto: `legal-entities/v/${entity_id}/notice-of-meeting`,
-            },
-            {
-              icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Minutes of Meeting",
-              goto: `legal-entities/v/${entity_id}/minutes-of-meeting`,
-            },
-            {
-              icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Board Resolutions",
-              goto: `legal-entities/v/${entity_id}/board-resolutions`,
-            },
-            {
-              icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Secretary Certificate",
-              goto: `legal-entities/v/${entity_id}/secretary-certificate`,
-            },
-            {
-              icon: <HiMiniUserGroup className="text-xl" />,
-              title: "Treasurer Certificate",
-              goto: `legal-entities/v/${entity_id}/treasurer-certificate`,
-            },
-          ],
-        },
+        // {
+        //   icon: <HiMiniChatBubbleLeftRight className="text-xl" />,
+        //   title: "Board Meetings",
+        //   goto: null,
+        //   isExpanded: true,
+        //   submenus: [
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Notice of Meeting",
+        //       goto: `legal-entities/v/${entity_id}/notice-of-meeting`,
+        //     },
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Minutes of Meeting",
+        //       goto: `legal-entities/v/${entity_id}/minutes-of-meeting`,
+        //     },
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Board Resolutions",
+        //       goto: `legal-entities/v/${entity_id}/board-resolutions`,
+        //     },
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Secretary Certificate",
+        //       goto: `legal-entities/v/${entity_id}/secretary-certificate`,
+        //     },
+        //     {
+        //       icon: <HiMiniUserGroup className="text-xl" />,
+        //       title: "Treasurer Certificate",
+        //       goto: `legal-entities/v/${entity_id}/treasurer-certificate`,
+        //     },
+        //   ],
+        // },
       ],
     },
   ];
