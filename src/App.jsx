@@ -168,7 +168,7 @@ const App = () => {
               element={<UpdateDocumentDraftingPage />}
             />
 
-            <Route
+            {/* <Route
               path="/legal-entities/v/:entity_id/notice-of-meeting"
               element={<NoticeOfMeetingPage />}
             />
@@ -187,7 +187,7 @@ const App = () => {
             <Route
               path="/legal-entities/v/:entity_id/treasurer-certificate"
               element={<TreasurerCertificatePage />}
-            />
+            /> */}
           </Route>
 
           <Route path="/login" element={<LoginPage />} />
