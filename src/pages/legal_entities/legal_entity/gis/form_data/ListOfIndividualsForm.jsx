@@ -2067,6 +2067,10 @@ export const ListOfIndividualsForm = ({
                         name: "Assistant Corporate Secretary",
                         value: "Assistant Corporate Secretary",
                       },
+                      {
+                        name: "Assistant Corporate Secretary/Treasurer",
+                        value: "Assistant Corporate Secretary/Treasurer",
+                      },
                       { name: "N/A - Not Applicable", value: "N/A" },
                     ]}
                     onSelectChange={(value) => {
