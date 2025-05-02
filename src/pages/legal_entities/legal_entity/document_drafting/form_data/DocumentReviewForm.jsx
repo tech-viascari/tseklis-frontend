@@ -260,7 +260,7 @@ export const DocumentReviewForm = ({
               value: formData.corporate_name || "No Company Name Provided",
             },
             {
-              name: "Audited Years in Question",
+              name: "Current Year Audited",
               value: formData.audited_years_in_question || "No Year Provided",
             },
             {
@@ -282,6 +282,74 @@ export const DocumentReviewForm = ({
             {
               name: "RDO City",
               value: formData.rdo_city || "No RDO City Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  const SMRBIRComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Current Year Audited",
+              value: formData.smr_bir_year_audited || "No Year Provided",
+            },
+            {
+              name: "President Name",
+              value: formData.president_name || "No President Name Provided",
+            },
+            {
+              name: "Treasurer's Name",
+              value: formData.treasurer_name || "No Treasurer Name Provided",
+            },
+            {
+              name: "RDO Number",
+              value: formData.smr_bir_rdo_number || "No RDO Number Provided",
+            },
+            {
+              name: "RDO Address",
+              value: formData.smr_bir_rdo_address || "No RDO Address Provided",
+            },
+            {
+              name: "RDO City",
+              value: formData.smr_bir_rdo_city || "No RDO City Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  const SMRSECComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Current Year Audited",
+              value: formData.smr_bir_year_audited || "No Year Provided",
+            },
+            {
+              name: "President Name",
+              value: formData.president_name || "No President Name Provided",
+            },
+            {
+              name: "Treasurer's Name",
+              value: formData.treasurer_name || "No Treasurer Name Provided",
             },
           ]}
         />
@@ -430,9 +498,10 @@ export const DocumentReviewForm = ({
               },
               {
                 name: "Date Signed",
-                value: moment(formData.nom_investor_date_signed).format(
-                  "MMMM DD, YYYY"
-                ) || "No Date Signed Provided",
+                value:
+                  moment(formData.nom_investor_date_signed).format(
+                    "MMMM DD, YYYY"
+                  ) || "No Date Signed Provided",
               },
             ]}
           />
@@ -441,9 +510,9 @@ export const DocumentReviewForm = ({
     );
   };
 
-  useEffect(() => {
-    console.log("Anthony Review Data: ", formData);
-  }, [formData]);
+  // useEffect(() => {
+  //   console.log("Anthony Review Data: ", formData);
+  // }, [formData]);
 
   return (
     <>
@@ -480,10 +549,9 @@ export const DocumentReviewForm = ({
         {formData.type === "Cover Sheet for Audited Financial Statements" && (
           <CoverSheetforAFSComponent />
         )}
-        {formData.type ===
-          "SMR - Statement of Management's Responsibility for Financial Statements" && (
-          <SMRComponent />
-        )}
+        {formData.type === "SMR for BIR and SEC" && <SMRComponent />}
+        {formData.type === "SMR for BIR" && <SMRBIRComponent />}
+        {formData.type === "SMR for SEC" && <SMRSECComponent />}
         {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
         {formData.type === "Notice of Meeting" && <NoticeOfMeetingComponent />}
       </div>

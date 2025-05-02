@@ -1,14 +1,8 @@
 import React from "react";
 import InputComponent from "../../../../../components/InputComponent";
-import SelectComponent from "../../../../../components/SelectComponent";
-import { Checkbox, Input, Typography } from "@material-tailwind/react";
+import { Typography, Input, Checkbox } from "@material-tailwind/react";
 
-export const SMRForm = ({
-  formData,
-  handleOnChange,
-  rdoAddressOption,
-  handleRDOChange,
-}) => {
+export const SMR_SECForm = ({formData, handleOnChange}) => {
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -26,8 +20,8 @@ export const SMRForm = ({
               Current Year Audited <span className="text-red-400">*</span>
             </Typography>
             <Input
-              name="audited_years_in_question"
-              value={formData.audited_years_in_question}
+              name="smr_sec_year_audited"
+              value={formData.smr_sec_year_audited}
               onChange={handleOnChange}
             />
           </div>
@@ -39,9 +33,9 @@ export const SMRForm = ({
             onChange={() => {
               handleOnChange({
                 target: {
-                  name: "audited_years_in_question",
+                  name: "smr_sec_year_audited",
                   value:
-                    formData.audited_years_in_question ===
+                    formData.smr_sec_year_audited ===
                     "December 31, 2024 and 2023"
                       ? "December 31, 2024"
                       : "December 31, 2024 and 2023",
@@ -49,8 +43,7 @@ export const SMRForm = ({
               });
             }}
             checked={
-              formData.audited_years_in_question ===
-              "December 31, 2024 and 2023"
+              formData.smr_sec_year_audited === "December 31, 2024 and 2023"
             }
           />
         </div>
@@ -68,29 +61,6 @@ export const SMRForm = ({
           required
           name="treasurer_name"
           value={formData.treasurer_name}
-          onChange={handleOnChange}
-        />
-
-        <SelectComponent
-          label="RDO Number"
-          options={rdoAddressOption}
-          value={formData.rdo_number}
-          onSelectChange={handleRDOChange}
-        />
-
-        <InputComponent
-          label="RDO Address"
-          required
-          name="rdo_address"
-          value={formData.rdo_address}
-          onChange={handleOnChange}
-        />
-
-        <InputComponent
-          label="RDO (District / City) / Province"
-          required
-          name="rdo_city"
-          value={formData.rdo_city}
           onChange={handleOnChange}
         />
       </div>

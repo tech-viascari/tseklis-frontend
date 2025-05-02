@@ -12,7 +12,9 @@ const DocumentTypes = [
   // "Affidavit of Loss",
   "Affidavit of Non-Operation",
   "Cover Sheet for Audited Financial Statements",
-  "SMR - Statement of Management's Responsibility for Financial Statements",
+  "SMR for BIR and SEC",
+  "SMR for BIR",
+  "SMR for SEC",
   "Waiver of Notice",
   "Notice of Meeting",
 ];
@@ -99,13 +101,22 @@ const DocumentDataState = {
   contact_person_mobile_number: "",
   contact_person_address: "",
 
-  //SMR
-  audited_years_in_question: "",
+  //SMR for Both BIR and SEC
+  audited_years_in_question: "December 31, 2024",
   president_name: "",
   treasurer_name: "",
   rdo_number: "",
   rdo_address: "",
   rdo_city: "",
+
+  // SMR for BIR
+  smr_bir_rdo_number: "",
+  smr_bir_rdo_address: "",
+  smr_bir_rdo_city: "",
+  smr_bir_year_audited: "December 31, 2024",
+
+  // SMR for SEC
+  smr_sec_year_audited: "December 31, 2024",
 
   //Waiver of Notice
   scheduled_date: "",
