@@ -13,6 +13,8 @@ import { SMRForm } from "../forms/SMRForm";
 import { rdoData } from "../forms/rdoData";
 import { WaiverOfNoticeForm } from "../forms/WaiverOfNoticeForm";
 import { NoticeOfMeeting } from "../forms/NoticeOfMeeting";
+import { SMR_BIRForm } from "../forms/SMR_BIRForm";
+import { SMR_SECForm } from "../forms/SMR_SECForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -141,6 +143,16 @@ export const DocumentDetailsForm = ({
       });
     };
 
+    const handleRDOBIRChange = (e) => {
+      const selectedRDO = rdoData.find((rdo) => rdo.rdo_code === e);
+      setFormData({
+        ...formData,
+        smr_bir_rdo_number: selectedRDO.rdo_code,
+        smr_bir_rdo_address: selectedRDO.rdo_address,
+        smr_bir_rdo_city: selectedRDO.rdo_city,
+      });
+    }
+
     const getDocumentForm = () => {
       switch (formData.type) {
         case "Certificate of Gross Sales/Receipts":
@@ -173,13 +185,30 @@ export const DocumentDetailsForm = ({
               handleOnChange={handleOnChange}
             />
           );
-        case "SMR - Statement of Management's Responsibility for Financial Statements":
+        case "SMR for BIR and SEC":
           return (
             <SMRForm
               formData={formData}
               handleOnChange={handleOnChange}
               rdoAddressOption={rdoAddressOption}
               handleRDOChange={handleRDOChange}
+            />
+          );
+        case "SMR for BIR":
+          return (
+            <SMR_BIRForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+              rdoAddressOption={rdoAddressOption}
+              handleRDOBIRChange={handleRDOBIRChange}
+            />
+          );
+        case "SMR for SEC":
+          return (
+            <SMR_SECForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+              rdoAddressOption={rdoAddressOption}
             />
           );
         case "Waiver of Notice":
@@ -197,7 +226,7 @@ export const DocumentDetailsForm = ({
               setFormData={setFormData}
               handleOnChange={handleOnChange}
             />
-          )
+          );
 
         default:
           return (
@@ -224,9 +253,9 @@ export const DocumentDetailsForm = ({
     return <div>{getDocumentForm()}</div>;
   };
 
-// useEffect(() => {
-//   console.log("Document Details anthony: ", formData);
-// }, [formData]);
+  // useEffect(() => {
+  //   console.log("Document Details anthony: ", formData);
+  // }, [formData]);
 
   return (
     <div className="flex flex-col gap-1">
@@ -235,7 +264,7 @@ export const DocumentDetailsForm = ({
       </Typography>
 
       <Typography variant="small" className="font-bold text-md">
-        Document Details
+        Document Details - {formData.type}
       </Typography>
 
       <div className="flex flex-col py-5 gap-8">
