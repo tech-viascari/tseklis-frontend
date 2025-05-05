@@ -17,6 +17,7 @@ const DocumentTypes = [
   "SMR for SEC",
   "Waiver of Notice",
   "Notice of Meeting",
+  "Report on Non-holding of Annual Stockholders' Meeting",
 ];
 
 export const appointeeState = {
@@ -137,6 +138,9 @@ const DocumentDataState = {
   nom_proxy_name: "",
   nom_investor: "",
   nom_investor_date_signed: "",
+
+  //Report on Non-holding of Annual Stockholders' Meeting
+  rnhasm_reason: "",
 };
 
 const StatusesState = {
