@@ -510,6 +510,63 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const RNHASComponent = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "SEC Registration Number",
+              value:
+                formData.sec_registration_number ||
+                "No SEC Registration Number Provided",
+            },
+            {
+              name: "Date of Annual Meeting",
+              value:
+                moment(formData.date_of_annual_meeting).format(
+                  "MMMM DD, YYYY"
+                ) || "No Date Provided",
+            },
+            {
+              name: "Reason for Non-Holding of Annual Meeting",
+              value:
+                formData.rnhasm_reason ||
+                "No Reason for Non-Holding of Annual Meeting Provided",
+            },
+          ]}
+        />
+
+        <ReviewComponent
+          title="Corporate Secretary / Authorized Representative Information"
+          data={[
+            {
+              name: "Corporate Secretary Name",
+              value:
+                formData.corp_sec || "No Corporate Secretary Name Provided",
+            },
+            {
+              name: "Official Contact Email",
+              value:
+                formData.official_email_address || "No Official Contact Email Provided",
+            },
+            {
+              name: "Official Contact Mobile Number",
+              value:
+                formData.official_mobile_number ||
+                "No Official Contact Number Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   // useEffect(() => {
   //   console.log("Anthony Review Data: ", formData);
   // }, [formData]);
@@ -554,6 +611,10 @@ export const DocumentReviewForm = ({
         {formData.type === "SMR for SEC" && <SMRSECComponent />}
         {formData.type === "Waiver of Notice" && <WaiverOfNoticeComponent />}
         {formData.type === "Notice of Meeting" && <NoticeOfMeetingComponent />}
+        {formData.type ===
+          "Report on Non-holding of Annual Stockholders' Meeting" && (
+          <RNHASComponent />
+        )}
       </div>
     </>
   );
