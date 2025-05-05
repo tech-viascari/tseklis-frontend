@@ -15,6 +15,7 @@ import { WaiverOfNoticeForm } from "../forms/WaiverOfNoticeForm";
 import { NoticeOfMeeting } from "../forms/NoticeOfMeeting";
 import { SMR_BIRForm } from "../forms/SMR_BIRForm";
 import { SMR_SECForm } from "../forms/SMR_SECForm";
+import { RNHASMForm } from "../forms/RNHASMForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -108,6 +109,19 @@ export const DocumentDetailsForm = ({
     }
   });
 
+  const rnhasmReasons = [
+    { name: "No Quorum", value: "The corporation failed to achieve quorum on the scheduled date, and the board has not yet determined a new date for the rescheduled meeting."},
+    { name: "Ongoing Deliberations", value: "Deliberations are ongoing regarding the rescheduling of the meeting due to "},
+    { name: "Other Reasons", value: "[Please put your reason here and delete this text]"},
+  ];
+
+  const rnhasmReasonOption = rnhasmReasons.map((reason) => {
+    return {
+      name: reason.name,
+      value: reason.value,
+    };
+  });
+
   const DocumentFormComponent = (
     formData,
     officers,
@@ -151,7 +165,16 @@ export const DocumentDetailsForm = ({
         smr_bir_rdo_address: selectedRDO.rdo_address,
         smr_bir_rdo_city: selectedRDO.rdo_city,
       });
-    }
+    };
+
+    //for Report on Non-holding of Annual Stockholders' Meeting
+    const handleRnhasmReasonChange = (e) => {
+      const selectedRNHASMReason = rnhasmReasonOption.find((reason) => reason.value === e);
+      setFormData({
+        ...formData,
+        rnhasm_reason: selectedRNHASMReason.value,
+      });
+    };
 
     const getDocumentForm = () => {
       switch (formData.type) {
@@ -225,6 +248,15 @@ export const DocumentDetailsForm = ({
               formData={formData}
               setFormData={setFormData}
               handleOnChange={handleOnChange}
+            />
+          );
+        case "Report on Non-holding of Annual Stockholders' Meeting":
+          return (
+            <RNHASMForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+              rnhasmReasonOption={rnhasmReasonOption}
+              handleRnhasmReasonChange={handleRnhasmReasonChange}
             />
           );
 
