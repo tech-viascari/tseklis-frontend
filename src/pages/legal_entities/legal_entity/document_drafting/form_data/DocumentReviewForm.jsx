@@ -528,10 +528,7 @@ export const DocumentReviewForm = ({
             },
             {
               name: "Date of Annual Meeting",
-              value:
-                moment(formData.date_of_annual_meeting).format(
-                  "MMMM DD, YYYY"
-                ) || "No Date Provided",
+              value: formData.date_of_annual_meeting || "No Date Provided",
             },
             {
               name: "Reason for Non-Holding of Annual Meeting",
