@@ -156,17 +156,8 @@ const AddDocumentDraftingPage = () => {
       new_form_data.contact_person_email = entity.entity_details.official_email;
 
       //for cover sheet - company info
-      new_form_data.telephone_number =
-        entity.entity_details.official_contact_number;
-      // selectedCompany.latestGIS.telephone_number;
-      new_form_data.official_mobile_number =
-        entity.entity_details.official_contact_number;
-      //selectedCompany.latestGIS.official_mobile_number;
-      // new_form_data.number_of_shareholders =
-      //  // selectedCompany.latestGIS.number_of_shareholders;
-      // new_form_data.date_of_annual_meeting =
-      //   //selectedCompany.latestGIS.date_of_annual_meeting;
-      // new_form_data.fiscal_year_end = selectedCompany.latestGIS.fiscal_year_end;
+      new_form_data.telephone_number = entity.entity_details.official_contact_number;
+      new_form_data.official_mobile_number = entity.entity_details.official_contact_number;
 
       if (entity.entity_details.officer_information.length != 0) {
         let officer = entity.entity_details.officer_information[0];
@@ -218,27 +209,7 @@ const AddDocumentDraftingPage = () => {
         new_form_data.stockholders = [];
       }
 
-      //stockholder information
-      // const stockholder =
-      //   selectedCompany.latestGIS.stock_holders_information.information.map(
-      //     (stockholder) => {
-      //       let setStockholder = {
-      //         ...stockholderState,
-      //         name: stockholder.name,
-      //         nationality: stockholder.nationality,
-      //         no_of_subscribed_shares: stockholder.number,
-      //         amount_of_subscribed_shares: stockholder.amount,
-      //         paidup_capital: stockholder.amount_paid,
-      //         amount_of_paid_APIC: "-",
-      //         total_amount_paid: stockholder.amount_paid,
-      //       };
-      //       return setStockholder;
-      //     }
-      //   );
-      // new_form_data.stockholders_data = stockholder;
-
       setOfficers(officers);
-
       setFormData(new_form_data);
     }
   };

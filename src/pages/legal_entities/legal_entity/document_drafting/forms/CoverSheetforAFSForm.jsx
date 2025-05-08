@@ -3,7 +3,12 @@ import React from "react";
 import InputComponent from "../../../../../components/InputComponent";
 import SelectComponent from "../../../../../components/SelectComponent";
 
-export const CoverSheetforAFSForm = ({ formData, handleOnChange }) => {
+export const CoverSheetforAFSForm = ({
+  formData,
+  handleOnChange,
+  coverSheetDepartmentOption,
+  handleOnChangeDepartment,
+}) => {
   return (
     <>
       <div className="flex flex-col gap-3">
@@ -39,12 +44,12 @@ export const CoverSheetforAFSForm = ({ formData, handleOnChange }) => {
           onChange={handleOnChange}
         />
 
-        <InputComponent
+        <SelectComponent
           label="Department Requiring the Report"
           required
-          name="department"
+          options={coverSheetDepartmentOption}
           value={formData.department}
-          onChange={handleOnChange}
+          onSelectChange={handleOnChangeDepartment}
         />
 
         <InputComponent
