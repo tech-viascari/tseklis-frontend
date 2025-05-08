@@ -16,6 +16,7 @@ import { NoticeOfMeeting } from "../forms/NoticeOfMeeting";
 import { SMR_BIRForm } from "../forms/SMR_BIRForm";
 import { SMR_SECForm } from "../forms/SMR_SECForm";
 import { RNHASMForm } from "../forms/RNHASMForm";
+import { IndependentAuditorsForm } from "../forms/IndependentAuditorsForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -109,16 +110,187 @@ export const DocumentDetailsForm = ({
     }
   });
 
+  const coverSheetDepartment = [
+    { name: "Markets and Securities Regulation Department", value: "MSRD" },
+    { name: "Corporate Governance and Finance Department", value: "CGFD" },
+    { name: "Company Registration and Monitoring Department", value: "CRMD" },
+    { name: "Financial Analysis and Audit Department", value: "FAAD" },
+    { name: "Enforcement and Investor Protection Department", value: "EIPD" },
+    { name: "Economic Research and Training Department", value: "ERTD" },
+    {
+      name: "Information and Communications Technology Department",
+      value: "ICTD",
+    },
+    { name: "Human Resources Department", value: "HRD" },
+    { name: "Management Services Department", value: "MSD" },
+    { name: "Financial Management Department", value: "FMD" },
+    { name: "External Affairs Department", value: "EAD" },
+  ];
+
+  const coverSheetDepartmentOption = coverSheetDepartment.map((department) => {
+    return {
+      name: department.name,
+      value: department.value,
+    };
+  });
+
   const rnhasmReasons = [
-    { name: "No Quorum", value: "The corporation failed to achieve quorum on the scheduled date, and the board has not yet determined a new date for the rescheduled meeting."},
-    { name: "Ongoing Deliberations", value: "Deliberations are ongoing regarding the rescheduling of the meeting due to "},
-    { name: "Other Reasons", value: "[Please put your reason here and delete this text]"},
+    {
+      name: "No Quorum",
+      value:
+        "The corporation failed to achieve quorum on the scheduled date, and the board has not yet determined a new date for the rescheduled meeting.",
+    },
+    {
+      name: "Ongoing Deliberations",
+      value:
+        "Deliberations are ongoing regarding the rescheduling of the meeting due to ",
+    },
+    {
+      name: "Other Reasons",
+      value: "[Please put your reason here and delete this text]",
+    },
   ];
 
   const rnhasmReasonOption = rnhasmReasons.map((reason) => {
     return {
       name: reason.name,
       value: reason.value,
+    };
+  });
+
+  const noOfStockholders = [
+    {
+      number: "One",
+      iar_no_of_stockholders: "one",
+      iar_no_of_stockholders_int: "1",
+    },
+    {
+      number: "Two",
+      iar_no_of_stockholders: "two",
+      iar_no_of_stockholders_int: "2",
+    },
+    {
+      number: "Three",
+      iar_no_of_stockholders: "three",
+      iar_no_of_stockholders_int: "3",
+    },
+    {
+      number: "Four",
+      iar_no_of_stockholders: "four",
+      iar_no_of_stockholders_int: "4",
+    },
+    {
+      number: "Five",
+      iar_no_of_stockholders: "five",
+      iar_no_of_stockholders_int: "5",
+    },
+    {
+      number: "Six",
+      iar_no_of_stockholders: "six",
+      iar_no_of_stockholders_int: "6",
+    },
+    {
+      number: "Seven",
+      iar_no_of_stockholders: "seven",
+      iar_no_of_stockholders_int: "7",
+    },
+    {
+      number: "Eight",
+      iar_no_of_stockholders: "eight",
+      iar_no_of_stockholders_int: "8",
+    },
+    {
+      number: "Nine",
+      iar_no_of_stockholders: "nine",
+      iar_no_of_stockholders_int: "9",
+    },
+    {
+      number: "Ten",
+      iar_no_of_stockholders: "ten",
+      iar_no_of_stockholders_int: "10",
+    },
+    {
+      number: "Eleven",
+      iar_no_of_stockholders: "eleven",
+      iar_no_of_stockholders_int: "11",
+    },
+    {
+      number: "Twelve",
+      iar_no_of_stockholders: "twelve",
+      iar_no_of_stockholders_int: "12",
+    },
+    {
+      number: "Thirteen",
+      iar_no_of_stockholders: "thirteen",
+      iar_no_of_stockholders_int: "13",
+    },
+    {
+      number: "Fourteen",
+      iar_no_of_stockholders: "fourteen",
+      iar_no_of_stockholders_int: "14",
+    },
+    {
+      number: "Fifteen",
+      iar_no_of_stockholders: "fifteen",
+      iar_no_of_stockholders_int: "15",
+    },
+    {
+      number: "Sixteen",
+      iar_no_of_stockholders: "sixteen",
+      iar_no_of_stockholders_int: "16",
+    },
+    {
+      number: "Seventeen",
+      iar_no_of_stockholders: "seventeen",
+      iar_no_of_stockholders_int: "17",
+    },
+    {
+      number: "Eighteen",
+      iar_no_of_stockholders: "eighteen",
+      iar_no_of_stockholders_int: "18",
+    },
+    {
+      number: "Nineteen",
+      iar_no_of_stockholders: "nineteen",
+      iar_no_of_stockholders_int: "19",
+    },
+    {
+      number: "Twenty",
+      iar_no_of_stockholders: "twenty",
+      iar_no_of_stockholders_int: "20",
+    },
+    {
+      number: "Twenty-One",
+      iar_no_of_stockholders: "twenty-one",
+      iar_no_of_stockholders_int: "21",
+    },
+    {
+      number: "Twenty-Two",
+      iar_no_of_stockholders: "twenty-two",
+      iar_no_of_stockholders_int: "22",
+    },
+    {
+      number: "Twenty-Three",
+      iar_no_of_stockholders: "twenty-three",
+      iar_no_of_stockholders_int: "23",
+    },
+    {
+      number: "Twenty-Four",
+      iar_no_of_stockholders: "twenty-four",
+      iar_no_of_stockholders_int: "24",
+    },
+    {
+      number: "Twenty-Five",
+      iar_no_of_stockholders: "twenty-five",
+      iar_no_of_stockholders_int: "25",
+    },
+  ];
+
+  const noOfStockholdersOption = noOfStockholders.map((stockholder) => {
+    return {
+      name: stockholder.number,
+      value: stockholder.iar_no_of_stockholders,
+      iar_no_of_stockholders_int: stockholder.iar_no_of_stockholders_int,
     };
   });
 
@@ -146,6 +318,17 @@ export const DocumentDetailsForm = ({
       setFormData(newFormData);
     };
 
+    //for Cover Sheet for Audited Financial Statements
+    const handleOnChangeDepartment = (e) => {
+      const selectedDepartment = coverSheetDepartment.find(
+        (department) => department.value === e
+      );
+      setFormData({
+        ...formData,
+        department: selectedDepartment.value,
+      });
+    };
+
     //for SMR
     const handleRDOChange = (e) => {
       const selectedRDO = rdoData.find((rdo) => rdo.rdo_code === e);
@@ -169,10 +352,24 @@ export const DocumentDetailsForm = ({
 
     //for Report on Non-holding of Annual Stockholders' Meeting
     const handleRnhasmReasonChange = (e) => {
-      const selectedRNHASMReason = rnhasmReasonOption.find((reason) => reason.value === e);
+      const selectedRNHASMReason = rnhasmReasonOption.find(
+        (reason) => reason.value === e
+      );
       setFormData({
         ...formData,
         rnhasm_reason: selectedRNHASMReason.value,
+      });
+    };
+
+    //for Independent Auditor's Report - Stockholders Number
+    const handleOnChangeStockholders = (e) => {
+      const selectedStockholder = noOfStockholdersOption.find(
+        (stockholder) => stockholder.value === e
+      );
+      setFormData({
+        ...formData,
+        iar_no_of_stockholders: selectedStockholder.value,
+        iar_no_of_stockholders_int: selectedStockholder.iar_no_of_stockholders_int,
       });
     };
 
@@ -206,6 +403,8 @@ export const DocumentDetailsForm = ({
             <CoverSheetforAFSForm
               formData={formData}
               handleOnChange={handleOnChange}
+              coverSheetDepartmentOption={coverSheetDepartmentOption}
+              handleOnChangeDepartment={handleOnChangeDepartment}
             />
           );
         case "SMR for BIR and SEC":
@@ -257,6 +456,15 @@ export const DocumentDetailsForm = ({
               handleOnChange={handleOnChange}
               rnhasmReasonOption={rnhasmReasonOption}
               handleRnhasmReasonChange={handleRnhasmReasonChange}
+            />
+          );
+        case "Independent Auditor's Report":
+          return (
+            <IndependentAuditorsForm
+              formData={formData}
+              handleOnChange={handleOnChange}
+              noOfStockholdersOption={noOfStockholdersOption}
+              handleOnChangeStockholders={handleOnChangeStockholders}
             />
           );
 
