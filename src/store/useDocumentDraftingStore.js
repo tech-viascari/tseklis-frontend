@@ -18,6 +18,7 @@ const DocumentTypes = [
   "Waiver of Notice",
   "Notice of Meeting",
   "Report on Non-holding of Annual Stockholders' Meeting",
+  "Independent Auditor's Report",
 ];
 
 export const appointeeState = {
@@ -84,7 +85,7 @@ const DocumentDataState = {
   //Cover Sheet
   sec_registration_number: "",
   form_type: "AAFS",
-  department: "",
+  department: "CRMD",
   secondary_license: "",
 
   //Cover Sheet - Company Info
@@ -141,6 +142,11 @@ const DocumentDataState = {
 
   //Report on Non-holding of Annual Stockholders' Meeting
   rnhasm_reason: "",
+
+  //Independent Auditor's Report
+  iar_financial_position_date: "December 31, 2024",
+  iar_no_of_stockholders: "",
+  iar_no_of_stockholders_int: "",
 };
 
 const StatusesState = {

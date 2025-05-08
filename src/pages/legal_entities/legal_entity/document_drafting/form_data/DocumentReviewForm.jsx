@@ -550,13 +550,46 @@ export const DocumentReviewForm = ({
             {
               name: "Official Contact Email",
               value:
-                formData.official_email_address || "No Official Contact Email Provided",
+                formData.official_email_address ||
+                "No Official Contact Email Provided",
             },
             {
               name: "Official Contact Mobile Number",
               value:
                 formData.official_mobile_number ||
                 "No Official Contact Number Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  const IndependentAuditor = () => {
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Office Address",
+              value: formData.office_address || "No Office Address Provided",
+            },
+            {
+              name: "Financial Year Ended",
+              value:
+                formData.iar_financial_position_date ||
+                "No Financial Year Ended Provided",
+            },
+            {
+              name: "Number of Stockholders",
+              value:
+                formData.iar_no_of_stockholders_int ||
+                "No Number of Stockholders Provided",
             },
           ]}
         />
@@ -611,6 +644,9 @@ export const DocumentReviewForm = ({
         {formData.type ===
           "Report on Non-holding of Annual Stockholders' Meeting" && (
           <RNHASComponent />
+        )}
+        {formData.type === "Independent Auditor's Report" && (
+          <IndependentAuditor />
         )}
       </div>
     </>
