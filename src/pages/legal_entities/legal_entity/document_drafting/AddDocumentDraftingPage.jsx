@@ -169,15 +169,16 @@ const AddDocumentDraftingPage = () => {
 
       let officers = entity.entity_details.officer_information.filter(
         (officer) => {
-          if (officer.officer.toLowerCase().includes("secretary")) {
+
+          if (officer.officer.includes("secretary").toString().toLowerCase()) {
             new_form_data.corp_sec = officer.officer_name;
             new_form_data.corp_sec_address = officer.current_residence;
           }
           //for smr officers
-          if (officer.officer.toLowerCase().includes("president")) {
+          if (officer.officer.includes("president").toString().toLowerCase()) {
             new_form_data.president_name = officer.officer_name;
           }
-          if (officer.officer.toLowerCase().includes("treasurer")) {
+          if (officer.officer.includes("treasurer").toString().toLowerCase()) {
             new_form_data.treasurer_name = officer.officer_name;
           }
           return officer.officer != "N/A";
@@ -216,7 +217,7 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
-   // console.log("Anthony Add Data Entity: ", entity);
+    console.log("Anthony Add Data Entity: ", entity);
   }, [entity]);
 
   return (
