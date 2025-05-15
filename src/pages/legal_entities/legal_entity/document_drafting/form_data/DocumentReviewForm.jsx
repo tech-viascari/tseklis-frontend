@@ -154,6 +154,119 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const AffidavitOfLossComponent = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "SEC Registration Number",
+              value:
+                formData.sec_registration_number ||
+                "No SEC Registration Number Provided",
+            },
+            {
+              name: "Corporate TIN",
+              value: formData.corporate_tin || "No Corporate TIN Provided",
+            },
+            {
+              name: "Principal Office Address",
+              value:
+                formData.office_address ||
+                "No Principal Office Address Provided",
+            },
+            {
+              name: "Old Head Office Address",
+              value:
+                formData.old_head_office ||
+                "No Old Head Office Address Provided",
+            },
+            {
+              name: "New Head Office Address",
+              value:
+                formData.new_head_office ||
+                "No New Head Office Address Provided",
+            },
+            {
+              name: "Last Discovered Date of Loss",
+              value:
+                formData.last_discovered_date ||
+                "No Last Discovered Date of Loss Provided",
+            },
+            {
+              name: "Missing Items",
+              value: formData.missing_items || "No Missing Items Provided",
+            },
+          ]}
+        />
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+        <ReviewComponent
+          title="Corporate Secretary"
+          data={[
+            {
+              name: "Name",
+              value:
+                formData.corp_sec || "No Corporate Secretary Name Provided",
+            },
+            {
+              name: "Address",
+              value: formData.corp_sec_address || "No Address Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   const CoverSheetforAFSComponent = () => {
     return (
       <>
@@ -633,6 +746,7 @@ export const DocumentReviewForm = ({
         {formData.type === "Affidavit of Non-Operation" && (
           <AffidavitOfNonOperationComponent />
         )}
+        {formData.type === "Affidavit of Loss" && <AffidavitOfLossComponent />}
         {formData.type === "Cover Sheet for Audited Financial Statements" && (
           <CoverSheetforAFSComponent />
         )}
