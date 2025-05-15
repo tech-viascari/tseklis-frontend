@@ -18,6 +18,7 @@ import { SMR_SECForm } from "../forms/SMR_SECForm";
 import { RNHASMForm } from "../forms/RNHASMForm";
 import { IndependentAuditorsForm } from "../forms/IndependentAuditorsForm";
 import { AffidavitOfLossForm } from "../forms/AffidavitOfLossForm";
+import { SPAforBusinessRenewalForm } from "../forms/SPAforBusinessRenewalForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -370,7 +371,8 @@ export const DocumentDetailsForm = ({
       setFormData({
         ...formData,
         iar_no_of_stockholders: selectedStockholder.value,
-        iar_no_of_stockholders_int: selectedStockholder.iar_no_of_stockholders_int,
+        iar_no_of_stockholders_int:
+          selectedStockholder.iar_no_of_stockholders_int,
       });
     };
 
@@ -476,6 +478,18 @@ export const DocumentDetailsForm = ({
               handleOnChange={handleOnChange}
               noOfStockholdersOption={noOfStockholdersOption}
               handleOnChangeStockholders={handleOnChangeStockholders}
+            />
+          );
+        case "SPA - Business Renewal":
+          return (
+            <SPAforBusinessRenewalForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
             />
           );
 
