@@ -365,7 +365,7 @@ const AddDocumentDraftingPage = () => {
 
   useEffect(() => {
     formDefault();
-    console.log("Anthony Add Data Entity: ", entity);
+    //console.log("Anthony Add Data Entity: ", entity);
   }, [entity]);
 
   return (

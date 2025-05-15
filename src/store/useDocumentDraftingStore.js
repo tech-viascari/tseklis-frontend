@@ -9,7 +9,7 @@ const DocumentTypes = [
   // "SECCERT - No Dispute",
   // "SECCERT - List of Stockholders",
   // "SECCERT - For Authorization",
-  // "Affidavit of Loss",
+  "Affidavit of Loss",
   "Affidavit of Non-Operation",
   "Cover Sheet for Audited Financial Statements",
   "SMR for BIR and SEC",
@@ -81,6 +81,11 @@ const DocumentDataState = {
     "I am executing this affidavit to attest to the truth of the foregoing in order to secure a certified true copy of the documents required for updating the Corporation’s head office address from {{old_head_office}} to {{new_head_office}}.",
   ],
   appointees: [],
+  last_discovered_date: "",
+  missing_items: "",
+  old_head_office: "",
+  new_head_office: "",
+  
 
   //Cover Sheet
   sec_registration_number: "",

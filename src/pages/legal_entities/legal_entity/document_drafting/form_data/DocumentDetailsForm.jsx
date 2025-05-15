@@ -17,6 +17,7 @@ import { SMR_BIRForm } from "../forms/SMR_BIRForm";
 import { SMR_SECForm } from "../forms/SMR_SECForm";
 import { RNHASMForm } from "../forms/RNHASMForm";
 import { IndependentAuditorsForm } from "../forms/IndependentAuditorsForm";
+import { AffidavitOfLossForm } from "../forms/AffidavitOfLossForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -398,6 +399,16 @@ export const DocumentDetailsForm = ({
               handleOnChangeAppointees={handleOnChangeAppointees}
             />
           );
+        case "Affidavit of Loss":
+          return (
+            <AffidavitOfLossForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+            />
+          );
+
         case "Cover Sheet for Audited Financial Statements":
           return (
             <CoverSheetforAFSForm
