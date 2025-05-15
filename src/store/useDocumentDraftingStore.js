@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 const DocumentTypes = [
   "Certificate of Gross Sales/Receipts",
-  // "SPA - Business Renewal",
+  "SPA - Business Renewal",
   // "SECCERT - Waiver of Preemptive Rights",
   // "SECCERT - No Dispute",
   // "SECCERT - List of Stockholders",
@@ -152,6 +152,9 @@ const DocumentDataState = {
   iar_financial_position_date: "December 31, 2024",
   iar_no_of_stockholders: "",
   iar_no_of_stockholders_int: "",
+
+  //SPA - Business Renewal
+  spa_br_year: `${new Date().getFullYear()}`,
 };
 
 const StatusesState = {

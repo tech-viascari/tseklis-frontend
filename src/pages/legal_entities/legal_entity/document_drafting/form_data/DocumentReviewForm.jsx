@@ -710,9 +710,98 @@ export const DocumentReviewForm = ({
     );
   };
 
-  // useEffect(() => {
-  //   console.log("Anthony Review Data: ", formData);
-  // }, [formData]);
+  const SPABusinessRenewal = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Year",
+              value: formData.spa_br_year || "No Year Provided",
+            },
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Office Address",
+              value: formData.office_address || "No Office Address Provided",
+            }
+          ]}
+        />
+
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+
+        <ReviewComponent
+          title="Signatory"
+          data={[
+            {
+              name: "Officer Name",
+              value: formData.officer_name,
+            },
+            {
+              name: "Officer Position",
+              value: formData.officer_position,
+            },
+            {
+              name: "Officer Nationality",
+              value: formData.officer_nationality,
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
+  useEffect(() => {
+    console.log("Anthony Review Data: ", formData);
+  }, [formData]);
 
   return (
     <>
@@ -762,6 +851,7 @@ export const DocumentReviewForm = ({
         {formData.type === "Independent Auditor's Report" && (
           <IndependentAuditor />
         )}
+        {formData.type === "SPA - Business Renewal" && <SPABusinessRenewal />}
       </div>
     </>
   );
