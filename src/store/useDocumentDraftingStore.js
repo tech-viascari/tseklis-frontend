@@ -6,7 +6,7 @@ const DocumentTypes = [
   "Certificate of Gross Sales/Receipts",
   "SPA - Business Renewal",
   // "SECCERT - Waiver of Preemptive Rights",
-  // "SECCERT - No Dispute",
+  "SECCERT - No Dispute",
   // "SECCERT - List of Stockholders",
   // "SECCERT - For Authorization",
   "Affidavit of Loss",

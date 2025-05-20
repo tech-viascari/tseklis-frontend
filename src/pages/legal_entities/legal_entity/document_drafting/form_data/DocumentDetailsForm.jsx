@@ -19,6 +19,7 @@ import { RNHASMForm } from "../forms/RNHASMForm";
 import { IndependentAuditorsForm } from "../forms/IndependentAuditorsForm";
 import { AffidavitOfLossForm } from "../forms/AffidavitOfLossForm";
 import { SPAforBusinessRenewalForm } from "../forms/SPAforBusinessRenewalForm";
+import { SecCertNoDisputeForm } from "../forms/SecCertNoDisputeForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -483,6 +484,18 @@ export const DocumentDetailsForm = ({
         case "SPA - Business Renewal":
           return (
             <SPAforBusinessRenewalForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
+            />
+          );
+        case "SECCERT - No Dispute":
+          return (
+            <SecCertNoDisputeForm
               formData={formData}
               setFormData={setFormData}
               errors={errors}
