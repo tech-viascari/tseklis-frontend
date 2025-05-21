@@ -880,6 +880,105 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const SecCertForAuthorization = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Office Address",
+              value:
+                formData.office_address ||
+                "No Principal Office Address Provided",
+            },
+            {
+              name: "Meeting Date",
+              value:
+                moment(formData.sec_authorization_meeting_date).format(
+                  "MMMM DD, YYYY"
+                ) || "No Meeting Date Provided",
+            },
+            {
+              name: "Contact Person Name",
+              value:
+                formData.sec_authorization_contact_person || "No Name Provided",
+            },
+            {
+              name: "Contact Person Position",
+              value:
+                formData.sec_authorization_contact_position ||
+                "No Position Provided",
+            },
+          ]}
+        />
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+        <ReviewComponent
+          title="Corporate Secretary"
+          data={[
+            {
+              name: "Name",
+              value:
+                formData.corp_sec || "No Corporate Secretary Name Provided",
+            },
+            {
+              name: "Address",
+              value: formData.corp_sec_address || "No Address Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   // useEffect(() => {
   //   console.log("Anthony Review Data: ", formData);
   // }, [formData]);
@@ -934,6 +1033,7 @@ export const DocumentReviewForm = ({
         )}
         {formData.type === "SPA - Business Renewal" && <SPABusinessRenewal />}
         {formData.type === "SECCERT - No Dispute" && <SecCertNoDispute />}
+        {formData.type === "SECCERT - For Authorization" && <SecCertForAuthorization />}
       </div>
     </>
   );
