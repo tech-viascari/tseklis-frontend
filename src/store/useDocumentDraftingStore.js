@@ -8,7 +8,7 @@ const DocumentTypes = [
   // "SECCERT - Waiver of Preemptive Rights",
   "SECCERT - No Dispute",
   // "SECCERT - List of Stockholders",
-  // "SECCERT - For Authorization",
+  "SECCERT - For Authorization",
   "Affidavit of Loss",
   "Affidavit of Non-Operation",
   "Cover Sheet for Audited Financial Statements",
@@ -155,6 +155,11 @@ const DocumentDataState = {
 
   //SPA - Business Renewal
   spa_br_year: `${new Date().getFullYear()}`,
+
+  //SECCERT - For Authorization
+  sec_authorization_meeting_date: "",
+  sec_authorization_contact_person: "",
+  sec_authorization_contact_position: "",
 };
 
 const StatusesState = {
