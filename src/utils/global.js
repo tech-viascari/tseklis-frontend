@@ -57,6 +57,18 @@ export const formattedDate = (date, full = false) => {
   return moment(date).format("ll");
 };
 
+export const formattedDateTime = (date, full = false) => {
+  if (!date) {
+    return "";
+  }
+
+  if (full) {
+    return moment(date).format("LL h:mm A"); // Full date with time in AM/PM format
+  }
+
+  return moment(date).format("ll h:mm A"); // Short date with time in AM/PM format
+};
+
 export const getName = (fullName) => {
   if (fullName == " " || !fullName) return;
 
@@ -139,7 +151,6 @@ export const limitText = (text, maxLength = 20) =>
   text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
 export const formatTIN = (input) => {
-
   //Removes the format function for a while.
   return input;
 
