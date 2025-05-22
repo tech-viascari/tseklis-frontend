@@ -441,7 +441,7 @@ const LegalEntitySideBar = () => {
                               {navigation.icon}
                             </span>
                             <p
-                              className={`font-regular text-sm line-clamp-1 ${
+                              className={`font-regular text-[13px] line-clamp-1 ${
                                 !open && "hidden"
                               } ${
                                 active == navigation.goto &&
