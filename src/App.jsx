@@ -47,6 +47,9 @@ import ViewGISPage from "./pages/legal_entities/legal_entity/gis/ViewGISPage";
 import UpdateGISPage from "./pages/legal_entities/legal_entity/gis/UpdateGISPage";
 import ViewDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/ViewDocumentDraftingPage";
 import UpdateDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/UpdateDocumentDraftingPage";
+import ProjectsPage from "./pages/projects/ProjectsPage";
+import AssignedProjectsPage from "./pages/projects/AssignedProjectsPage";
+import ViewProjectPage from "./pages/projects/ViewProjectPage";
 
 const App = () => {
   return (
@@ -93,6 +96,13 @@ const App = () => {
               path="/workflow/view/:workflow_id"
               element={<ViewWorkflow />}
             />
+           
+            <Route
+              path="/projects-assigned-to-you"
+              element={<AssignedProjectsPage />}
+            />
+             <Route path="/projects" element={<ProjectsPage />} />
+             <Route path="/projects/view/:project-id" element={<ViewProjectPage />} />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />

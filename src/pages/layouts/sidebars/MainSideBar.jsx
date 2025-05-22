@@ -50,20 +50,33 @@ const MainSideBar = () => {
           isExpanded: false,
           show: true,
         },
-        {
-          icon: <HiMiniClipboardDocumentCheck className="text-xl" />,
-          title: "Project Management",
-          goto: "/workflow",
-          submenus: [],
-          isExpanded: false,
-          show: false,
-        },
       ],
     },
     {
       title: "Settings",
       show: true,
       navigation: [
+        {
+          icon: <HiMiniClipboardDocumentCheck className="text-xl" />,
+          title: "Project Management",
+          goto: null,
+          isExpanded: true,
+          show: true,
+          submenus: [
+            {
+              icon: <HiMiniUserGroup className="text-xl" />,
+              title: "Assigned to you",
+              goto: "/projects-assigned-to-you",
+              show: true,
+            },
+            {
+              icon: <HiMiniUserGroup className="text-xl" />,
+              title: "All Projects",
+              goto: "/projects",
+              show: true,
+            },
+          ],
+        },
         {
           icon: <HiMiniUserGroup className="text-xl" />,
           title: "User Management",
@@ -245,7 +258,7 @@ const MainSideBar = () => {
                               {navigation.icon}
                             </span>
                             <p
-                              className={`font-regular text-sm line-clamp-1 ${
+                              className={`font-regular text-[13px] line-clamp-1 ${
                                 !open && "hidden"
                               } ${
                                 active == navigation.goto &&
@@ -298,7 +311,7 @@ const MainSideBar = () => {
                                     }}
                                   >
                                     <p
-                                      className={`${
+                                      className={`text-[13px] ${
                                         active == submenu.goto &&
                                         "text-primary text-semibold"
                                       }`}
