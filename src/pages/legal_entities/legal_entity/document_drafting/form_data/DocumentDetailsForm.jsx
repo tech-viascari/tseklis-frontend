@@ -21,6 +21,7 @@ import { AffidavitOfLossForm } from "../forms/AffidavitOfLossForm";
 import { SPAforBusinessRenewalForm } from "../forms/SPAforBusinessRenewalForm";
 import { SecCertNoDisputeForm } from "../forms/SecCertNoDisputeForm";
 import { SecCertForAuthorizationForm } from "../forms/SecCertForAuthorizationForm";
+import { SecCertListOfStockholdersForm } from "../forms/SecCertListOfStockholdersForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -518,6 +519,18 @@ export const DocumentDetailsForm = ({
               handleOnChangeAppointees={handleOnChangeAppointees}
             />
           );
+        case "SECCERT - List of Stockholders":
+          return (
+            <SecCertListOfStockholdersForm
+              formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
+            />
+          )
 
         default:
           return (
