@@ -1767,7 +1767,7 @@ export const ListOfIndividualsForm = ({
       </Typography>
 
       <Typography variant="small" className="font-bold text-md">
-        List of Individuals
+        List of Personalities
       </Typography>
 
       <div className="flex flex-col py-5 gap-8">
@@ -1786,7 +1786,7 @@ export const ListOfIndividualsForm = ({
         size="xl"
         dialogName={individualDialog}
         handlerDialog={handleIndividualDialog}
-        title="List of Individuals"
+        title="List of Personalities"
         footerContent={
           <div className="flex flex-row items-center justify-end gap-3 w-full">
             <ButtonComponent

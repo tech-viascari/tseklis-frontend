@@ -7,7 +7,7 @@ const DocumentTypes = [
   "SPA - Business Renewal",
   // "SECCERT - Waiver of Preemptive Rights",
   "SECCERT - No Dispute",
-  // "SECCERT - List of Stockholders",
+  "SECCERT - List of Stockholders",
   "SECCERT - For Authorization",
   "Affidavit of Loss",
   "Affidavit of Non-Operation",
@@ -85,7 +85,6 @@ const DocumentDataState = {
   missing_items: "",
   old_head_office: "",
   new_head_office: "",
-  
 
   //Cover Sheet
   sec_registration_number: "",
@@ -160,6 +159,10 @@ const DocumentDataState = {
   sec_authorization_meeting_date: "",
   sec_authorization_contact_person: "",
   sec_authorization_contact_position: "",
+
+  //SECCERT - List of Stockholders
+  sec_cert_list_date: "",
+  sec_cert_list_of_stockholders: [],
 };
 
 const StatusesState = {

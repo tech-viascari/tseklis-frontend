@@ -187,7 +187,7 @@ const AddGISPage = () => {
       />
     ),
     getFormState(
-      "List of Individuals",
+      "List of Personalities",
       <ListOfIndividualsForm
         formData={formData}
         setFormData={setFormData}

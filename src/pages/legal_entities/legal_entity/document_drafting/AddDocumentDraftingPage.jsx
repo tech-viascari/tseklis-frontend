@@ -358,6 +358,28 @@ const AddDocumentDraftingPage = () => {
         }
       }
 
+      // for SEC. Cert - List of Stockholders
+      if (entity.latest_GIS.length != 0) {
+        let stockholders = entity.latest_GIS[0].document_data.stock_holders_information.information.map(
+          (stockholder) => ({
+            amount: stockholder.amount,
+            amount_paid: stockholder.amount_paid,
+            current_residential_address: stockholder.current_residential_address,
+            name: stockholder.name,
+            nationality: stockholder.nationality,
+            number: stockholder.number,
+            percent_of_ownership: stockholder.percent_of_ownership,
+            total_amount: stockholder.total_amount,
+            total_number: stockholder.total_number,
+            tax_id_number: stockholder.tax_id_number,
+            type: stockholder.type,
+          })
+        )
+
+        new_form_data.sec_cert_list_of_stockholders = stockholders;
+      }
+        
+
       setOfficers(officers);
       setFormData(new_form_data);
     }

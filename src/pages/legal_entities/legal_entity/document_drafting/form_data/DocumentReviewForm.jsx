@@ -979,6 +979,217 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const SecCertforListOfStockholders = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Office Address",
+              value:
+                formData.office_address ||
+                "No Principal Office Address Provided",
+            },
+            {
+              name: "List of Stockholders as of Date",
+              value:
+                moment(formData.sec_cert_list_date).format("MMMM DD, YYYY") ||
+                "No Meeting Date Provided",
+            },
+          ]}
+        />
+        <ReviewComponent title="List of Stockholders" data={[]} />
+        {formData.sec_cert_list_of_stockholders.length > 0 ? (
+          <GISTableComponent
+            data={formData.sec_cert_list_of_stockholders}
+            columns={[
+              {
+                name: "Name",
+                selector: (row) => row.name,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.name}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Nationality",
+                selector: (row) => row.nationality,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.nationality}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Current Residential Address",
+                selector: (row) => row.current_residential_address,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.current_residential_address}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Type",
+                selector: (row) => row.type,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.type}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Number",
+                selector: (row) => formatNumberWithCommaOnly(row.number),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaOnly(row.number)}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Amount",
+                selector: (row) => formatNumberWithCommaAndDecimal(row.amount),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.amount)}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "% of Ownership",
+                selector: (row) =>
+                  formatNumberWithCommaAndDecimal(row.percent_of_ownership),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(
+                        row.percent_of_ownership
+                      )}
+                      %
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Amount Paid in PHP",
+                selector: (row) =>
+                  formatNumberWithCommaAndDecimal(row.amount_paid),
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {formatNumberWithCommaAndDecimal(row.amount_paid)}
+                    </Typography>
+                  );
+                },
+              },
+              {
+                name: "Tax Identification Number",
+                selector: (row) => row.tax_id_number,
+                cell: (row) => {
+                  return (
+                    <Typography className="font-normal text-sm">
+                      {row.tax_id_number}
+                    </Typography>
+                  );
+                },
+              },
+            ]}
+          />
+        ) : (
+          <ReviewComponent
+            title="List of Stockholders"
+            data={[
+              {
+                name: "List of Stockholders",
+                value: "No Stockholder. Please add one.",
+              },
+            ]}
+          />
+        )}
+
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+        <ReviewComponent
+          title="Corporate Secretary"
+          data={[
+            {
+              name: "Name",
+              value:
+                formData.corp_sec || "No Corporate Secretary Name Provided",
+            },
+            {
+              name: "Address",
+              value: formData.corp_sec_address || "No Address Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   // useEffect(() => {
   //   console.log("Anthony Review Data: ", formData);
   // }, [formData]);
@@ -1033,7 +1244,12 @@ export const DocumentReviewForm = ({
         )}
         {formData.type === "SPA - Business Renewal" && <SPABusinessRenewal />}
         {formData.type === "SECCERT - No Dispute" && <SecCertNoDispute />}
-        {formData.type === "SECCERT - For Authorization" && <SecCertForAuthorization />}
+        {formData.type === "SECCERT - For Authorization" && (
+          <SecCertForAuthorization />
+        )}
+        {formData.type === "SECCERT - List of Stockholders" && (
+          <SecCertforListOfStockholders />
+        )}
       </div>
     </>
   );
