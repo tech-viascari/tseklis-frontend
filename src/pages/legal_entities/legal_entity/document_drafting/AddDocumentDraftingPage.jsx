@@ -13,6 +13,7 @@ import { DocumentDetailsForm } from "./form_data/DocumentDetailsForm";
 import { DocumentReviewForm } from "./form_data/DocumentReviewForm";
 import axiosInstance from "../../../../utils/axiosHelper";
 import useGISDocumentStore from "../../../../store/useGISDocumentStore";
+import { ToWords } from 'to-words';
 
 const AddDocumentDraftingPage = () => {
   const { entity_id } = useParams();
@@ -41,6 +42,27 @@ const AddDocumentDraftingPage = () => {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const navigate = useNavigate();
+
+  //convert number to words
+  const toWords = new ToWords({
+  localeCode: 'en-PH',
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: false,
+    currencyOptions: {
+      name: 'Peso',
+      plural: 'Pesos',
+      symbol: '₱',
+      fractionalUnit: {
+        name: 'Centavo',
+        plural: 'Centavos',
+        symbol: '',
+      },
+    },
+  },
+});
 
   const handleSubmitDialog = () => {
     setSubmitDialog(!submitDialog);
@@ -345,40 +367,67 @@ const AddDocumentDraftingPage = () => {
           entity.latest_GIS[0].document_data.stock_holders_information.information.filter(
             (stockholder) => stockholder.amount >= 100
           ).length;
-      
+
         if (stockholders_amount) {
           const matchedStockholder = noOfStockholders.find(
-            (stockholder) => stockholder.iar_no_of_stockholders_int === stockholders_amount.toString()
+            (stockholder) =>
+              stockholder.iar_no_of_stockholders_int ===
+              stockholders_amount.toString()
           );
-      
+
           if (matchedStockholder) {
-            new_form_data.iar_no_of_stockholders = matchedStockholder.iar_no_of_stockholders;
-            new_form_data.iar_no_of_stockholders_int = matchedStockholder.iar_no_of_stockholders_int;
+            new_form_data.iar_no_of_stockholders =
+              matchedStockholder.iar_no_of_stockholders;
+            new_form_data.iar_no_of_stockholders_int =
+              matchedStockholder.iar_no_of_stockholders_int;
           }
         }
       }
 
       // for SEC. Cert - List of Stockholders
       if (entity.latest_GIS.length != 0) {
-        let stockholders = entity.latest_GIS[0].document_data.stock_holders_information.information.map(
-          (stockholder) => ({
-            amount: stockholder.amount,
-            amount_paid: stockholder.amount_paid,
-            current_residential_address: stockholder.current_residential_address,
-            name: stockholder.name,
-            nationality: stockholder.nationality,
-            number: stockholder.number,
-            percent_of_ownership: stockholder.percent_of_ownership,
-            total_amount: stockholder.total_amount,
-            total_number: stockholder.total_number,
-            tax_id_number: stockholder.tax_id_number,
-            type: stockholder.type,
-          })
-        )
+        let stockholders =
+          entity.latest_GIS[0].document_data.stock_holders_information.information.map(
+            (stockholder) => ({
+              amount: stockholder.amount,
+              amount_paid: stockholder.amount_paid,
+              current_residential_address:
+                stockholder.current_residential_address,
+              name: stockholder.name,
+              nationality: stockholder.nationality,
+              number: stockholder.number,
+              percent_of_ownership: stockholder.percent_of_ownership,
+              total_amount: stockholder.total_amount,
+              total_number: stockholder.total_number,
+              tax_id_number: stockholder.tax_id_number,
+              type: stockholder.type,
+            })
+          );
 
         new_form_data.sec_cert_list_of_stockholders = stockholders;
       }
+
+      // for Sec. Cert - Waiver of Preemptive Rights
+      if (entity.latest_GIS.length != 0) {
+        let capital_stock =
+          entity.latest_GIS[0].document_data.auth_capital_stock.capital_stocks.map(
+            (stock) => ({
+              amount: stock.amount,
+              number_of_shares: stock.number_of_shares,
+              par_or_stated_value: stock.par_or_stated_value,
+            })
+          );
         
+        
+
+        let stockholder_from = toWords.convert(capital_stock[0].amount, {doNotAddOnly: true}) + " (₱" + capital_stock[0].amount + ")";
+        let stockholder_from_number_of_shares = toWords.convert(capital_stock[0].number_of_shares, {currency: false}) + "  Shares (" + capital_stock[0].number_of_shares + ")";
+        let stockholder_from_par_value = toWords.convert(capital_stock[0].par_or_stated_value, {doNotAddOnly: true}) + " (₱" + capital_stock[0].par_or_stated_value + ")";
+        
+        new_form_data.sec_cert_waiver_authstock_from = stockholder_from.toUpperCase();
+        new_form_data.sec_cert_waiver_authstock_from_divided_into = stockholder_from_number_of_shares.toUpperCase();
+        new_form_data.sec_cert_waiver_authstock_from_par_value = stockholder_from_par_value.toUpperCase();
+      }
 
       setOfficers(officers);
       setFormData(new_form_data);

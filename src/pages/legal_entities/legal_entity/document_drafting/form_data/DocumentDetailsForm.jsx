@@ -22,6 +22,7 @@ import { SPAforBusinessRenewalForm } from "../forms/SPAforBusinessRenewalForm";
 import { SecCertNoDisputeForm } from "../forms/SecCertNoDisputeForm";
 import { SecCertForAuthorizationForm } from "../forms/SecCertForAuthorizationForm";
 import { SecCertListOfStockholdersForm } from "../forms/SecCertListOfStockholdersForm";
+import { SecCertWaiverOfPreemptiveRightsForm } from "../forms/SecCertWaiverOfPreemptiveRightsForm";
 
 export const DocumentDetailsForm = ({
   formData,
@@ -523,6 +524,18 @@ export const DocumentDetailsForm = ({
           return (
             <SecCertListOfStockholdersForm
               formData={formData}
+              setFormData={setFormData}
+              errors={errors}
+              handleOnChange={handleOnChange}
+              officersOption={officersOption}
+              selectedOfficer={selectedOfficer}
+              handleOnChangeAppointees={handleOnChangeAppointees}
+            />
+          )
+        case "SECCERT - Waiver of Preemptive Rights":
+          return (
+            <SecCertWaiverOfPreemptiveRightsForm
+            formData={formData}
               setFormData={setFormData}
               errors={errors}
               handleOnChange={handleOnChange}
