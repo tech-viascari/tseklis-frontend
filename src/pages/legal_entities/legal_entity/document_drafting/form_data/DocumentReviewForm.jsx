@@ -1190,6 +1190,143 @@ export const DocumentReviewForm = ({
     );
   };
 
+  const SecCertWaiverOfPreemptiveRights = () => {
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.name}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "ID Number",
+        selector: (row) => row.id_no,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.id_no}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        name: "Date and Place Issued",
+        selector: (row) => row.date_place_issued,
+        cell: (row, rowIndex) => {
+          return (
+            <div className="w-full">
+              <Typography variant="small" className="font-normal">
+                {row.date_place_issued}
+              </Typography>
+            </div>
+          );
+        },
+      },
+    ];
+
+    return (
+      <>
+        <ReviewComponent
+          title="Document Details"
+          data={[
+            {
+              name: "Company Name",
+              value: formData.corporate_name || "No Company Name Provided",
+            },
+            {
+              name: "Year",
+              value: formData.year || "No Year Provided",
+            },
+            {
+              name: "Meeting Date",
+              value:
+                moment(formData.sec_cert_waiver_date).format("MMMM DD, YYYY") ||
+                "No Meeting Date Provided",
+            },
+            {
+              name: "Meeting Place",
+              value:
+                formData.sec_cert_waiver_place || "No Meeting Place Provided",
+            },
+          ]}
+        />
+
+        <ReviewComponent
+          title="Authorized Capital Stock - From"
+          data={[
+            {
+              name: "From (Pesos)",
+              value:
+                formData.sec_cert_waiver_authstock_from || "No From Provided",
+            },
+            {
+              name: "Divided Into",
+              value:
+                formData.sec_cert_waiver_authstock_from_divided_into ||
+                "No Divided Into Provided",
+            },
+            {
+              name: "Par Value",
+              value:
+                formData.sec_cert_waiver_authstock_from_par_value ||
+                "No Par Value Provided",
+            },
+          ]}
+        />
+
+        <ReviewComponent
+          title="Authorized Capital Stock - To"
+          data={[
+            {
+              name: "To (Pesos)",
+              value: formData.sec_cert_waiver_authstock_to || "No To Provided",
+            },
+            {
+              name: "Divided Into",
+              value:
+                formData.sec_cert_waiver_authstock_to_divided_into ||
+                "No Divided Into Provided",
+            },
+            {
+              name: "Par Value",
+              value:
+                formData.sec_cert_waiver_authstock_to_par_value ||
+                "No Par Value Provided",
+            },
+          ]}
+        />
+
+        <ReviewComponent title="Appointees" data={[]} />
+        <div>
+          <TableComponent columns={columns} data={formData.appointees} />
+        </div>
+        <ReviewComponent
+          title="Corporate Secretary"
+          data={[
+            {
+              name: "Name",
+              value:
+                formData.corp_sec || "No Corporate Secretary Name Provided",
+            },
+            {
+              name: "Address",
+              value: formData.corp_sec_address || "No Address Provided",
+            },
+          ]}
+        />
+      </>
+    );
+  };
+
   // useEffect(() => {
   //   console.log("Anthony Review Data: ", formData);
   // }, [formData]);
@@ -1249,6 +1386,9 @@ export const DocumentReviewForm = ({
         )}
         {formData.type === "SECCERT - List of Stockholders" && (
           <SecCertforListOfStockholders />
+        )}
+        {formData.type === "SECCERT - Waiver of Preemptive Rights" && (
+          <SecCertWaiverOfPreemptiveRights />
         )}
       </div>
     </>
