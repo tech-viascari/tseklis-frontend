@@ -13,50 +13,7 @@ import ButtonComponent from "../../../components/ButtonComponent";
 import { toast } from "sonner";
 import useChecklistStore from "../../../store/useChecklistStore";
 
-const ChecklistPage = () => {
-  const sample_checklists = [
-    {
-      checklist_id: "1",
-      list_item:
-        "Reservation of Business Name with the Securities and Exchange Commission (SEC)",
-      checked: false,
-    },
-    {
-      checklist_id: "2",
-      list_item: "Submission of Documents to SEC",
-      checked: false,
-    },
-    {
-      checklist_id: "3",
-      list_item:
-        "Registration with Local Government Units (LGUs) of the location where you want to establish your business",
-      checked: false,
-    },
-    {
-      checklist_id: "4",
-      list_item:
-        "Registration with the Bureau of Internal Revenue (BIR) for corporate taxation",
-      checked: false,
-    },
-    {
-      checklist_id: "5",
-      list_item:
-        "Registration with other Government Agencies (for employer registration if employing individuals)",
-      checked: false,
-    },
-
-    {
-      checklist_id: "6",
-      list_item:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus alias ab distinctio dolore eligendi iusto obcaecati est adipisci blanditiis, explicabo labore voluptatum praesentium ipsum dicta nisi expedita ea numquam delectus?Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum cumque quas libero vitae est voluptas quisquam natus sequi eum doloribus dolor hic saepe accusamus, minus asperiores repellat excepturi corrupti? Commodi!",
-      checked: false,
-    },
-  ];
-
-  // const [checkLists, setCheckLists] = useState(sample_checklists);
-
-  const { checkLists, setCheckLists } = useChecklistStore();
-
+const ChecklistPage = ({ checkLists = [], setCheckLists }) => {
   const [showMenu, setShowMenu] = useState(-1);
 
   const [showTextArea, setShowTextArea] = useState(false);
@@ -139,10 +96,6 @@ const ChecklistPage = () => {
     const completedCount = checkLists.filter((item) => item.checked).length;
     setNumberOfCompleted(completedCount);
   }, [checkLists]);
-
-  useEffect(() => {
-    setCheckLists(sample_checklists);
-  }, []);
 
   return (
     <div className="flex flex-col gap-1 pt-2 pb-10">

@@ -19,9 +19,13 @@ const ReviewComponent = ({ title, data }) => {
               </div>
 
               <div className="w-full pl-20">
-                <Typography variant="small" className="font-normal text-sm">
-                  {row.value}
-                </Typography>
+                {row.value == "" ? (
+                  <Typography variant="small" className="font-normal text-sm">
+                    {row.value}
+                  </Typography>
+                ) : (
+                  row.value
+                )}
               </div>
             </div>
           );

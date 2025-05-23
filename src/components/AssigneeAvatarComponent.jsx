@@ -36,7 +36,7 @@ const AssigneeAvatarComponent = ({ assignees, size = "xs" }) => {
               alt={assignee.name}
               size={size}
               className="border-[1px] border-white hover:z-10 focus:z-10"
-              src={assignee.profile_picture_url}
+              src={assignee.picture}
             />
           </Tooltip>
         );

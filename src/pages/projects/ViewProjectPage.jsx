@@ -29,6 +29,7 @@ import { HiMiniBell, HiOutlineEllipsisHorizontal } from "react-icons/hi2";
 import ChecklistPage from "./checklist/ChecklistPage";
 import NotesPage from "./notes/NotesPage";
 import useProjectStore from "../../store/useProjectStore";
+import useCheckListStore from "../../store/useChecklistStore";
 
 const ViewProjectPage = () => {
   const response = {
@@ -42,31 +43,31 @@ const ViewProjectPage = () => {
       {
         user_id: "u001",
         name: "Alice Smith",
-        profile_picture_url:
+        picture:
           "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80",
       },
       {
         user_id: "u002",
         name: "Emma Johnson",
-        profile_picture_url:
+        picture:
           "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1288&q=80",
       },
       {
         user_id: "u003",
         name: "Richard Hayes",
-        profile_picture_url:
+        picture:
           "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80",
       },
       {
         user_id: "u004",
         name: "Ethan Walker",
-        profile_picture_url:
+        picture:
           "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
       },
       {
         user_id: "u005",
         name: "Lucas Carter",
-        profile_picture_url:
+        picture:
           "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
       },
     ],
@@ -86,6 +87,7 @@ const ViewProjectPage = () => {
   const [selectedTab, setSelectedTab] = useState("checklist");
 
   const { project, setProject, states } = useProjectStore();
+  const { checkLists, setCheckLists } = useCheckListStore();
 
   // const [project, setProject] = useState(response);
 
@@ -93,7 +95,9 @@ const ViewProjectPage = () => {
     {
       label: "Checklist",
       value: "checklist",
-      desc: <ChecklistPage />,
+      desc: (
+        <ChecklistPage checkLists={checkLists} setCheckLists={setCheckLists} />
+      ),
     },
     {
       label: "Notes",
@@ -114,8 +118,7 @@ const ViewProjectPage = () => {
   useEffect(() => {
     setDocumentTitle("Projects");
     // fetchProjectsData();
-
-    console.log(project);
+    setCheckLists(project.checklist);
   }, []);
 
   return (
@@ -142,13 +145,15 @@ const ViewProjectPage = () => {
                         {project.project_name}
                       </Typography>
                       <div className="flex w-max flex-row gap-2">
-                        <ButtonComponent
-                          variant="outlined"
-                          className="py-1 px-4 text-secondary text-sm"
-                          onClick={() => {}}
-                        >
-                          In Progress
-                        </ButtonComponent>
+                        {project.status.length != 0 && (
+                          <ButtonComponent
+                            variant="outlined"
+                            className="py-1 px-4 text-secondary text-sm"
+                            onClick={() => {}}
+                          >
+                            {project.status[0].status}
+                          </ButtonComponent>
+                        )}
                         <Menu>
                           <MenuHandler>
                             <Button
@@ -183,7 +188,7 @@ const ViewProjectPage = () => {
                               alt="user 1"
                               size="sm"
                               className="border-[1px] border-white hover:z-10 focus:z-10"
-                              src={user.profile_picture_url}
+                              src={user.picture}
                             />
                           </Tooltip>
                         );
