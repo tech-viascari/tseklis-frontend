@@ -70,7 +70,7 @@ export const formattedDateTime = (date, full = false) => {
 };
 
 export const getName = (fullName) => {
-  if (fullName == " " || !fullName) return;
+  if (fullName == "" || !fullName) return;
 
   const [firstName, ...lastNameParts] = fullName.split(" ");
 

@@ -42,7 +42,6 @@ import AddWorkflow from "./pages/project_management/AddWorkflow";
 import AddDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/AddDocumentDraftingPage";
 import { UpdateLegalEntitiesPage } from "./pages/legal_entities/UpdateLegalEntitiesPage";
 import AddGISPage from "./pages/legal_entities/legal_entity/gis/AddGISPage";
-import AddProjectsPage from "./pages/project_management/AddProjects";
 import ViewGISPage from "./pages/legal_entities/legal_entity/gis/ViewGISPage";
 import UpdateGISPage from "./pages/legal_entities/legal_entity/gis/UpdateGISPage";
 import ViewDocumentDraftingPage from "./pages/legal_entities/legal_entity/document_drafting/ViewDocumentDraftingPage";
@@ -50,6 +49,7 @@ import UpdateDocumentDraftingPage from "./pages/legal_entities/legal_entity/docu
 import ProjectsPage from "./pages/projects/ProjectsPage";
 import AssignedProjectsPage from "./pages/projects/AssignedProjectsPage";
 import ViewProjectPage from "./pages/projects/ViewProjectPage";
+import AddProjectsPage from "./pages/projects/AddProjectsPage";
 
 const App = () => {
   return (
@@ -96,13 +96,17 @@ const App = () => {
               path="/workflow/view/:workflow_id"
               element={<ViewWorkflow />}
             />
-           
+
             <Route
               path="/projects-assigned-to-you"
               element={<AssignedProjectsPage />}
             />
-             <Route path="/projects" element={<ProjectsPage />} />
-             <Route path="/projects/view/:project-id" element={<ViewProjectPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route
+              path="/projects/view/:project-id"
+              element={<ViewProjectPage />}
+            />
+            <Route path="/projects/add-new" element={<AddProjectsPage />} />
 
             <Route path="/users" element={<UsersPage />} />
             <Route path="/users/add-new" element={<AddUsersPage />} />

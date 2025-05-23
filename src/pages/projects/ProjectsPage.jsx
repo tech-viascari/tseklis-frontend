@@ -148,15 +148,33 @@ const ProjectsPage = () => {
       cell: (row) => {
         if (row.google_project_folder.name == "") return;
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => {
-              navigateToProject(row);
-            }}
-          >
-            Google Project Folder
-          </Typography>
+          <div className="flex flex-row">
+            {row.google_project_folder.name != "" &&
+            row.google_project_folder.link != "" ? (
+              <a
+                href={
+                  row.google_project_folder.name != "" &&
+                  row.google_project_folder.link != ""
+                    ? row.google_project_folder.link
+                    : ""
+                }
+                target="_blank"
+              >
+                <Typography
+                  variant="small"
+                  className="text-sm font-normal text-blue-500 underline"
+                >
+                  {row.google_project_folder.name != "" &&
+                    row.google_project_folder.link != "" &&
+                    row.google_project_folder.name}
+                </Typography>
+              </a>
+            ) : (
+              <Typography variant="small" className="text-sm font-normal">
+                --
+              </Typography>
+            )}
+          </div>
         );
       },
     },
@@ -166,15 +184,29 @@ const ProjectsPage = () => {
       cell: (row) => {
         if (row.executed_documents.length == 0) return;
         return (
-          <Typography
-            variant="small"
-            className="font-normal text-sm text-dark"
-            onClick={() => {
-              navigateToProject(row);
-            }}
-          >
-            Executed Documents
-          </Typography>
+          <>
+            {formData.executed_documents.length > 0 ? (
+              formData.executed_documents.map((doc) => {
+                if (doc.name == "") return;
+                return (
+                  <div className="flex flex-row">
+                    <a href={doc.link != "" ? doc.link : ""} target="_blank">
+                      <Typography
+                        variant="small"
+                        className="text-sm font-normal text-blue-500 underline"
+                      >
+                        {doc.name}
+                      </Typography>
+                    </a>
+                  </div>
+                );
+              })
+            ) : (
+              <Typography variant="small" className="text-sm font-normal">
+                --
+              </Typography>
+            )}
+          </>
         );
       },
     },
@@ -199,31 +231,31 @@ const ProjectsPage = () => {
           {
             user_id: "u001",
             name: "Alice Smith",
-            profile_picture_url:
+            picture:
               "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80",
           },
           {
             user_id: "u002",
             name: "Emma Johnson",
-            profile_picture_url:
+            picture:
               "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1288&q=80",
           },
           {
             user_id: "u003",
             name: "Richard Hayes",
-            profile_picture_url:
+            picture:
               "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80",
           },
           {
             user_id: "u004",
             name: "Ethan Walker",
-            profile_picture_url:
+            picture:
               "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
           },
           {
             user_id: "u005",
             name: "Lucas Carter",
-            profile_picture_url:
+            picture:
               "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
           },
         ],
@@ -238,6 +270,44 @@ const ProjectsPage = () => {
             created_at: new Date(),
             updated_at: new Date(),
             full_name: "Benjie Pecson",
+          },
+        ],
+        checklist: [
+          {
+            checklist_id: "1",
+            list_item:
+              "Reservation of Business Name with the Securities and Exchange Commission (SEC)",
+            checked: false,
+          },
+          {
+            checklist_id: "2",
+            list_item: "Submission of Documents to SEC",
+            checked: false,
+          },
+          {
+            checklist_id: "3",
+            list_item:
+              "Registration with Local Government Units (LGUs) of the location where you want to establish your business",
+            checked: false,
+          },
+          {
+            checklist_id: "4",
+            list_item:
+              "Registration with the Bureau of Internal Revenue (BIR) for corporate taxation",
+            checked: false,
+          },
+          {
+            checklist_id: "5",
+            list_item:
+              "Registration with other Government Agencies (for employer registration if employing individuals)",
+            checked: false,
+          },
+
+          {
+            checklist_id: "6",
+            list_item:
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus alias ab distinctio dolore eligendi iusto obcaecati est adipisci blanditiis, explicabo labore voluptatum praesentium ipsum dicta nisi expedita ea numquam delectus?Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum cumque quas libero vitae est voluptas quisquam natus sequi eum doloribus dolor hic saepe accusamus, minus asperiores repellat excepturi corrupti? Commodi!",
+            checked: false,
           },
         ],
         pending_action_from: "",
@@ -265,6 +335,19 @@ const ProjectsPage = () => {
             full_name: "Benjie Pecson",
           },
         ],
+        checklist: [
+          {
+            checklist_id: "1",
+            list_item:
+              "Reservation of Business Name with the Securities and Exchange Commission (SEC)",
+            checked: false,
+          },
+          {
+            checklist_id: "2",
+            list_item: "Submission of Documents to SEC",
+            checked: false,
+          },
+        ],
         pending_action_from: "Client",
         date_completed: null,
         google_project_folder: { ...states.attachment_view },
@@ -279,6 +362,7 @@ const ProjectsPage = () => {
         ...states.project,
         project_id: project.project_id,
         project_name: project.project_name,
+        checklist: project.checklist,
         desc: project.desc,
         start_date: project.start_date,
         target_date: project.target_date,
@@ -291,7 +375,9 @@ const ProjectsPage = () => {
       };
     });
 
-    setProjects(newProjects);
+    if (projects.length == 0) {
+      setProjects(newProjects);
+    }
   }, []);
 
   return (
@@ -315,7 +401,7 @@ const ProjectsPage = () => {
                   <div>
                     <ButtonComponent
                       onClick={() => {
-                        // navigate("/quotes/add-new");
+                        navigate("/projects/add-new");
                       }}
                     >
                       Add new
