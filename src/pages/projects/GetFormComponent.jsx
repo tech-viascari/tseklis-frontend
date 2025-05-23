@@ -127,9 +127,10 @@ export const GetFormComponent = ({
               }}
               isMulti={true}
               required={true}
+              menuPortalTarget={document.body}
             ></SelectMultipleComponent>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mb-20">
               <div>
                 <Typography variant="small" className="text-sm font-medium">
                   Google Drive Folder

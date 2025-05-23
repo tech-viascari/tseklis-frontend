@@ -15,6 +15,7 @@ const SelectMultipleComponent = ({
   isMulti = false,
   defaultValue,
   closeMenuOnSelect = false,
+  menuPortalTarget = null,
 }) => {
   const customStyles = {
     control: (provided) => ({
@@ -46,6 +47,7 @@ const SelectMultipleComponent = ({
           name={name}
           value={value}
           defaultValue={defaultValue}
+          menuPortalTarget={menuPortalTarget}
         />
         {error_message && (
           <label className="text-xs text-red-500 flex flex-row gap-1 items-center">
