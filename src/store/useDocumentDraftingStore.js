@@ -5,7 +5,7 @@ import { create } from "zustand";
 const DocumentTypes = [
   "Certificate of Gross Sales/Receipts",
   "SPA - Business Renewal",
-  // "SECCERT - Waiver of Preemptive Rights",
+  "SECCERT - Waiver of Preemptive Rights",
   "SECCERT - No Dispute",
   "SECCERT - List of Stockholders",
   "SECCERT - For Authorization",
@@ -163,6 +163,16 @@ const DocumentDataState = {
   //SECCERT - List of Stockholders
   sec_cert_list_date: "",
   sec_cert_list_of_stockholders: [],
+
+  //SECCERT - Waiver of Preemptive Rights
+  sec_cert_waiver_date: "",
+  sec_cert_waiver_place: "",
+  sec_cert_waiver_authstock_from: "",
+  sec_cert_waiver_authstock_from_divided_into: "",
+  sec_cert_waiver_authstock_from_par_value: "",
+  sec_cert_waiver_authstock_to: "",
+  sec_cert_waiver_authstock_to_divided_into: "",
+  sec_cert_waiver_authstock_to_par_value: "",
 };
 
 const StatusesState = {
