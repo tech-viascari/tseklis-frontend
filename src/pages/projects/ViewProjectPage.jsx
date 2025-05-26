@@ -13,24 +13,15 @@ import {
   MenuItem,
   MenuList,
   Option,
-  Progress,
   Select,
-  Tab,
-  TabPanel,
-  Tabs,
-  TabsBody,
-  TabsHeader,
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
-import DataProvider from "../../providers/DataProvider";
-import TableComponent from "../../components/TableComponent";
 import ButtonComponent from "../../components/ButtonComponent";
 import { formattedDate, setDocumentTitle } from "../../utils/global";
 import {
-  HiMiniArrowTrendingUp,
-  HiMiniBell,
   HiMiniExclamationCircle,
+  HiMinusCircle,
   HiOutlineClock,
   HiOutlineEllipsisHorizontal,
 } from "react-icons/hi2";
@@ -41,22 +32,27 @@ import useCheckListStore from "../../store/useChecklistStore";
 import ViewPageComponent from "../../components/ViewPageComponent";
 import DialogComponent from "../../components/DialogComponent";
 import TimelineComponent from "../../components/TimelineComponent";
-import SelectComponent from "../../components/SelectComponent";
 import TextAreaComponent from "../../components/TextAreaComponent";
 import InputComponent from "../../components/InputComponent";
+import SelectMultipleComponent from "../../components/SelectMultipleComponent";
+import axiosInstance from "../../utils/axiosHelper";
+import { toast } from "sonner";
 
 const ViewProjectPage = () => {
-  const { open, setOpen } = useDrawerStore();
-
   const navigate = useNavigate();
-  const { quotes, setQuote, setQuotes } = useQuoteStore();
 
-  const { user, hasPermission } = useAuthStore();
+  const { user } = useAuthStore();
 
   const [selectedTab, setSelectedTab] = useState("checklist");
 
-  const { project, setProject, states } = useProjectStore();
+  const { project, setProject, states, projects, setProjects } =
+    useProjectStore();
   const { checkLists, setCheckLists } = useCheckListStore();
+
+  const [activeUsers, setActiveUsers] = useState([]);
+  const [selectedListOfAssignee, setSelectedListOfAssignee] = useState([]);
+
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [statusDialog, setStatusDialog] = useState(false);
   const statusHandlerDialog = () => {
@@ -69,6 +65,16 @@ const ViewProjectPage = () => {
     setSelectedStatus(newStatus);
   };
 
+  const [updateDetailsDialog, setUpdateDetailsDialog] = useState(false);
+  const updateDetailsHandlerDialog = () => {
+    setUpdateDetailsDialog(!updateDetailsDialog);
+  };
+
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const deleteHandlerDialog = () => {
+    setDeleteDialog(!deleteDialog);
+  };
+
   const [timelines, setTimelines] = useState([]);
 
   const [selectedStatus, setSelectedStatus] = useState("Not Started");
@@ -76,9 +82,21 @@ const ViewProjectPage = () => {
   const [beforeStatus, setBeforeStatus] = useState("Not Started");
 
   const [formData, setFormData] = useState(states.project);
+  const [errors, setErrors] = useState({});
+
+  const handleOnChange = (e, error_message) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    if (value === "") {
+      setErrors({ ...errors, [name]: error_message });
+    } else {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
 
   const [remarks, setRemarks] = useState("");
-  const [dateCompleted, setDateCompleted] = useState("");
 
   const formattedTimeline = (timestamps = []) => {
     if (timestamps.length === 0) {
@@ -215,16 +233,30 @@ const ViewProjectPage = () => {
     // },
   ];
 
+  const fetchActiveUsers = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-active-users");
+      setActiveUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setDocumentTitle("Projects");
+    fetchActiveUsers();
   }, []);
 
   useEffect(() => {
-    console.log(project);
+    setFormData(project);
     setCheckLists(project.checklist);
     const timeline = formattedTimeline(project.status);
     setTimelines(timeline);
   }, [project]);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   return (
     <>
@@ -299,13 +331,20 @@ const ViewProjectPage = () => {
                   </Button>
                 </MenuHandler>
                 <MenuList>
-                  <MenuItem className="text-dark" onClick={() => {}}>
+                  <MenuItem
+                    className="text-dark"
+                    onClick={updateDetailsHandlerDialog}
+                  >
                     Edit Details
                   </MenuItem>
 
                   <hr className="my-1 text-light-gray" />
 
-                  <MenuItem onClick={() => {}}>
+                  <MenuItem
+                    onClick={() => {
+                      deleteHandlerDialog();
+                    }}
+                  >
                     <span className="text-red-400">Delete</span>
                   </MenuItem>
                 </MenuList>
@@ -558,19 +597,23 @@ const ViewProjectPage = () => {
                 let newStatus = {
                   project_timestamps_id: "1f9bdcdb-efc4-4127-8781-0926157c8de7",
                   project_id: "10457bf7-1129-4d3c-b10d-f2ae4e0d5279",
-                  user_id: "b1e3ce17-4b01-48fa-aef8-8f41cf677176",
+                  user_id: `${user.user_id}`,
                   status: beforeStatus,
                   remarks: remarks,
-                  datetime: "2025-05-26T02:17:09.350Z",
-                  created_at: "2025-05-26T02:17:09.350Z",
-                  updated_at: "2025-05-26T02:17:09.350Z",
-                  full_name: "Benjie Pecson",
+                  datetime: new Date(),
+                  created_at: new Date(),
+                  updated_at: new Date(),
+                  full_name: `${user.first_name} ${user.last_name}`,
                 };
 
                 let newProject = {
                   ...project,
                   status: [newStatus, ...project.status],
                 };
+
+                if (beforeStatus == "Completed") {
+                  newProject.date_completed = formData.date_completed;
+                }
 
                 setProject(newProject);
 
@@ -606,9 +649,11 @@ const ViewProjectPage = () => {
             {beforeStatus == "Completed" && (
               <InputComponent
                 label="Date Completed"
-                value={dateCompleted}
+                value={
+                  formData.date_completed != null ? formData.date_completed : ""
+                }
                 onChange={(e) => {
-                  setDateCompleted(e.target.value);
+                  setFormData({ ...formData, date_completed: e.target.value });
                 }}
                 type="date"
                 required={true}
@@ -624,6 +669,300 @@ const ViewProjectPage = () => {
               }}
               labelClass=""
             />
+          </div>
+        </div>
+      </DialogComponent>
+
+      <DialogComponent
+        dialogName={deleteDialog}
+        handlerDialog={deleteHandlerDialog}
+        title={`Delete Project`}
+        footerContent={
+          <div className="flex flex-row items-center justify-end gap-3 w-full">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={deleteHandlerDialog}
+            >
+              No
+            </ButtonComponent>
+
+            <ButtonComponent
+              loading={isFormSubmitting}
+              disabled={isFormSubmitting}
+              className="bg-secondary"
+              onClick={async () => {
+                try {
+                  setIsFormSubmitting(true);
+                  console.log(projects);
+                  const newProjects = projects.filter(
+                    (_) => _.project_id != project.project_id
+                  );
+                  setProjects(newProjects);
+                  navigate("/projects");
+                } catch (error) {
+                  console.log(error);
+                  toast.error("There was an error deleting the record");
+                } finally {
+                  deleteHandlerDialog();
+                  setIsFormSubmitting(false);
+                }
+              }}
+            >
+              Yes
+            </ButtonComponent>
+          </div>
+        }
+      >
+        <Typography variant="small" className="font-normal text-sm">
+          Are you sure? This action cannot be undone.
+        </Typography>
+      </DialogComponent>
+
+      <DialogComponent
+        size="lg"
+        dialogName={updateDetailsDialog}
+        handlerDialog={updateDetailsHandlerDialog}
+        title="Update Details"
+        footerContent={
+          <div className="flex flex-row items-center justify-end gap-3 w-full">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={updateDetailsHandlerDialog}
+            >
+              Cancel
+            </ButtonComponent>
+
+            <ButtonComponent
+              className="bg-secondary"
+              onClick={() => {
+                console.log(formData);
+                setProject(formData);
+                updateDetailsHandlerDialog();
+              }}
+            >
+              Save
+            </ButtonComponent>
+          </div>
+        }
+      >
+        <div className="grid grid-cols-1 gap-5 pb-10 mb-20">
+          <InputComponent
+            label="Project Name"
+            required={true}
+            name="project_name"
+            value={formData.project_name}
+            error_message={errors.project_name}
+            onChange={(e) => {
+              handleOnChange(e, "Project Name is required.");
+            }}
+          />
+          <TextAreaComponent
+            label="Project Description"
+            name="desc"
+            value={formData.desc}
+            onChange={(e) => {
+              handleOnChange(e);
+            }}
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <InputComponent
+              label="Project Start Date"
+              required={true}
+              name="start_date"
+              value={formData.start_date == null ? "" : formData.start_date}
+              type="date"
+              onChange={(e) => {
+                handleOnChange(e, "Start Date is required.");
+              }}
+            />
+            <InputComponent
+              label="Project Target Date"
+              required={true}
+              name="target_date"
+              value={formData.target_date == null ? "" : formData.target_date}
+              type="date"
+              onChange={(e) => {
+                handleOnChange(e, "Target Date is required.");
+              }}
+            />
+          </div>
+          <div>
+            <InputComponent
+              label="Pending Action From"
+              name="pending_action_from"
+              value={formData.pending_action_from}
+              onChange={(e) => {
+                handleOnChange(e);
+              }}
+            />
+          </div>
+
+          <SelectMultipleComponent
+            label="Assignee"
+            options={activeUsers.map((assignee) => {
+              return {
+                label: assignee.name,
+                value: assignee.user_id,
+              };
+            })}
+            name="assignee"
+            value={selectedListOfAssignee}
+            onSelectChange={(value) => {
+              setSelectedListOfAssignee(value);
+            }}
+            className=""
+            isMulti={true}
+            required={true}
+          ></SelectMultipleComponent>
+
+          <div className="flex flex-col gap-2">
+            <div>
+              <Typography variant="small" className="text-sm font-medium">
+                Google Drive Folder
+              </Typography>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div className="col-span-1">
+                <InputComponent
+                  label="Text"
+                  name="name"
+                  value={formData.google_project_folder.name}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      google_project_folder: {
+                        ...formData.google_project_folder,
+                        name: e.target.value,
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <div className="col-span-1 lg:col-span-2">
+                <InputComponent
+                  label="URL"
+                  name="link"
+                  value={formData.google_project_folder.link}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      google_project_folder: {
+                        ...formData.google_project_folder,
+                        link: e.target.value,
+                      },
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center justify-between">
+              <Typography variant="small" className="text-sm font-medium">
+                Executed Documents
+              </Typography>
+              <ButtonComponent
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    executed_documents: [
+                      ...formData.executed_documents,
+                      states.attachment_view,
+                    ],
+                  });
+                }}
+              >
+                Add Row
+              </ButtonComponent>
+            </div>
+            <div className="flex flex-row items-center justify-between gap-1 w-full">
+              {formData.executed_documents.length != 0 ? (
+                <div className="flex flex-col gap-3 w-full">
+                  {formData.executed_documents.map((item, index) => {
+                    return (
+                      <div className="flex flex-row items-center justify-between gap-1 w-full">
+                        <div className="w-[35%] flex">
+                          <div className="w-full">
+                            <InputComponent
+                              label="Text"
+                              name="name"
+                              value={item.name}
+                              onChange={(e) => {
+                                let updatedExecutedDocuments =
+                                  formData.executed_documents;
+                                updatedExecutedDocuments[index] = {
+                                  ...updatedExecutedDocuments[index],
+                                  name: e.target.value,
+                                };
+                                setFormData({
+                                  ...formData,
+                                  executed_documents: updatedExecutedDocuments,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="w-[60%] flex">
+                          <div className="w-full">
+                            <InputComponent
+                              label="URL"
+                              name="link"
+                              value={item.link}
+                              onChange={(e) => {
+                                let updatedExecutedDocuments =
+                                  formData.executed_documents;
+                                updatedExecutedDocuments[index] = {
+                                  ...updatedExecutedDocuments[index],
+                                  link: e.target.value,
+                                };
+                                setFormData({
+                                  ...formData,
+                                  executed_documents: updatedExecutedDocuments,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="w-[5%] flex mt-5 ml-2 flex-end">
+                          <div className="w-full ">
+                            <ButtonComponent
+                              className="p-0"
+                              onClick={() => {
+                                const newDocuments =
+                                  formData.executed_documents.filter(
+                                    (_, idx) => index != idx
+                                  );
+
+                                setFormData({
+                                  ...formData,
+                                  executed_documents: newDocuments,
+                                });
+                              }}
+                            >
+                              <HiMinusCircle size={20} color="red" />
+                            </ButtonComponent>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-2 text-center w-full">
+                    <Typography variant="small" className="text-sm font-bold">
+                      No documents attached.
+                    </Typography>
+                    <Typography variant="small" className="text-sm font-normal">
+                      Click the button{" "}
+                      <span className="font-medium">"Add row"</span> to attach
+                      documents.
+                    </Typography>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </DialogComponent>
