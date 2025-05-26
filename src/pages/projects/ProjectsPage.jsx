@@ -225,8 +225,8 @@ const ProjectsPage = () => {
     const data = [
       {
         project_name: "INCORPORATION",
-        start_date: new Date(),
-        target_date: new Date().setDate(new Date().getDate() + 10),
+        start_date: "2025-05-20",
+        target_date: "2025-05-30",
         assignee: [
           {
             user_id: "u001",
@@ -312,15 +312,19 @@ const ProjectsPage = () => {
         ],
         pending_action_from: "",
         date_completed: null,
-        google_project_folder: { ...states.attachment_view },
+        google_project_folder: {
+          ...states.attachment_view,
+          name: "Tseklis Drive",
+          link: "https://drive.google.com/drive/folders/0AHgQ64hlUEz9Uk9PVA",
+        },
         executed_documents: [],
         project_id: 2,
         desc: "This is a test project",
       },
       {
         project_name: "INCORPORATION",
-        start_date: new Date(),
-        target_date: new Date().setDate(new Date().getDate() + 10),
+        start_date: "2025-05-20",
+        target_date: "2025-05-30",
         assignee: [],
         status: [
           {
@@ -350,7 +354,11 @@ const ProjectsPage = () => {
         ],
         pending_action_from: "Client",
         date_completed: null,
-        google_project_folder: { ...states.attachment_view },
+        google_project_folder: {
+          ...states.attachment_view,
+          name: "Tseklis Drive",
+          link: "https://drive.google.com/drive/folders/0AHgQ64hlUEz9Uk9PVA",
+        },
         executed_documents: [],
         project_id: 1,
         desc: "This is a test project",
