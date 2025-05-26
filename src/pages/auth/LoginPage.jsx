@@ -13,7 +13,7 @@ import LoadingComponent from "../../components/LoadingComponent.jsx";
 import { setDocumentTitle } from "../../utils/global.js";
 
 const LoginPage = () => {
-  const { login } = useAuthStore();
+  const { login, user } = useAuthStore();
   const formState = { email: "", password: "" };
   const [formData, setFormData] = useState(formState);
   const [errors, setErrors] = useState(formState);
@@ -188,7 +188,26 @@ const LoginPage = () => {
     </div>
   );
 
-  setDocumentTitle("Login");
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get("auth/check");
+      if (response.status === 200) {
+        login(response.data.user);
+        navigate("/");
+      }
+    } catch (error) {
+      // navigate("/login");
+      console.log("Session Expired!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setDocumentTitle("Login");
+    fetchData();
+  }, [user]);
 
   return (
     <>

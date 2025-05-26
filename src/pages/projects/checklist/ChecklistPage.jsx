@@ -98,26 +98,7 @@ const ChecklistPage = ({ checkLists = [], setCheckLists }) => {
   }, [checkLists]);
 
   return (
-    <div className="flex flex-col gap-1 pt-2 pb-10">
-      {numberOfCompleted > 0 && (
-        <div>
-          <Button
-            variant="text"
-            size="sm"
-            className="bg-transparent border-none hover:bg-light-gray text-black normal-case"
-            onClick={toggleHideOrShowCompleted}
-          >
-            <Typography
-              variant="small"
-              className="font-normal text-sm underline"
-            >
-              {showCompleted
-                ? "Hide Completed"
-                : `${numberOfCompleted} Completed`}
-            </Typography>
-          </Button>
-        </div>
-      )}
+    <div className="flex flex-col gap-2 pt-2 pb-10">
       {checkLists.map((list) => {
         if (!showCompleted && list.checked) return null;
         return (
@@ -235,6 +216,7 @@ const ChecklistPage = ({ checkLists = [], setCheckLists }) => {
           </div>
         );
       })}
+
       <div className="flex flex-row">
         <div className="flex flex-row items-center justify-center  w-11">
           {!showTextArea && (
@@ -293,6 +275,26 @@ const ChecklistPage = ({ checkLists = [], setCheckLists }) => {
           </div> */}
         </div>
       </div>
+
+      {numberOfCompleted > 0 && (
+        <div>
+          <Button
+            variant="text"
+            size="sm"
+            className="bg-transparent border-none hover:bg-light-gray text-black normal-case"
+            onClick={toggleHideOrShowCompleted}
+          >
+            <Typography
+              variant="small"
+              className="font-normal text-sm underline"
+            >
+              {showCompleted
+                ? "Hide Completed"
+                : `${numberOfCompleted} Completed`}
+            </Typography>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
