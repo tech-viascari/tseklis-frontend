@@ -12,7 +12,9 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
+  Option,
   Progress,
+  Select,
   Tab,
   TabPanel,
   Tabs,
@@ -25,59 +27,25 @@ import DataProvider from "../../providers/DataProvider";
 import TableComponent from "../../components/TableComponent";
 import ButtonComponent from "../../components/ButtonComponent";
 import { formattedDate, setDocumentTitle } from "../../utils/global";
-import { HiMiniBell, HiOutlineEllipsisHorizontal } from "react-icons/hi2";
+import {
+  HiMiniArrowTrendingUp,
+  HiMiniBell,
+  HiMiniExclamationCircle,
+  HiOutlineClock,
+  HiOutlineEllipsisHorizontal,
+} from "react-icons/hi2";
 import ChecklistPage from "./checklist/ChecklistPage";
 import NotesPage from "./notes/NotesPage";
 import useProjectStore from "../../store/useProjectStore";
 import useCheckListStore from "../../store/useChecklistStore";
 import ViewPageComponent from "../../components/ViewPageComponent";
+import DialogComponent from "../../components/DialogComponent";
+import TimelineComponent from "../../components/TimelineComponent";
+import SelectComponent from "../../components/SelectComponent";
+import TextAreaComponent from "../../components/TextAreaComponent";
+import InputComponent from "../../components/InputComponent";
 
 const ViewProjectPage = () => {
-  const response = {
-    project_id: "1",
-    project_name: "INCORPORATION",
-    project_desc:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt voluptatum exercitationem velit quos et consequuntur corrupti aut nam accusantium magni, delectus distinctio quibusdam voluptas eos, molestiae laudantium non laboriosam necessitatibus.",
-    start_date: new Date(),
-    target_due_date: new Date(),
-    assignee: [
-      {
-        user_id: "u001",
-        name: "Alice Smith",
-        picture:
-          "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1061&q=80",
-      },
-      {
-        user_id: "u002",
-        name: "Emma Johnson",
-        picture:
-          "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1288&q=80",
-      },
-      {
-        user_id: "u003",
-        name: "Richard Hayes",
-        picture:
-          "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80",
-      },
-      {
-        user_id: "u004",
-        name: "Ethan Walker",
-        picture:
-          "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-      },
-      {
-        user_id: "u005",
-        name: "Lucas Carter",
-        picture:
-          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80",
-      },
-    ],
-    status: "In Progress",
-    pending_action_from: "Client",
-    date_completed: null,
-    google_project_folder: [],
-  };
-
   const { open, setOpen } = useDrawerStore();
 
   const navigate = useNavigate();
@@ -90,7 +58,142 @@ const ViewProjectPage = () => {
   const { project, setProject, states } = useProjectStore();
   const { checkLists, setCheckLists } = useCheckListStore();
 
-  // const [project, setProject] = useState(response);
+  const [statusDialog, setStatusDialog] = useState(false);
+  const statusHandlerDialog = () => {
+    setStatusDialog(!statusDialog);
+  };
+
+  const [changeStatusDialog, setChangeStatusDialog] = useState(false);
+  const changeStatusHandlerDialog = (newStatus = project.status[0].status) => {
+    setChangeStatusDialog(!changeStatusDialog);
+    setSelectedStatus(newStatus);
+  };
+
+  const [timelines, setTimelines] = useState([]);
+
+  const [selectedStatus, setSelectedStatus] = useState("Not Started");
+
+  const [beforeStatus, setBeforeStatus] = useState("Not Started");
+
+  const [formData, setFormData] = useState(states.project);
+
+  const [remarks, setRemarks] = useState("");
+  const [dateCompleted, setDateCompleted] = useState("");
+
+  const formattedTimeline = (timestamps = []) => {
+    if (timestamps.length === 0) {
+      return [];
+    }
+
+    const timelineState = {
+      title: "",
+      date: new Date(),
+      name: "",
+      description: "",
+      action_component: <></>,
+    };
+
+    const customClassName = `bg-transparent text-black border border-black hover:bg-black/80 hover:text-white hover:border-secondary font-sm focus:!border-black py-1`;
+
+    const actionComponents = {
+      Drafted: (
+        <>
+          <div className="flex flex-row gap-3">
+            <ButtonComponent
+              className={customClassName}
+              onClick={() => {
+                setRemarks("");
+                setStatus("Sent for Signature");
+                setChangeStatusDialog(true);
+                setStatusDialog(false);
+              }}
+            >
+              Mark as 'Sent for Signature'
+            </ButtonComponent>
+          </div>
+        </>
+      ),
+      "Sent for Signature": (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Signed");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Signed'
+          </ButtonComponent>
+        </div>
+      ),
+      Signed: (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Sent Invoice");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Sent Invoice'
+          </ButtonComponent>
+        </div>
+      ),
+      "Sent Invoice": (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Paid");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Paid'
+          </ButtonComponent>
+        </div>
+      ),
+      Paid: (
+        <div className="flex flex-row gap-3">
+          <ButtonComponent
+            className={customClassName}
+            onClick={() => {
+              setRemarks("");
+              setStatus("Completed");
+              setChangeStatusDialog(true);
+              setStatusDialog(false);
+            }}
+          >
+            Mark as 'Completed'
+          </ButtonComponent>
+        </div>
+      ),
+    };
+
+    const timeline = timestamps.map((timestamp, index) => {
+      const actionComponent =
+        actionComponents[timestamp.status] && index == 0 ? (
+          actionComponents[timestamp.status]
+        ) : (
+          <></>
+        );
+      return {
+        ...timelineState,
+        title: timestamp.status,
+        date: timestamp.datetime,
+        name: timestamp.full_name,
+        description: timestamp.remarks,
+        action_component: actionComponent,
+      };
+    });
+
+    return timeline;
+  };
 
   const tabData = [
     {
@@ -112,15 +215,16 @@ const ViewProjectPage = () => {
     // },
   ];
 
-  const fetchProjectsData = () => {
-    setProject(response);
-  };
-
   useEffect(() => {
     setDocumentTitle("Projects");
-    // fetchProjectsData();
-    setCheckLists(project.checklist);
   }, []);
+
+  useEffect(() => {
+    console.log(project);
+    setCheckLists(project.checklist);
+    const timeline = formattedTimeline(project.status);
+    setTimelines(timeline);
+  }, [project]);
 
   return (
     <>
@@ -137,15 +241,53 @@ const ViewProjectPage = () => {
         sideButtonComponent={
           <div className="flex w-max flex-row gap-2">
             <div className="flex w-max flex-row gap-2">
-              {project.status.length != 0 && (
-                <ButtonComponent
-                  variant="outlined"
-                  className="py-1 px-4 text-secondary text-sm"
-                  onClick={() => {}}
-                >
-                  {project.status[0].status}
-                </ButtonComponent>
-              )}
+              <div>
+                {project.status.length != 0 &&
+                project.status[0].status == "Completed" ? (
+                  <ButtonComponent
+                    variant="outlined"
+                    className=" text-secondary text-sm"
+                    onClick={() => {
+                      statusHandlerDialog();
+                    }}
+                  >
+                    {project.status[0].status}
+                  </ButtonComponent>
+                ) : (
+                  <Select
+                    className="!border-light-gray focus:!border-light-gray text-dark text-center"
+                    labelProps={{
+                      className: "before:content-none after:content-none",
+                    }}
+                    value={selectedStatus}
+                    onChange={(value) => {
+                      if (value != project.status[0].status) {
+                        changeStatusHandlerDialog();
+                      }
+                      setSelectedStatus(value);
+                      setBeforeStatus(value);
+                    }}
+                  >
+                    <Option value="Not Started">Not Started</Option>
+                    <Option value="In Progress">In Progress</Option>
+                    <Option value="Blocked">Blocked</Option>
+                    <Option value="For Checking">For Checking</Option>
+                    <Option value="Completed">Completed</Option>
+                  </Select>
+                )}
+              </div>
+              {project.status.length != 0 &&
+                project.status[0].status != "Completed" && (
+                  <ButtonComponent
+                    variant="outlined"
+                    className=" text-secondary text-sm"
+                    onClick={() => {
+                      statusHandlerDialog();
+                    }}
+                  >
+                    <HiOutlineClock size={20} />
+                  </ButtonComponent>
+                )}
               <Menu>
                 <MenuHandler>
                   <Button
@@ -379,6 +521,112 @@ const ViewProjectPage = () => {
           </div>
         </div>
       </ViewPageComponent>
+
+      <DialogComponent
+        dialogName={statusDialog}
+        handlerDialog={statusHandlerDialog}
+        title="Status"
+        hideFooter={true}
+        hideHeader={true}
+        size="md"
+      >
+        <div className="p-5">
+          <TimelineComponent timelines={timelines}></TimelineComponent>
+        </div>
+      </DialogComponent>
+
+      <DialogComponent
+        dialogName={changeStatusDialog}
+        handlerDialog={() => {
+          changeStatusHandlerDialog();
+        }}
+        title="Change Status"
+        footerContent={
+          <div className="flex flex-row items-center justify-center gap-5 w-full -mt-5 mb-2">
+            <ButtonComponent
+              className="bg-red-400"
+              onClick={() => {
+                changeStatusHandlerDialog();
+              }}
+            >
+              No
+            </ButtonComponent>
+
+            <ButtonComponent
+              className="bg-secondary"
+              onClick={() => {
+                let newStatus = {
+                  project_timestamps_id: "1f9bdcdb-efc4-4127-8781-0926157c8de7",
+                  project_id: "10457bf7-1129-4d3c-b10d-f2ae4e0d5279",
+                  user_id: "b1e3ce17-4b01-48fa-aef8-8f41cf677176",
+                  status: beforeStatus,
+                  remarks: remarks,
+                  datetime: "2025-05-26T02:17:09.350Z",
+                  created_at: "2025-05-26T02:17:09.350Z",
+                  updated_at: "2025-05-26T02:17:09.350Z",
+                  full_name: "Benjie Pecson",
+                };
+
+                let newProject = {
+                  ...project,
+                  status: [newStatus, ...project.status],
+                };
+
+                setProject(newProject);
+
+                setRemarks("");
+
+                changeStatusHandlerDialog(beforeStatus);
+              }}
+            >
+              Yes, proceed!
+            </ButtonComponent>
+          </div>
+        }
+        hideHeader={true}
+      >
+        <div className="flex flex-col gap-3 pt-5">
+          <div className="flex flex-col items-center gap-2">
+            <HiMiniExclamationCircle className="text-orange-500" size={50} />
+            <Typography
+              variant="small"
+              className="font-bold text-md text-center"
+            >
+              Are you sure?
+            </Typography>
+            <Typography
+              variant="small"
+              className="font-normal text-sm text-center"
+            >
+              You want to proceed to the next step?
+            </Typography>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {beforeStatus == "Completed" && (
+              <InputComponent
+                label="Date Completed"
+                value={dateCompleted}
+                onChange={(e) => {
+                  setDateCompleted(e.target.value);
+                }}
+                type="date"
+                required={true}
+              />
+            )}
+            <TextAreaComponent
+              label={"Remarks"}
+              error_message=""
+              name="remarks"
+              value={remarks}
+              onChange={(e) => {
+                setRemarks(e.target.value);
+              }}
+              labelClass=""
+            />
+          </div>
+        </div>
+      </DialogComponent>
     </>
   );
 };
