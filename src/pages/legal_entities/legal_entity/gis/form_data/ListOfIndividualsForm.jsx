@@ -2060,6 +2060,10 @@ export const ListOfIndividualsForm = ({
                         value: "Corporate Secretary",
                       },
                       {
+                        name: "Director",
+                        value: "Director",
+                      },
+                      {
                         name: "Corporate Secretary/Treasurer",
                         value: "Corporate Secretary/Treasurer",
                       },
