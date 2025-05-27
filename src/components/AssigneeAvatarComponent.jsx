@@ -1,5 +1,6 @@
 import { Avatar, Tooltip, Typography } from "@material-tailwind/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import UserBlack from "../assets/userblack.svg"; // Assuming you have a default user image
 
 const AssigneeAvatarComponent = ({ assignees, size = "xs" }) => {
   return (
@@ -35,8 +36,12 @@ const AssigneeAvatarComponent = ({ assignees, size = "xs" }) => {
               variant="circular"
               alt={assignee.name}
               size={size}
-              className="border-[1px] border-white hover:z-10 focus:z-10"
+              className={`border-[1px] border-light-gray hover:z-10 focus:z-10`}
               src={assignee.picture}
+              onError={(e) => {
+                e.target.src = UserBlack; // Fallback image
+                setOnError(true);
+              }}
             />
           </Tooltip>
         );
