@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
 import BreadCrumbsComponent from "../../components/BreadCrumbsComponent";
 import { toast } from "sonner";
-import { HiOutlineBell } from "react-icons/hi2";
+import { HiMiniUserCircle, HiOutlineBell } from "react-icons/hi2";
 import useDrawerStore from "../../store/useDrawerStore.js";
 import useAuthStore from "../../store/useAuthStore";
 import { useNavigate } from "react-router";
@@ -23,7 +23,15 @@ const TopBar = ({ items }) => {
   const GetImage = () => {
     if (picture == "" || picture == undefined)
       return <span className="text-[13px]">{initials}</span>;
-    return <img className="w-7 h-7 rounded-full " src={picture} alt="" />;
+    return (
+      <img
+        className="w-7 h-7 rounded-full "
+        src={picture}
+        onError={(e) => {
+          setPicture("");
+        }}
+      />
+    );
   };
 
   useEffect(() => {

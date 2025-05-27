@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { HiMiniPaperAirplane } from "react-icons/hi2";
 import { formattedDate, formattedDateTime } from "../../../utils/global";
 import useNoteStore from "../../../store/useNoteStore";
+import UserBlack from "../../../assets/userblack.svg";
 
 const NotesPage = () => {
   const response = {
@@ -174,8 +175,11 @@ const NotesPage = () => {
                                 variant="circular"
                                 alt={participant.name}
                                 size="sm"
-                                className="border-[1px] border-white hover:z-10 focus:z-10"
+                                className="border-[1px] border-light-gray hover:z-10 focus:z-10"
                                 src={participant.profile_picture_url}
+                                onError={(e) => {
+                                  e.target.src = UserBlack;
+                                }}
                               />
                             </Tooltip>
                           );

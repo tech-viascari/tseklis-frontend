@@ -37,6 +37,7 @@ import InputComponent from "../../components/InputComponent";
 import SelectMultipleComponent from "../../components/SelectMultipleComponent";
 import axiosInstance from "../../utils/axiosHelper";
 import { toast } from "sonner";
+import UserBlack from "../../assets/userblack.svg"; // Default user image
 
 const ViewProjectPage = () => {
   const navigate = useNavigate();
@@ -364,8 +365,11 @@ const ViewProjectPage = () => {
                         variant="circular"
                         alt="user 1"
                         size="sm"
-                        className="border-[1px] border-white hover:z-10 focus:z-10"
+                        className="border-[1px] border-light-gray hover:z-10 focus:z-10"
                         src={user.picture}
+                        onError={(e) => {
+                          e.target.src = UserBlack; 
+                        }}
                       />
                     </Tooltip>
                   );
